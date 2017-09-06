@@ -1,8 +1,8 @@
 package org.learn.spliterator.demo02skeleton;
 
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 
+
+import java.util.List;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -20,7 +20,7 @@ public class App {
 
 
         Stream<Document> streams =  StreamSupport.stream(new WebPageSpliterator(new WebPageProvider()), false);
-        streams.map(doc -> doc.getElementsByTag("img").first().absUrl("src"));
+        streams.map(Document::getImages).flatMap(List::stream).limit(10).map(i-> i.getURL()).forEach(System.out::println);
 
 
     }

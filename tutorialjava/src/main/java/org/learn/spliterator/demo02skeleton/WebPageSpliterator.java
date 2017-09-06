@@ -1,6 +1,5 @@
 package org.learn.spliterator.demo02skeleton;
 
-import org.jsoup.nodes.Document;
 
 import java.util.Spliterator;
 import java.util.function.Consumer;

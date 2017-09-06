@@ -1,7 +1,6 @@
 package org.learn.spliterator.demo02skeleton;
 
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -25,7 +24,7 @@ public class WebPageProvider {
 
 
     public Document getPage() {
-        Document doc = null;
+        org.jsoup.nodes.Document doc = null;
 
         while (doc == null) {
             String nextPageURL = urls.remove();
@@ -44,7 +43,7 @@ public class WebPageProvider {
             // System.out.println(newURL);
             urls.add(newURL);
         }
-        return doc;
+        return new Document(doc);
     }
 
 
