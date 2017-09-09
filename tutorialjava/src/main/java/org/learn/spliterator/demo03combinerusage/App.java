@@ -2,6 +2,7 @@ package org.learn.spliterator.demo03combinerusage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by eduard on 07/09/17.
@@ -11,7 +12,8 @@ public class App {
     public static void main(String[] args) {
         List<Payment>  payments = new ArrayList<>();
         fillPayments(payments);
-        PaymentCollector.Total total = payments.stream().collect(new PaymentCollector<>());
+        Map<String, Integer> total = payments.stream().collect(new PaymentCollector());
+        total.forEach((k,v)-> System.out.println("K : " + k + "  v:" + v));
 
 
 
