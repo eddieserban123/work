@@ -1,4 +1,9 @@
 package main
+//docker run --name sqlserver -d mssql-articles
+//docker inspect
+
+//docker run -it --link sqlserver --rm mssql-articles  /opt/mssql-tools/bin/sqlcmd -S 172.17.0.2 -U sa -P "puieMonta140!"
+
 
 import (
 	"net/http"
@@ -38,7 +43,7 @@ func initSqlConnection() *sql.DB {
 	u := &url.URL{
 		Scheme:   "sqlserver",
 		User:     url.UserPassword("sa", "puieMonta140!"),
-		Host:     fmt.Sprintf("%s:%d", "localhost", 1433),
+		Host:     fmt.Sprintf("%s:%d", "172.17.0.2", 1433),
 		// Path:  instance, // if connecting to an instance instead of a port
 		RawQuery: query.Encode(),
 	}
