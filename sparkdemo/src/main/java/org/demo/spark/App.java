@@ -1,26 +1,34 @@
 package org.demo.spark;
 
 import org.apache.spark.SparkConf;
+import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.DoubleFunction;
-import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.Function;
+
 import org.apache.spark.api.java.function.VoidFunction;
+import org.apache.spark.ml.linalg.Vector;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Encoders;
+import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
+import org.apache.spark.util.StatCounter;
+import org.demo.spark.accumulator.StudentAccumulator;
 import org.demo.spark.beans.Student;
 import scala.Tuple2;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 
 import static com.datastax.spark.connector.japi.CassandraJavaUtil.javaFunctions;
 import static com.datastax.spark.connector.japi.CassandraJavaUtil.mapRowTo;
+import static org.apache.spark.sql.functions.*;
+
 
 /**
- * Hello world!
+ * https://spark.apache.org/docs/2.1.1/ml-features.html#onehotencoder
  */
 public class App {
     public static void main(String[] args) {
@@ -30,15 +38,50 @@ public class App {
 
         JavaSparkContext sc = new JavaSparkContext(conf);
         SparkSession session = SparkSession.builder().appName("session").getOrCreate();
-        JavaRDD<Student> students = sc.parallelize(
-                javaFunctions(sc).cassandraTable("test", "school", mapRowTo(Student.class)).collect());
+        JavaRDD<Student> students =
+                javaFunctions(sc).cassandraTable("test", "school", mapRowTo(Student.class));
 
-        JavaPairRDD<Integer, Student> classrooms = students.groupBy(new Function<Student, Integer>() {
-            public Integer call(Student student) throws Exception {
-                return student.getClassroom();
+        //first way
+
+        Dataset<Student> studentsDf = session.createDataset(students.rdd(), Encoders.bean(Student.class));
+        Dataset<Row> rows = studentsDf.groupBy("classroom").agg(avg("mark1"), stddev("mark2"));
+        rows.show();
+
+        //more programmatic way
+
+        StudentAccumulator stAcc =  new StudentAccumulator();
+        sc.sc().register(stAcc);
+
+        students.foreach(student -> stAcc.add(student));
+
+
+
+
+        JavaPairRDD<Integer, Student> classrooms = students.groupBy(
+                (Function<Student, Integer>) student -> student.getClassroom()).flatMapValues(a -> a);
+
+
+
+
+
+//
+//
+//        classrooms.combineByKey(new Function<Student, Object>() {
+//            @Override
+//            public Object call(Student student) throws Exception {
+//                return null;
+//            }
+//        })
+//
+
+
+
+        students.map(new Function<Student, Vector>() {
+            @Override
+            public Vector call(Student student) throws Exception {
+                return null;
             }
-        }).flatMapValues(a -> a);
-
+        });
 
         classrooms.mapToDouble(new DoubleFunction<Tuple2<Integer, Student>>() {
             @Override
