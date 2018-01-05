@@ -5,12 +5,12 @@ import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
-import org.apache.spark.api.java.function.VoidFunction;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.demo.spark.accumulator.StudentAccumulator;
+import org.demo.spark.aggregate.MyAggregate;
 import org.demo.spark.beans.Student;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +39,8 @@ public class App {
         JavaSparkContext sc = new JavaSparkContext(conf);
         SparkSession session = SparkSession.builder().appName("session").getOrCreate();
 
+        session.udf().register("myagg", new MyAggregate());
+
 
 
 
@@ -52,7 +54,7 @@ public class App {
         //first way
 
         Dataset<Student> studentsDf = session.createDataset(students.rdd(), Encoders.bean(Student.class));
-        Dataset<Row> rows = studentsDf.groupBy("classroom").agg(avg("mark1"), stddev("mark2"));
+        Dataset<Row> rows = studentsDf.groupBy("classroom").agg( org.apache.spark.sql.functions.exp("myagg(mark1)"), stddev("mark2"));
         rows.show();
 
 //        //more programmatic way
