@@ -27,6 +27,7 @@ import static org.apache.spark.sql.functions.stddev;
 /**
  * https://spark.apache.org/docs/2.1.1/ml-features.html#onehotencoder
  * https://github.com/clakech/sparkassandra-dockerized
+ * spark-submit --class org.demo.spark.App --master spark://10.64.134.27:7077 --total-executor-cores 2 ./target/sparkdemo-1.0-SNAPSHOT-jar-with-dependencies.jar
  */
 public class App {
 
@@ -34,8 +35,8 @@ public class App {
     public static void main(String[] args) {
 
 
-        SparkConf conf = new SparkConf().setAppName("demo").setMaster("spark://172.17.0.2:7077").
-                set("spark.cassandra.connection.host", "172.17.0.2");
+        SparkConf conf = new SparkConf().setAppName("demo").setMaster("spark://10.64.134.27:7077").
+                set("spark.cassandra.connection.host", "10.64.134.27");
         JavaSparkContext sc = new JavaSparkContext(conf);
         SparkSession session = SparkSession.builder().appName("session").getOrCreate();
 

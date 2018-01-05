@@ -1,8 +1,15 @@
 package org.demo.spark.beans;
 
+import org.demo.spark.App;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.Serializable;
 
 public class Student implements Serializable{
+
+    final static Logger log = LoggerFactory.getLogger(Student.class);
+
 
     Integer id;
 
@@ -25,6 +32,7 @@ public class Student implements Serializable{
     }
 
     public Integer getClassroom() {
+        log.error("**************************** clasroom " + classroom);
         return classroom;
     }
 

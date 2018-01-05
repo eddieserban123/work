@@ -2,11 +2,16 @@ package org.demo.spark.accumulator;
 
 import org.apache.spark.util.AccumulatorV2;
 import org.demo.spark.beans.Student;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class StudentAccumulator extends AccumulatorV2<Student, Map<String, Results>> {
+
+    final static Logger log = LoggerFactory.getLogger(StudentAccumulator.class);
+
 
     Map<String, Results> results = new ConcurrentHashMap<>();
 
@@ -26,18 +31,22 @@ public class StudentAccumulator extends AccumulatorV2<Student, Map<String, Resul
 
     @Override
     public AccumulatorV2 copy() {
+        log.error("****** copy students ");
+
         AccumulatorV2 newAcc = new StudentAccumulator();
         return newAcc;
     }
 
     @Override
     public void reset() {
+        log.error("****** reset students ");
         this.results.clear();
 
     }
 
     @Override
     public void add(Student student) {
+        log.error("****** add student " + student.getId());
         String key = String.format("%d,%d", student.getClassroom(),student.getId());
         results.putIfAbsent(key, new Results());
 
@@ -55,6 +64,7 @@ public class StudentAccumulator extends AccumulatorV2<Student, Map<String, Resul
 
     @Override
     public void merge(AccumulatorV2 accumulatorV2) {
+        log.error("****** merge studentss ");
         this.results.putAll((Map<? extends String, ? extends Results>) accumulatorV2.value());
 
     }
