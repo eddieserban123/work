@@ -32,7 +32,7 @@ public class Student implements Serializable{
     }
 
     public Integer getClassroom() {
-        log.error("**************************** clasroom " + classroom);
+     //   log.error("**************************** clasroom " + classroom);
         return classroom;
     }
 

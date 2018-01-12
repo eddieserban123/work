@@ -2,6 +2,7 @@ package org.demo.spark.accumulator;
 
 import org.apache.spark.util.AccumulatorV2;
 import org.demo.spark.beans.Student;
+import org.demo.spark.beans.TradeTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,18 +11,18 @@ import java.net.UnknownHostException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class StudentAccumulator extends AccumulatorV2<Student, Map<String, Results>> {
+public class TradeTimeAccumulator extends AccumulatorV2<TradeTime, Map<String, Results>> {
 
-    final static Logger log = LoggerFactory.getLogger(StudentAccumulator.class);
+    final static Logger log = LoggerFactory.getLogger(TradeTimeAccumulator.class);
 
 
     Map<String, Results> results = new ConcurrentHashMap<>();
 
-    public StudentAccumulator() {
+    public TradeTimeAccumulator() {
 
     }
 
-    public StudentAccumulator(Map<String, Results> results) {
+    public TradeTimeAccumulator(Map<String, Results> results) {
         this.results.putAll(results);
     }
 
@@ -33,35 +34,35 @@ public class StudentAccumulator extends AccumulatorV2<Student, Map<String, Resul
 
     @Override
     public AccumulatorV2 copy() {
-        log.error("****** copy students ");
+        log.error("****** copy TRADETIME");
 
-        AccumulatorV2 newAcc = new StudentAccumulator();
+        AccumulatorV2 newAcc = new TradeTimeAccumulator();
         return newAcc;
     }
 
     @Override
     public void reset() {
-        log.error("****** reset students ");
+        log.error("****** reset TRADETIME ");
         this.results.clear();
 
     }
 
     @Override
-    public void add(Student student) {
+    public void add(TradeTime trade) {
         try {
-            log.info("****** add student " + student.getId() +
+            log.info("****** add tradeEvent " + trade.getMarket_event() +
                     " on machine " + InetAddress.getLocalHost().getHostAddress() + " " +
                     "thread id "  + Thread.currentThread().getId());
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
-        String key = String.format("%d", student.getClassroom());
+        String key = String.format("%s", trade.getMarket_event());
         results.putIfAbsent(key, new Results());
 
         results.computeIfPresent(key, (s, results) ->
                 results.addVal1(
-                                student.getMark1().doubleValue()).
-                        addVal2(student.getMark2().doubleValue()));
+                                trade.getOffset().doubleValue()).
+                        addVal2(trade.getTradetime_millis().doubleValue()));
 
     }
 

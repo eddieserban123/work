@@ -48,8 +48,18 @@ public class Results implements Serializable{
     }
 
     public Results addVal2(Double val) {
-        this.val1+=val;
+        this.val2+=val;
         n2++;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Results{" +
+                "val1=" + val1 +
+                ", val2=" + val2 +
+                ", n1=" + n1 +
+                ", n2=" + n2 +
+                '}';
     }
 }

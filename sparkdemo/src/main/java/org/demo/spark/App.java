@@ -1,26 +1,28 @@
 package org.demo.spark;
 
+import com.datastax.spark.connector.japi.rdd.CassandraTableScanJavaRDD;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.Function;
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Encoders;
-import org.apache.spark.sql.Row;
-import org.apache.spark.sql.SparkSession;
+import org.apache.spark.api.java.function.*;
+import org.apache.spark.sql.*;
 import org.demo.spark.accumulator.StudentAccumulator;
-import org.demo.spark.aggregate.MyAggregate;
+import org.demo.spark.aggregate.MyAverage;
 import org.demo.spark.beans.Student;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import scala.Tuple2;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import static com.datastax.spark.connector.japi.CassandraJavaUtil.javaFunctions;
 import static com.datastax.spark.connector.japi.CassandraJavaUtil.mapRowTo;
+import static jdk.nashorn.internal.objects.NativeArray.reduce;
 import static org.apache.spark.sql.functions.avg;
+import static org.apache.spark.sql.functions.expr;
 import static org.apache.spark.sql.functions.stddev;
 
 
@@ -32,7 +34,8 @@ import static org.apache.spark.sql.functions.stddev;
 public class App {
 
     final static Logger log = LoggerFactory.getLogger(App.class);
-    public static void main(String[] args) {
+
+    public static void main1(String[] args) {
 
 
         SparkConf conf = new SparkConf().setAppName("demo").setMaster("spark://10.64.134.27:7077").
@@ -40,14 +43,37 @@ public class App {
         JavaSparkContext sc = new JavaSparkContext(conf);
         SparkSession session = SparkSession.builder().appName("session").getOrCreate();
 
-        session.udf().register("myagg", new MyAggregate());
-
-
-
+        session.udf().register("myavg", new MyAverage());
 
 
         JavaRDD<Student> students =
-                javaFunctions(sc).cassandraTable("test", "school", mapRowTo(Student.class));
+                javaFunctions(sc).cassandraTable("test", "school2", mapRowTo(Student.class));
+
+
+
+
+
+
+
+        JavaPairRDD<Integer, Integer> res = students.mapToPair((PairFunction<Student, Integer, Student>) student -> new Tuple2<>(student.getClassroom(), student)).
+                aggregateByKey(0, (Function2<Integer, Student, Integer>) (v1, v2) ->
+                {
+                    log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  aggregate " + v1 + " + studentId" + v2.getId() + " on machine " + InetAddress.getLocalHost().getHostAddress() + " " +
+                            "thread id " + Thread.currentThread().getId());
+                    return v1 + v2.getMark1();},
+                        (Function2<Integer, Integer, Integer>) (v1, v2) -> {
+                            log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  sum " + v1 + " + " + v2 + " on machine " + InetAddress.getLocalHost().getHostAddress() + " " +
+                                    "thread id " + Thread.currentThread().getId());
+                            return v1 + v2;
+                        });
+
+
+
+
+        res.foreach((VoidFunction<Tuple2<Integer, Integer>>) v ->
+                log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@--- sum for class " + v._1 + "  is" + v._2 + " on machine " + InetAddress.getLocalHost().getHostAddress() + " " +
+                        "thread id " + Thread.currentThread().getId()));
+
 
 
         students.foreach(student -> log.error("Student " + student.getId()));
@@ -55,24 +81,28 @@ public class App {
         //first way
 
         Dataset<Student> studentsDf = session.createDataset(students.rdd(), Encoders.bean(Student.class));
-        Dataset<Row> rows = studentsDf.groupBy("classroom").agg( org.apache.spark.sql.functions.exp("myagg(mark1)"), stddev("mark2"));
+
+
+        Dataset<Row> rows = studentsDf.groupBy("classroom").agg(expr("myavg(mark1)"), stddev("mark2"));
         rows.show();
+
 
 //        //more programmatic way
 //
-        StudentAccumulator stAcc =  new StudentAccumulator();
+        StudentAccumulator stAcc = new StudentAccumulator();
         sc.sc().register(stAcc);
 
         students.foreach(student -> stAcc.add(student));
-
-
 
 
         JavaPairRDD<Integer, Student> classrooms = students.groupBy(
                 (Function<Student, Integer>) student -> student.getClassroom()).flatMapValues(a -> a);
 
 
+        //or using groupByKey
 
+
+        // classrooms.groupByKey().aggre
 
 
 //
@@ -84,7 +114,6 @@ public class App {
 //            }
 //        })
 //
-
 
 
 //        students.map(new Function<Student, Vector>() {
@@ -110,12 +139,10 @@ public class App {
 //
 
 
-
-        classrooms.lookup(1).forEach(a -> System.out.println(a));
-
-        classrooms.lookup(2).forEach(a -> System.out.println(a));
-
-
+//
+//        classrooms.lookup(1).forEach(a -> System.out.println(a));
+//
+//        classrooms.lookup(2).forEach(a -> System.out.println(a));
 
 
 //        classrooms.foreach(new VoidFunction<Tuple2<Integer, Iterable<Student>>>() {
@@ -129,7 +156,6 @@ public class App {
 //        });
 
     }
-
 
 
     public static <E> Collection<E> makeCollection(Iterable<E> iter) {
