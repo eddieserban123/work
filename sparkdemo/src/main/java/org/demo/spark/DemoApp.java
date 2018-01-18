@@ -42,13 +42,6 @@ public class DemoApp {
 
     public static void main(String[] args) {
 
-        String db = "test";
-        String table = "trades_by_time";
-        if(args.length==2) {
-            db=args[0];
-            table=args[1];
-        }
-
 
         SparkConf conf = new SparkConf().setAppName("demo").setMaster("spark://10.64.134.27:7077").
                 set("spark.cassandra.connection.host", "10.64.134.27");
@@ -59,27 +52,32 @@ public class DemoApp {
 
 
         JavaRDD<TradeTime> tradeTimes =
-                javaFunctions(sc).cassandraTable(db, table, mapRowTo(TradeTime.class));
+                javaFunctions(sc).cassandraTable("test1", "trades_by_time1", mapRowTo(TradeTime.class));
+
 
 
         //Give me avg time on days for tradtetime_millis
 
         Dataset<TradeTime> tradeTimesDf = session.createDataset(tradeTimes.rdd(), Encoders.bean(TradeTime.class));
-//          //   1 sql with one group by
-//        Dataset<Row> rows = tradeTimesDf.groupBy("day").agg(expr("myavg(tradetime_millis)"));
-//        rows.show(1000);
+            // 1 sql with one group by
+        Dataset<Row> rows = tradeTimesDf.groupBy("day").agg(expr("myavg(tradetime_millis)"));
+        rows.orderBy("day").show(1000);
+        //rows.show();
 
-//       //  2 sql with by two group by
+        // 2 sql with by two group by
 //         Dataset<Row> rows = tradeTimesDf.groupBy("day","market_event").agg(expr("myavg(tradetime_millis)"));
 //         rows.show();
 
+//        // 3  left to be investigated
+//        JavaPairRDD<String, Iterable<TradeTime>> res = tradeTimes.groupBy((Function<TradeTime, String>) v1 -> v1.getDay());
+//        res.values().
 
         // 4 pure programmatic
-        TradeTimeAccumulator tradeTimeAcc = new TradeTimeAccumulator();
-        sc.sc().register(tradeTimeAcc);
-        tradeTimes.foreach(trade -> tradeTimeAcc.add(trade));
-
-        tradeTimeAcc.value().forEach((k,v) -> log.info("^^^^^^^^^^^^^ " + k+" " + v));
+//        TradeTimeAccumulator tradeTimeAcc = new TradeTimeAccumulator();
+//        sc.sc().register(tradeTimeAcc);
+//        tradeTimes.foreach(trade -> tradeTimeAcc.add(trade));
+//
+//        tradeTimeAcc.value().forEach((k,v) -> log.info("^^^^^^^^^^^^^ " + k+" " + v));
 
 
 

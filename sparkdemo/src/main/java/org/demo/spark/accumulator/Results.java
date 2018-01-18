@@ -48,7 +48,7 @@ public class Results implements Serializable{
     }
 
     public Results addVal2(Double val) {
-        this.val2+=val;
+        this.val1+=val;
         n2++;
         return this;
     }
