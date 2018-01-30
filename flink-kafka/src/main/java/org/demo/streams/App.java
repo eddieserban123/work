@@ -1,17 +1,21 @@
 package org.demo.streams;
 
 import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.common.functions.RichCoGroupFunction;
 import org.apache.flink.api.common.restartstrategy.RestartStrategies;
+import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor;
 import org.apache.flink.streaming.api.watermark.Watermark;
+import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer09;
 import org.apache.flink.streaming.util.serialization.JSONDeserializationSchema;
 import org.apache.flink.streaming.api.functions.AssignerWithPeriodicWatermarks;
+import org.apache.flink.util.Collector;
 import scala.Tuple3;
 
 import javax.annotation.Nullable;
@@ -67,12 +71,32 @@ public class App
                 .assignTimestampsAndWatermarks(new ExtractTimestampAutoGenerateWatermark(Time.seconds(20)))
                 .name("stream2");
 
-        topic1Stream.map(new MapFunction<ObjectNode, Tuple3<String, Integer, String>>() {
+//        topic1Stream.map(new MapFunction<ObjectNode, Tuple3<String, Integer, String>>() {
+//            @Override
+//            public Tuple3<String, Integer, String> map(ObjectNode jsonNodes) throws Exception {
+//                return new Tuple3(jsonNodes.get("name").asText(), jsonNodes.get("price").asInt(), jsonNodes.get("time"));
+//            }
+//        }).print();
+        
+        topic1Stream.coGroup(topic2Stream).where(new KeySelector<ObjectNode, String>() {
             @Override
-            public Tuple3<String, Integer, String> map(ObjectNode jsonNodes) throws Exception {
-                return new Tuple3(jsonNodes.get("name").asText(), jsonNodes.get("price").asInt(), jsonNodes.get("time"));
+            public String getKey(ObjectNode value) throws Exception {
+                return value.get("name").asText();
             }
-        }).print();
+        }).equalTo(new KeySelector<ObjectNode, String>() {
+            @Override
+            public String getKey(ObjectNode value) throws Exception {
+                return value.get("name").asText();
+            }
+        }).window(TumblingEventTimeWindows.of(Time.milliseconds(1000))).
+                apply(new RichCoGroupFunction<ObjectNode, ObjectNode, String>() {
+                    @Override
+                    public void coGroup(Iterable<ObjectNode> it1, Iterable<ObjectNode> it2,
+                                        Collector<String> collector) throws Exception {
+
+                        collector.collect("bla");
+                    }
+                }).print();
 
         env.execute();
 
@@ -98,7 +122,7 @@ public class App
             String timeText = jsonNodes.get("time").asText();
             LocalDateTime sharetime = LocalDateTime.parse(jsonNodes.get("time").asText(), formatter);
             LocalDateTime startOfDay = LocalDate.parse(timeText, formatter).atStartOfDay();
-            long millis = ChronoUnit.MILLIS.between(sharetime, startOfDay);
+            long millis = ChronoUnit.MILLIS.between(startOfDay,sharetime);
             return millis;
         }
 
