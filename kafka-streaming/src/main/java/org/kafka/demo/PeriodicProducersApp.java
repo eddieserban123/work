@@ -19,8 +19,8 @@ public class PeriodicProducersApp {
 
     public static void main(String[] args) throws Exception {
 
-        sendMsg(TOPIC1, 800);
-        sendMsg(TOPIC2, 900);
+        sendMsg(TOPIC1, 3000);
+        sendMsg(TOPIC2, 4000);
 
     }
 
@@ -49,9 +49,9 @@ public class PeriodicProducersApp {
                     producer.send(record, (metadata, exception) -> {
                         long elapsedTime = System.currentTimeMillis() - time;
                         if (metadata != null) {
-                            System.out.printf("sent record(key=%s value=%s) " +
+                            System.out.printf("topic=%s sent record(key=%s value=%s) " +
                                             "meta(partition=%d, offset=%d) time=%d\n",
-                                    record.key(),share, metadata.partition(),
+                                    topic,record.key(),share, metadata.partition(),
                                     metadata.offset(), elapsedTime);
                         } else {
                             exception.printStackTrace();

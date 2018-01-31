@@ -21,6 +21,7 @@ import scala.Tuple3;
 import javax.annotation.Nullable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Properties;
@@ -53,7 +54,7 @@ public class App
 
         env.getConfig().disableSysoutLogging();
         env.getConfig().setRestartStrategy(RestartStrategies.fixedDelayRestart(0, 0));
-        env.enableCheckpointing(30000); // create a checkpoint every 5 seconds
+        env.enableCheckpointing(1000); // create a checkpoint every 5 seconds
         env.getConfig().setAutoWatermarkInterval(5000);
 
         FlinkKafkaConsumer09<ObjectNode> stream1 = new FlinkKafkaConsumer09(TOPIC1, new JSONDeserializationSchema(), props);
@@ -63,12 +64,12 @@ public class App
         stream2.setStartFromLatest();
 
         SingleOutputStreamOperator<ObjectNode> topic1Stream = env.addSource(stream1)
-                .assignTimestampsAndWatermarks(new ExtractTimestampAutoGenerateWatermark(Time.seconds(20)))
+                .assignTimestampsAndWatermarks(new ExtractTimestampAutoGenerateWatermark(Time.seconds(5)))
                 .name("stream1");
 
 
         SingleOutputStreamOperator<ObjectNode> topic2Stream  = env.addSource(stream2)
-                .assignTimestampsAndWatermarks(new ExtractTimestampAutoGenerateWatermark(Time.seconds(20)))
+                .assignTimestampsAndWatermarks(new ExtractTimestampAutoGenerateWatermark(Time.seconds(5)))
                 .name("stream2");
 
 //        topic1Stream.map(new MapFunction<ObjectNode, Tuple3<String, Integer, String>>() {
@@ -93,8 +94,14 @@ public class App
                     @Override
                     public void coGroup(Iterable<ObjectNode> it1, Iterable<ObjectNode> it2,
                                         Collector<String> collector) throws Exception {
+                        synchronized(TOPIC1) {
+                            System.out.println("------------start-------\ntopic1:");
+                            it1.forEach(System.out::print);
+                            System.out.println("\ntopic2");
+                            it2.forEach(System.out::print);
+                            System.out.println("\n----------end-----------");
 
-                        collector.collect("bla");
+                        }
                     }
                 }).print();
 
@@ -119,11 +126,10 @@ public class App
         @Override
         public long extractTimestamp(ObjectNode jsonNodes) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-            String timeText = jsonNodes.get("time").asText();
             LocalDateTime sharetime = LocalDateTime.parse(jsonNodes.get("time").asText(), formatter);
-            LocalDateTime startOfDay = LocalDate.parse(timeText, formatter).atStartOfDay();
-            long millis = ChronoUnit.MILLIS.between(startOfDay,sharetime);
-            return millis;
+            ZoneId zoneId = ZoneId.systemDefault(); // or: ZoneId.of("Europe/Oslo");
+            long epoch = sharetime.atZone(zoneId).toInstant().toEpochMilli();
+            return epoch;
         }
 
     }
