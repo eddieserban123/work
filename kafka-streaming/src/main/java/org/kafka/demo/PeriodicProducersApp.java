@@ -15,12 +15,12 @@ public class PeriodicProducersApp {
 
     private final static String TOPIC1 = "topic1";
     private final static String TOPIC2 = "topic2";
-    private final static String BOOTSTRAP_SERVERS = "localhost:9093,localhost:9094";
+    private final static String BOOTSTRAP_SERVERS = "localhost:9093";
 
     public static void main(String[] args) throws Exception {
 
-        sendMsg(TOPIC1, 3000);
-        sendMsg(TOPIC2, 4000);
+        sendMsg(TOPIC1, 300);
+        sendMsg(TOPIC2, 400);
 
     }
 

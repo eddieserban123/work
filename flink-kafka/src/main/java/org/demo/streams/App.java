@@ -1,6 +1,6 @@
 package org.demo.streams;
 
-import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.common.functions.JoinFunction;
 import org.apache.flink.api.common.functions.RichCoGroupFunction;
 import org.apache.flink.api.common.restartstrategy.RestartStrategies;
 import org.apache.flink.api.java.functions.KeySelector;
@@ -9,21 +9,17 @@ import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor;
-import org.apache.flink.streaming.api.watermark.Watermark;
+import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer09;
 import org.apache.flink.streaming.util.serialization.JSONDeserializationSchema;
-import org.apache.flink.streaming.api.functions.AssignerWithPeriodicWatermarks;
 import org.apache.flink.util.Collector;
-import scala.Tuple3;
 
 import javax.annotation.Nullable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.Properties;
 
 /**
@@ -54,8 +50,8 @@ public class App
 
         env.getConfig().disableSysoutLogging();
         env.getConfig().setRestartStrategy(RestartStrategies.fixedDelayRestart(0, 0));
-        env.enableCheckpointing(1000); // create a checkpoint every 5 seconds
-        env.getConfig().setAutoWatermarkInterval(5000);
+        env.enableCheckpointing(2000); // create a checkpoint every 5 seconds
+        env.getConfig().setAutoWatermarkInterval(100);
 
         FlinkKafkaConsumer09<ObjectNode> stream1 = new FlinkKafkaConsumer09(TOPIC1, new JSONDeserializationSchema(), props);
         FlinkKafkaConsumer09<ObjectNode> stream2 = new FlinkKafkaConsumer09(TOPIC2, new JSONDeserializationSchema(), props);
@@ -64,12 +60,12 @@ public class App
         stream2.setStartFromLatest();
 
         SingleOutputStreamOperator<ObjectNode> topic1Stream = env.addSource(stream1)
-                .assignTimestampsAndWatermarks(new ExtractTimestampAutoGenerateWatermark(Time.seconds(5)))
+                .assignTimestampsAndWatermarks(new ExtractTimestampAutoGenerateWatermark(Time.milliseconds(100)))
                 .name("stream1");
 
 
         SingleOutputStreamOperator<ObjectNode> topic2Stream  = env.addSource(stream2)
-                .assignTimestampsAndWatermarks(new ExtractTimestampAutoGenerateWatermark(Time.seconds(5)))
+                .assignTimestampsAndWatermarks(new ExtractTimestampAutoGenerateWatermark(Time.milliseconds(100)))
                 .name("stream2");
 
 //        topic1Stream.map(new MapFunction<ObjectNode, Tuple3<String, Integer, String>>() {
@@ -78,8 +74,8 @@ public class App
 //                return new Tuple3(jsonNodes.get("name").asText(), jsonNodes.get("price").asInt(), jsonNodes.get("time"));
 //            }
 //        }).print();
-        
-        topic1Stream.coGroup(topic2Stream).where(new KeySelector<ObjectNode, String>() {
+
+        topic1Stream.join(topic2Stream).where(new KeySelector<ObjectNode, String>() {
             @Override
             public String getKey(ObjectNode value) throws Exception {
                 return value.get("name").asText();
@@ -89,21 +85,45 @@ public class App
             public String getKey(ObjectNode value) throws Exception {
                 return value.get("name").asText();
             }
-        }).window(TumblingEventTimeWindows.of(Time.milliseconds(1000))).
-                apply(new RichCoGroupFunction<ObjectNode, ObjectNode, String>() {
-                    @Override
-                    public void coGroup(Iterable<ObjectNode> it1, Iterable<ObjectNode> it2,
-                                        Collector<String> collector) throws Exception {
-                        synchronized(TOPIC1) {
-                            System.out.println("------------start-------\ntopic1:");
-                            it1.forEach(System.out::print);
-                            System.out.println("\ntopic2");
-                            it2.forEach(System.out::print);
-                            System.out.println("\n----------end-----------");
-
-                        }
-                    }
-                }).print();
+        }).window(TumblingEventTimeWindows.of(Time.milliseconds(1000))).apply(new JoinFunction<ObjectNode, ObjectNode, String>() {
+            @Override
+            public String join(ObjectNode jsonNodes, ObjectNode jsonNodes2) throws Exception {
+                synchronized(TOPIC1) {
+                    System.out.println("------------start-------\ntopic1:");
+                    System.out.println(jsonNodes);
+                    System.out.println("\ntopic2");
+                    System.out.println(jsonNodes);
+                    System.out.println("\n----------end-----------");
+                    return "";
+                }
+            }
+        });
+        
+//        topic1Stream.coGroup(topic2Stream).where(new KeySelector<ObjectNode, String>() {
+//            @Override
+//            public String getKey(ObjectNode value) throws Exception {
+//                return value.get("name").asText();
+//            }
+//        }).equalTo(new KeySelector<ObjectNode, String>() {
+//            @Override
+//            public String getKey(ObjectNode value) throws Exception {
+//                return value.get("name").asText();
+//            }
+//        }).window(TumblingEventTimeWindows.of(Time.milliseconds(1000))).
+//                apply(new RichCoGroupFunction<ObjectNode, ObjectNode, String>() {
+//                    @Override
+//                    public void coGroup(Iterable<ObjectNode> it1, Iterable<ObjectNode> it2,
+//                                        Collector<String> collector) throws Exception {
+//                        synchronized(TOPIC1) {
+//                            System.out.println("------------start-------\ntopic1:");
+//                            it1.forEach(System.out::print);
+//                            System.out.println("\ntopic2");
+//                            it2.forEach(System.out::print);
+//                            System.out.println("\n----------end-----------");
+//
+//                        }
+//                    }
+//                }).print();
 
         env.execute();
 
