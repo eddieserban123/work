@@ -26,7 +26,7 @@ import java.util.Properties;
  * Hello world!
  *
  */
-public class App 
+public class BasicWindowApp
 {
 
     private final static String TOPIC1 = "topic1";
