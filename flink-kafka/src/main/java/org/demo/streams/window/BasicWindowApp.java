@@ -1,4 +1,4 @@
-package org.demo.streams;
+package org.demo.streams.window;
 
 import org.apache.flink.api.common.functions.JoinFunction;
 import org.apache.flink.api.common.functions.RichCoGroupFunction;

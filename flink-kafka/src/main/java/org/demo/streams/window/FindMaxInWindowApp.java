@@ -1,4 +1,4 @@
-package org.demo.streams;
+package org.demo.streams.window;
 
 import org.apache.flink.api.common.functions.JoinFunction;
 import org.apache.flink.api.common.functions.MapFunction;
@@ -22,7 +22,9 @@ import org.apache.flink.streaming.util.serialization.JSONDeserializationSchema;
 import org.apache.flink.util.Collector;
 
 
-
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -53,7 +55,11 @@ public class FindMaxInWindowApp {
                 env.addSource(stream).assignTimestampsAndWatermarks(new BoundedOutOfOrdernessTimestampExtractor<ObjectNode>(Time.milliseconds(0)) {
              @Override
              public long extractTimestamp(ObjectNode jsonNodes) {
-                 return jsonNodes.get("time").asLong();
+                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+                 LocalDateTime sharetime = LocalDateTime.parse(jsonNodes.get("time").asText(), formatter);
+                 ZoneId zoneId = ZoneId.systemDefault(); // or: ZoneId.of("Europe/Oslo");
+                 long epoch = sharetime.atZone(zoneId).toInstant().toEpochMilli();
+                 return epoch;
              }
          }).name("mystream");
 
