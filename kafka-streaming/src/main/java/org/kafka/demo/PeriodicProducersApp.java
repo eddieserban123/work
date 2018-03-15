@@ -20,7 +20,7 @@ public class PeriodicProducersApp {
     public static void main(String[] args) throws Exception {
 
         sendMsg(TOPIC1, 300);
-        sendMsg(TOPIC2, 400);
+       // sendMsg(TOPIC2, 400);
 
     }
 
