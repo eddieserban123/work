@@ -1,24 +1,15 @@
 package com.aqr.tca.config;
 
-import com.aqr.tca.model.Person;
-import com.aqr.tca.model.serializer.PersonSerializer;
+import com.aqr.tca.model.PersistToWebService;
+import com.aqr.tca.model.deserializer.PersistToWebServiceDeserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.deser.std.NumberDeserializers;
-import com.fasterxml.jackson.databind.deser.std.StringDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import org.apache.kafka.clients.consumer.Consumer;
-import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-
-import java.util.Collections;
-import java.util.Properties;
 
 import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
 import static com.fasterxml.jackson.databind.DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL;
@@ -41,7 +32,7 @@ public class SpringRootConfig {
         SimpleModule mod = new SimpleModule("SWEngineer Module");
 
         // Add the custom serializer to the module
-        mod.addSerializer(new PersonSerializer(Person.class));
+        mod.addDeserializer(PersistToWebService.class, new PersistToWebServiceDeserializer());
         mapper.registerModule(mod);    // Register the module on the mapper
         return mapper;
     }
@@ -52,8 +43,6 @@ public class SpringRootConfig {
         httpMessageConverter.setObjectMapper(objectMapper);
         return httpMessageConverter;
     }
-
-
 
 
 }

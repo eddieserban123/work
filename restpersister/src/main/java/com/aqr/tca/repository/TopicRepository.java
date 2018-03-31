@@ -1,7 +1,6 @@
 package com.aqr.tca.repository;
 
 import com.aqr.tca.utils.Topics;
-import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.LongDeserializer;
@@ -28,4 +27,6 @@ public class TopicRepository {
         consumer.listTopics().forEach((k,v) -> topics.addTopic(k));
         return topics;
     }
+
+
 }

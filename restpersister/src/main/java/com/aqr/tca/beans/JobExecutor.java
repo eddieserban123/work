@@ -55,8 +55,10 @@ public class JobExecutor<T extends Callable<StatusWork>> {
         workToDo.add(work);
     }
 
-    public List<T> getWorkBeeingExecuted() {
-        return workBeeingExecuted;
+    public List<String> getWorkBeeingExecuted() {
+        List<String> work = new ArrayList<>();
+        workBeeingExecuted.stream().forEach(t -> work.add("aa"));
+        return work;
     }
 
 
