@@ -1,6 +1,5 @@
-package com.aqr.tca.config.utils;
+package com.aqr.tca.utils;
 
-import com.fasterxml.jackson.databind.deser.std.NumberDeserializers;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -13,8 +12,8 @@ import java.util.Properties;
 public class ConsumerBuilder {
 
     public static Consumer createKafkaConsumer() {
-        String TOPIC = "testtopic1";
-        String BOOTSTRAP_SERVERS = "localhost:9091,localhost:9092";
+        String TOPIC = "testtopic";
+        String BOOTSTRAP_SERVERS = "localhost:9092";
         Properties props = new Properties();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "KafkaExampleConsumer");
