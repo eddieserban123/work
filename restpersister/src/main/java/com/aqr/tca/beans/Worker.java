@@ -2,9 +2,10 @@ package com.aqr.tca.beans;
 
 import com.aqr.tca.utils.StatusWork;
 
+import java.util.Observer;
 import java.util.concurrent.Callable;
 
-public abstract class Worker implements Callable<StatusWork> {
+public abstract class Worker implements Callable<StatusWork>{
 
     private String info;
 

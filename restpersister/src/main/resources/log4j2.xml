@@ -1,11 +1,16 @@
-<Configuration status="debug" name="endava" packages="">
+<Configuration status="INFO" name="endava" packages="">
     <Appenders>
-        <Console name="stdout" target="SYSTEM_OUT">
+        <Console name="STDOUT" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %p %m%n"/>
         </Console>
     </Appenders>
-    <Root level="debug">
-            <AppenderRef ref="STDOUT"/>
-    </Root>
+    <Loggers>
+        <Root level="WARN">  
+            <AppenderRef ref="STDOUT"/>
+        </Root>
+        <Logger name="com.aqr.tca" level="ALL">
+            <AppenderRef ref="Console"/>
+        </Logger>
+    </Loggers>
 </Configuration>
 

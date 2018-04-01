@@ -43,7 +43,6 @@ public class KafkaController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public Topics getTopics() {
-        logger.error("aaaaaaaaaaaaaaaaaaaaaaaaaaa");
         return topicService.getTopics();
     }
 
@@ -70,8 +69,7 @@ public class KafkaController {
     }
 
     //    {"location":"http://localhost:8080","method":"POST","headers":[]}
-//curl -X POST -H "Content-Type: application/json" -d '{"location":"http://localhost:8080","method":"POST","headers":[]}' http://localhost:8080/restpersister/kafka/topics/toweb
-
+// curl -X POST -H "Content-Type: application/json" -d '{"location":"http://localhost:8080","method":"POST","headers":[{"dsdsd":"asa"},{"head2":"val2"}]}' http://localhost:8080/restpersister/kafka/topics/toweb
     @RequestMapping(method = RequestMethod.POST, path = "/toweb",  consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> moveDataFromTopicsToWebServices(@RequestBody PersistToWebService persist) {
 
@@ -102,10 +100,11 @@ public class KafkaController {
                         consumer.commitAsync();
                     }
                     consumer.close();
-                    System.out.println("DONE");
+                    logger.error("DONE for " + getInfo());
 
 
                 } catch (Exception ex) {
+                    logger.error("Excpetion for " + getInfo() + " " + ex.getLocalizedMessage());
                     return StatusWorkHelper.buildErrorStatus("Er:blabla");
                 }
                 return StatusWorkHelper.buildOkStatus("blabla");
@@ -120,7 +119,7 @@ public class KafkaController {
     //curl -XGET http://localhost:8080/restpersister/kafka/topics/statuswork
     @RequestMapping(method = RequestMethod.GET, path = "/statuswork")
     public ResponseEntity<List<String>> getStatusofWork(final PersistToWebService persist) {
-        return new ResponseEntity<>(jobExecutor.getWorkBeeingExecuted(), HttpStatus.OK);
+        return new ResponseEntity<>(jobExecutor.getWorkBeingExecuted(), HttpStatus.OK);
     }
 }
 

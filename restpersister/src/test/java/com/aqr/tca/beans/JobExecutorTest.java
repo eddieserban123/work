@@ -28,6 +28,6 @@ public class JobExecutorTest {
 //            return StatusWorkHelper.buildOkStatus("coffe");
 //        });
 //        Thread.sleep(2500);
-//        System.out.println(exec.getWorkBeeingExecuted().size());
+//        System.out.println(exec.getWorkBeingExecuted().size());
     }
 }
