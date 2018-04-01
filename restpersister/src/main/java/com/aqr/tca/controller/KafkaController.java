@@ -11,6 +11,7 @@ import com.aqr.tca.utils.StatusWorkHelper;
 import com.aqr.tca.utils.Topics;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,7 +19,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.concurrent.Callable;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
+//http://www.baeldung.com/java-logging-intro
 
 @RestController
 @RequestMapping("/kafka/topics")
@@ -27,6 +31,8 @@ public class KafkaController {
     @Autowired
     private TopicService topicService;
 
+
+    private static final Logger logger = LogManager.getLogger(KafkaController.class);
 
     @Autowired
     JobExecutor jobExecutor;
@@ -37,6 +43,7 @@ public class KafkaController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public Topics getTopics() {
+        logger.error("aaaaaaaaaaaaaaaaaaaaaaaaaaa");
         return topicService.getTopics();
     }
 
@@ -87,9 +94,9 @@ public class KafkaController {
                         }
 
                         consumerRecords.forEach(record -> {
-                            System.out.printf("Consumer Record:(%d, %s, %d, %d)\n",
+                            logger.error(String.format("Consumer Record:(%d, %s, %d, %d)\n",
                                     record.key(), record.value(),
-                                    record.partition(), record.offset());
+                                    record.partition(), record.offset()));
                         });
 
                         consumer.commitAsync();
@@ -106,14 +113,14 @@ public class KafkaController {
 
         });
 
-        return new ResponseEntity<String>("anaremere", HttpStatus.CREATED);
+        return new ResponseEntity<>("anaremere", HttpStatus.CREATED);
     }
 
 
     //curl -XGET http://localhost:8080/restpersister/kafka/topics/statuswork
     @RequestMapping(method = RequestMethod.GET, path = "/statuswork")
     public ResponseEntity<List<String>> getStatusofWork(final PersistToWebService persist) {
-        return new ResponseEntity<List<String>>(jobExecutor.getWorkBeeingExecuted(), HttpStatus.OK);
+        return new ResponseEntity<>(jobExecutor.getWorkBeeingExecuted(), HttpStatus.OK);
     }
 }
 
