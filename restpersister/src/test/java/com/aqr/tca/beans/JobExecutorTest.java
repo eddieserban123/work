@@ -14,20 +14,20 @@ public class JobExecutorTest {
 
     @Test
     public void test1() throws InterruptedException {
-        JobExecutor exec = new JobExecutor();
-        exec.executeWork(() -> {
-            Thread.sleep(100);
-            return StatusWorkHelper.buildOkStatus("coffe");
-        });
-        exec.executeWork(() -> {
-            Thread.sleep(100);
-            return StatusWorkHelper.buildOkStatus("coffe");
-        });
-        exec.executeWork(() -> {
-            Thread.sleep(5000);
-            return StatusWorkHelper.buildOkStatus("coffe");
-        });
-        Thread.sleep(2500);
-        System.out.println(exec.getWorkBeeingExecuted().size());
+//        JobExecutor exec = new JobExecutor();
+//        exec.executeWork(() -> {
+//            Thread.sleep(100);
+//            return StatusWorkHelper.buildOkStatus("coffe");
+//        });
+//        exec.executeWork(() -> {
+//            Thread.sleep(100);
+//            return StatusWorkHelper.buildOkStatus("coffe");
+//        });
+//        exec.executeWork(() -> {
+//            Thread.sleep(5000);
+//            return StatusWorkHelper.buildOkStatus("coffe");
+//        });
+//        Thread.sleep(2500);
+//        System.out.println(exec.getWorkBeeingExecuted().size());
     }
 }

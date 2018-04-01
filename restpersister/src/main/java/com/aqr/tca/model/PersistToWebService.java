@@ -13,7 +13,7 @@ public class PersistToWebService {
 
     private HttpMethod methodType;
 
-    private Map<String,String> headers = new HashMap<>();
+    private Map<String, String> headers = new HashMap<>();
 
     public PersistToWebService() {
     }
