@@ -2,7 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Getting Started: Serving Web Content</title>
-    <link rel="stylesheet" href="resources/css/bootstrap.min.css">
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="resources/bootstrap/css/bootstrap.min.css"/>
 </head>
 <body>
 
@@ -19,20 +20,27 @@
                 </tr>
             </table>
         </div>
+        <div class="col-sm-3 col-md-6 col-lg-6">
+            <ul class="nav nav-pills">
+                <li class="nav-item dropdown show">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                       aria-haspopup="true" aria-expanded="true">Persist To</a>
+                    <div class="dropdown-menu show" x-placement="bottom-start"
+                         style="position: absolute; transform: translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        <a class="dropdown-item" href="#">WebService</a>
+                        <a class="dropdown-item" href="#">Cassandra</a>
+                        <a class="dropdown-item" href="#">Csv File</a>
+                    </div>
+                </li>
+            </ul>
 
-        <div class="col-sm-9 col-md-6 col-lg-6">
-            Persist To:
-            <select>
-                <option selected value="webservice">WebService</option>
-                <option value="cassandra">Cassandra</option>
-                <option value="csv">Csv File</option>
-            </select>
         </div>
     </div>
 
+
     <div class="row">
         <div class="col-sm-9 col-md-6 col-lg-6">
-            Active  Workers:
+            Active Workers:
             <table border="1" align="center" width="100%" style="width: 100%;">
                 <tr>
                     <th>Topic</th>
@@ -46,9 +54,9 @@
 
 </div>
 
-    <!-- include javascript -->
-    <script type="text/javascript" src="resources/js/jquery.min.js/"></script>
-    <script type="text/javascript" src="resources/js/bootstrap.min.js"></script>
+    <script type='text/javascript' src="resources/jquery/jquery-3.3.1.min.js"></script>
+    <script type='text/javascript' src='resources/bootstrap/js/bootstrap.js'></script>
+
 
 </body>
 </html>
