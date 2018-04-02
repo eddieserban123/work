@@ -35,6 +35,8 @@ public class PersistToWebServiceDeserializer extends StdDeserializer<PersistToWe
         ObjectCodec oc = jsonParser.getCodec();
         JsonNode node = oc.readTree(jsonParser);
         try {
+            String fromTopic = node.get("fromTopic").asText();
+            String appName = node.get("appName").asText();
             URI location = new URI(node.get("location").asText());
             HttpMethod methodType = HttpMethod.resolve(node.get("method").asText());
             Map<String, String> headers = new HashMap<>();
@@ -51,7 +53,7 @@ public class PersistToWebServiceDeserializer extends StdDeserializer<PersistToWe
 //            MapType type    = factory.constructMapType(HashMap.class, String.class, String.class);
 //            mapper  = new ObjectMapper();
 //            = mapper.readValue(headersNode.asText(), type);
-            return new PersistToWebService(location, methodType, headers);
+            return new PersistToWebService(fromTopic, appName, location, methodType, headers);
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }

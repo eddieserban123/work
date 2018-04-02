@@ -47,29 +47,7 @@ public class KafkaController {
     }
 
     //    {"location":"http://localhost:8080","method":"POST","headers":[]}
-//curl -X POST -H "Content-Type: application/json" -d '{"location":"http://localhost:8080","method":"POST","headers":[]}' http://localhost:8080/restpersister/kafka/topics/toweb
-
-    @RequestMapping(method = RequestMethod.POST, path = "/tofake",  consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> moveDataFake(@RequestBody PersistToWebService persist) {
-
-        jobExecutor.executeWork(new Worker(persist.getLocation().toString()) {
-            @Override
-            public StatusWork call() {
-                try {
-                    Thread.sleep(7000);
-                } catch (Exception ex) {
-                    return StatusWorkHelper.buildErrorStatus("Er:blabla");
-                }
-                return StatusWorkHelper.buildOkStatus("blabla");
-            }
-
-        });
-
-        return new ResponseEntity<String>("anaremere", HttpStatus.CREATED);
-    }
-
-    //    {"location":"http://localhost:8080","method":"POST","headers":[]}
-// curl -X POST -H "Content-Type: application/json" -d '{"location":"http://localhost:8080","method":"POST","headers":[{"dsdsd":"asa"},{"head2":"val2"}]}' http://localhost:8080/restpersister/kafka/topics/toweb
+// curl -X POST -H "Content-Type: application/json" -d '{"fromTopic":"testtopic1","appName":"AQRPersister","location":"http://localhost:8080","method":"POST","headers":[{"dsdsd":"asa"},{"head2":"val2"}]}' http://localhost:8080/restpersister/kafka/topics/toweb
     @RequestMapping(method = RequestMethod.POST, path = "/toweb",  consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> moveDataFromTopicsToWebServices(@RequestBody PersistToWebService persist) {
 
@@ -78,7 +56,7 @@ public class KafkaController {
             @Override
             public StatusWork call() {
                 try {
-                    final Consumer<Long, String> consumer = cm.createKafkaConsumer("testtopic1","myId");
+                    final Consumer<Long, String> consumer = cm.createKafkaConsumer(persist.getFromTopic(),persist.getAppName());
                     final int giveUp = 100;
                     int noRecordsCount = 0;
 
@@ -96,6 +74,8 @@ public class KafkaController {
                                     record.key(), record.value(),
                                     record.partition(), record.offset()));
                         });
+
+
 
                         consumer.commitAsync();
                     }

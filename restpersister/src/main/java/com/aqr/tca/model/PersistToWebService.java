@@ -9,7 +9,9 @@ import java.util.Map;
 
 public class PersistToWebService {
 
-    private URI location;  //chech with a URI
+    private String fromTopic;
+    private String appName; //needed for Kafka as a groupID
+    private URI location;
 
     private HttpMethod methodType;
 
@@ -18,10 +20,12 @@ public class PersistToWebService {
     public PersistToWebService() {
     }
 
-    public PersistToWebService(URI location, HttpMethod methodType, Map<String, String> headers) {
+    public PersistToWebService(String fromTopic, String appName, URI location, HttpMethod methodType, Map<String, String> headers) {
         this.location = location;
+        this.appName = appName;
         this.methodType = methodType;
         this.headers = headers;
+        this.fromTopic = fromTopic;
     }
 
     public URI getLocation() {
@@ -46,5 +50,21 @@ public class PersistToWebService {
 
     public void setHeaders(Map<String, String> headers) {
         this.headers = headers;
+    }
+
+    public String getFromTopic() {
+        return fromTopic;
+    }
+
+    public void setFromTopic(String fromTopic) {
+        this.fromTopic = fromTopic;
+    }
+
+    public String getAppName() {
+        return appName;
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
     }
 }
