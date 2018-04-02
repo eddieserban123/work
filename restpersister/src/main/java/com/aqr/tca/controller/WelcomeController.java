@@ -1,5 +1,7 @@
 package com.aqr.tca.controller;
 
+import com.aqr.tca.service.TopicService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,9 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class WelcomeController {
 
+    @Autowired
+    TopicService topicService;
+
     @GetMapping("/")
     public String index(Model model) {
-        model.addAttribute("message", "Hello Spring MVC 5!");
+        model.addAttribute("topics", topicService.getTopics().getTopics());  // i know is wrong
         return "index";
     }
 }
