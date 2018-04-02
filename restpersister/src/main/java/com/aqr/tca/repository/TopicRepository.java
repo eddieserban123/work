@@ -3,6 +3,8 @@ package com.aqr.tca.repository;
 import com.aqr.tca.utils.Topics;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.KafkaException;
+import org.apache.kafka.common.errors.TimeoutException;
 import org.apache.kafka.common.serialization.LongDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,8 +31,13 @@ public class TopicRepository {
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
 
         // Create the consumer using props.
-        final KafkaConsumer<Long, String> consumer = new KafkaConsumer(props);
-        consumer.listTopics().forEach((k,v) -> topics.addTopic(k));
+        try {
+            final KafkaConsumer<Long, String> consumer = new KafkaConsumer(props);
+            consumer.listTopics().forEach((k,v) -> topics.addTopic(k));
+        } catch(KafkaException ex) {
+            topics.addTopic("Error with Kafka cluster");
+        }
+
         return topics;
     }
 

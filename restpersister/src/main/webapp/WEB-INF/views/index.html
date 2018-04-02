@@ -2,11 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Getting Started: Serving Web Content</title>
+    <link rel="stylesheet" href="resources/css/bootstrap.min.css">
 </head>
 <body>
 
 
 <div class="container">
+    <div class="row">
+        <div class="col-sm-3 col-md-6 col-lg-6">
             <table>
                 <tr>
                     <th>Topic Name</th>
@@ -15,10 +18,37 @@
                     <td th:text="${topic}"/>
                 </tr>
             </table>
+        </div>
+
+        <div class="col-sm-9 col-md-6 col-lg-6">
+            Persist To:
+            <select>
+                <option selected value="webservice">WebService</option>
+                <option value="cassandra">Cassandra</option>
+                <option value="csv">Csv File</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-9 col-md-6 col-lg-6">
+            Active  Workers:
+            <table border="1" align="center" width="100%" style="width: 100%;">
+                <tr>
+                    <th>Topic</th>
+                    <th>Started At</th>
+                    <th>Saved To</th>
+                    <th>Processed items so far</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+
 </div>
 
-<!-- include javascript -->
-<script type="text/javascript" src="resources/js/jquery.min.js/"></script>
-<script type="text/javascript" src="resources/js/bootstrap.min.js"></script>
+    <!-- include javascript -->
+    <script type="text/javascript" src="resources/js/jquery.min.js/"></script>
+    <script type="text/javascript" src="resources/js/bootstrap.min.js"></script>
+
 </body>
 </html>
