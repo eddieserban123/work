@@ -11,10 +11,65 @@
 
     <script>
     $(document).ready(function(){
-        $('#my_radio_box').change(function(){
-            alert('Radio Box has been changed!');
+       $('#my_radio_box').change(function(){
+            selected= $("input[name='options']:checked").val();
+            hideDivs()
+             $('#' + selected+'div').show();
         });
     });
+
+    function hideDivs(){
+        $('#webservicediv').hide();
+        $('#cassandradiv').hide();
+    }
+
+    $(document).ready(function(){
+    hideDivs();
+    $('#webservicediv').show();
+
+    var counter = 2;
+
+    $("#addButton").click(function () {
+
+	if(counter>10){
+            alert("Only 10 Headers allow");
+            return false;
+	}
+	var newTextBoxDiv = $(document.createElement('div'))
+	     .attr("id", 'TextBoxDiv' + counter);
+
+	newTextBoxDiv.after().html('<label>Header #'+ counter + ' : </label>' +
+	      '<input type="text" name="header' + counter +
+	      '" id="header' + counter + '" value="" >');
+
+	newTextBoxDiv.appendTo("#TextBoxesGroup");
+	counter++;
+     });
+
+     $("#removeButton").click(function () {
+	if(counter==1){
+          alert("No more headers to remove");
+          return false;
+       }
+
+	counter--;
+
+        $("#TextBoxDiv" + counter).remove();
+
+     });
+
+     $("#persistBtn").click(function () {
+
+	var msg = '';
+	for(i=1; i<counter; i++){
+   	  msg += "\n Header #" + i + " : " + $('#header' + i).val();
+	}
+    	  alert(msg);
+     });
+  });
+</script>
+
+
 
 
 
@@ -46,14 +101,14 @@
             <div class="btn-group btn-group-toggle" data-toggle="buttons">
                 <form id="my_radio_box">
                     <label class="btn btn-primary active">
-                        <input name="options" id="option1" autocomplete="off" checked="" type="radio"
-                               th:onclick="'goWebService()'"> WebService
+                        <input name="options" id="option1" value="webservice" autocomplete="off" checked=""
+                               type="radio"/>WebService
                     </label>
                     <label class="btn btn-primary">
-                        <input name="options" id="option2" autocomplete="off" type="radio"> Cassandra
+                        <input name="options" id="option2" value="cassandra" autocomplete="off" type="radio"/> Cassandra
                     </label>
                     <label class="btn btn-primary">
-                        <input name="options" id="option3" autocomplete="off" type="radio"> Csv File
+                        <input name="options" id="option3" value="csvfile" autocomplete="off" type="radio"/> Csv File
                     </label>
                 </form>
             </div>
@@ -76,39 +131,45 @@
                 </thead>
             </table>
         </div>
-
-        <div class="col-sm-6 col-md-6 col-lg-6">
-            <button type="button" class="btn btn-success">Persist</button>
-        </div>
     </div>
 </div>
 
-<div id="webserviceinfo">
-    <table class="table table-hover">
-        <thead>
-        <tr>
-            <th scope="col">Test</th>
-            <th scope="col">bla</th>
-        </tr>
-        <tr>
-            <td>webservice</td>
-        </tr>
-        </thead>
-    </table>
+<div id="webservicediv">
+    <div class="row">
+        <div class="col-sm-3 col-md-3 col-lg-3">
+            <label for="InputUrl">Url Address</label>
+            <input type="url" class="form-control" id="urlAddress" aria-describedby="Url location" placeholder="Url">
+            <small id="UrlHelp" class="form-text text-muted">Url Location of the WebService</small>
+        </div>
+        <div class="col-sm-3 col-md-3 col-lg-3">
+            <label for="methodType">Method Type</label>
+            <select class="form-control" id="methodType">
+                <option>POST</option>
+                <option>PUT</option>
+            </select>
+        </div>
+        <div class="col-sm-3 col-md-3 col-lg-3">
+            <div id='TextBoxesGroup'>
+                <div id="TextBoxDiv1">
+                    <label>Header #1 : </label><input type='textbox' id='header1'>
+                </div>
+            </div>
+            <input type='button' value='Add Header' id='addButton'>
+            <input type='button' value='Remove Header' id='removeButton'>
+        </div>
+
+
+        <div class="col-sm-3 col-md-3 col-lg-3">
+            <button type="button" class="btn btn-success" id='persistBtn'>Persist</button>
+        </div>
+
+    </div>
+
+
 </div>
 
-<div id="cassandrainfo">
-    <table class="table table-hover">
-        <thead>
-        <tr>
-            <th scope="col">Test</th>
-            <th scope="col">bla</th>
-        </tr>
-        <tr>
-            <td>cassandra</td>
-        </tr>
-        </thead>
-    </table>
+<div id="cassandradiv">
+    cassandra Stuf
 </div>
 
 
