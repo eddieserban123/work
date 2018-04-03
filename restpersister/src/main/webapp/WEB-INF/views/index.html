@@ -6,37 +6,56 @@
 
     <link rel="stylesheet" href="resources/bootstrap/css/bootstrap.min.css"/>
     <script type='text/javascript' src="resources/jquery/jquery-3.3.1.min.js"></script>
-    <script src='resources/popper/popper.min.js'></script>
     <script src='resources/bootstrap/js/bootstrap.min.js'></script>
+    <script src='resources/popper/popper.min.js'></script>
 
+    <script>
+    $(document).ready(function(){
+        $('#my_radio_box').change(function(){
+            alert('Radio Box has been changed!');
+        });
+    });
+
+
+
+
+
+    </script>
 
 </head>
+
+
 <body>
 
 
 <div class="container">
     <div class="row">
         <div class="col-sm-6 col-md-6 col-lg-6">
-            <table class="table table-hover">
-                <tr>
-                    <th>Topic Name</th>
-                </tr>
-                <tr scope="row" th:each="topic : ${topics}">
-                    <td th:text="${topic}"/>
-                </tr>
-            </table>
+
+
+            <fieldset class="form-group">
+                <legend>Kafka Topics</legend>
+                <div th:each="topic : ${topics}">
+                    <input class="form-check-input" name="optionsRadios" checked="" type="radio">
+                    <label class="form-check-label" th:text="${topic}"/>
+                </div>
+
+            </fieldset>
         </div>
         <div class="col-sm-6 col-md-6 col-lg-6">
             <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                <label class="btn btn-primary active">
-                    <input name="options" id="option1" autocomplete="off" checked="" type="radio"> WebService
-                </label>
-                <label class="btn btn-primary">
-                    <input name="options" id="option2" autocomplete="off" type="radio"> Cassandra
-                </label>
-                <label class="btn btn-primary">
-                    <input name="options" id="option3" autocomplete="off" type="radio"> Csv File
-                </label>
+                <form id="my_radio_box">
+                    <label class="btn btn-primary active">
+                        <input name="options" id="option1" autocomplete="off" checked="" type="radio"
+                               th:onclick="'goWebService()'"> WebService
+                    </label>
+                    <label class="btn btn-primary">
+                        <input name="options" id="option2" autocomplete="off" type="radio"> Cassandra
+                    </label>
+                    <label class="btn btn-primary">
+                        <input name="options" id="option3" autocomplete="off" type="radio"> Csv File
+                    </label>
+                </form>
             </div>
 
         </div>
@@ -63,6 +82,35 @@
         </div>
     </div>
 </div>
+
+<div id="webserviceinfo">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Test</th>
+            <th scope="col">bla</th>
+        </tr>
+        <tr>
+            <td>webservice</td>
+        </tr>
+        </thead>
+    </table>
+</div>
+
+<div id="cassandrainfo">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Test</th>
+            <th scope="col">bla</th>
+        </tr>
+        <tr>
+            <td>cassandra</td>
+        </tr>
+        </thead>
+    </table>
+</div>
+
 
 </body>
 </html>
