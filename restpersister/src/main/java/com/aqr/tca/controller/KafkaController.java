@@ -16,16 +16,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
+
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 //http://www.baeldung.com/java-logging-intro
 
 @RestController
 @RequestMapping("/kafka/topics")
+@Async
 public class KafkaController {
 
     @Autowired
@@ -48,7 +54,7 @@ public class KafkaController {
 
     //    {"location":"http://localhost:8080","method":"POST","headers":[]}
 // curl -X POST -H "Content-Type: application/json" -d '{"fromTopic":"testtopic1","appName":"AQRPersister","location":"http://localhost:8080","method":"POST","headers":[{"dsdsd":"asa"},{"head2":"val2"}]}' http://localhost:8080/restpersister/kafka/topics/toweb
-    @RequestMapping(method = RequestMethod.POST, path = "/toweb",  consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.POST, path = "/toweb", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> moveDataFromTopicsToWebServices(@RequestBody PersistToWebService persist) {
 
 
@@ -56,7 +62,7 @@ public class KafkaController {
             @Override
             public StatusWork call() {
                 try {
-                    final Consumer<Long, String> consumer = cm.createKafkaConsumer(persist.getFromTopic(),persist.getAppName());
+                    final Consumer<Long, String> consumer = cm.createKafkaConsumer(persist.getFromTopic(), persist.getAppName());
                     final int giveUp = 100;
                     int noRecordsCount = 0;
 
@@ -74,7 +80,6 @@ public class KafkaController {
                                     record.key(), record.value(),
                                     record.partition(), record.offset()));
                         });
-
 
 
                         consumer.commitAsync();
@@ -101,7 +106,27 @@ public class KafkaController {
     public ResponseEntity<List<String>> getStatusofWork(final PersistToWebService persist) {
         return new ResponseEntity<>(jobExecutor.getWorkBeingExecuted(), HttpStatus.OK);
     }
+
+
+    @RequestMapping(method = RequestMethod.GET, path = "/streaming")
+    public StreamingResponseBody getStrteaming() {
+        return os -> {
+            int i = 0;
+            while (true) {
+                os.write((String.valueOf(i++).concat(" ")).getBytes());
+                os.flush();
+                logger.error(i);
+                try {
+                    Thread.sleep(1000);
+
+                } catch (InterruptedException e) {
+                    logger.error(e);
+                }
+            }
+        };
+    }
 }
+
 
 
 

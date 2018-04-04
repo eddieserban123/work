@@ -2,6 +2,8 @@ package com.aqr.tca.config;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import javax.servlet.ServletRegistration;
+
 public class AppInitializer  extends
         AbstractAnnotationConfigDispatcherServletInitializer {
 
@@ -18,5 +20,11 @@ public class AppInitializer  extends
     @Override
     protected String[] getServletMappings() {
         return new String[] { "/" };
+    }
+
+    @Override
+    protected void customizeRegistration(ServletRegistration.Dynamic registration) {
+        registration.setInitParameter("dispatchOptionsRequest", "true");
+        registration.setAsyncSupported(true);
     }
 }
