@@ -23,6 +23,12 @@
         $('#cassandradiv').hide();
     }
 
+   function onTableRowClick(e) {
+    alert('sds');
+    alert($e);
+
+  }
+
     $(document).ready(function(){
     hideDivs();
     $('#webservicediv').show();
@@ -66,13 +72,28 @@
 	}
     	  alert(msg);
      });
+
+    var currentTopicSelected;
+
+    $("#topicstable tr").click(function(){
+        console.log(this);
+        if(currentTopicSelected !== null){
+            $(currentTopicSelected).addClass('table-light');
+            $(currentTopicSelected).removeClass('table-success');
+            $(this).addClass('table-success');
+            $(this).removeClass('table-light');
+        }
+        else {
+            $(this).addClass('table-success');
+            $(this).removeClass('table-light');
+        }
+        currentTopicSelected = this;
+    });
+
+
+
   });
-</script>
-
-
-
-
-
+    </script>
 
 
     </script>
@@ -87,15 +108,18 @@
     <div class="row">
         <div class="col-sm-6 col-md-6 col-lg-6">
 
-
-            <fieldset class="form-group">
-                <legend>Kafka Topics</legend>
-                <div th:each="topic : ${topics}">
-                    <input class="form-check-input" name="optionsRadios" checked="" type="radio">
-                    <label class="form-check-label" th:text="${topic}"/>
-                </div>
-
-            </fieldset>
+        <table id="topicstable" class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Kafka Topics</th>
+            </tr>
+          </thead>
+          <tbody>
+          <tr th:each="topic : ${topics}" class="table-light">
+             <td th:text="${topic}"/>
+           </tr>
+          </tbody>
+        </table>
         </div>
         <div class="col-sm-6 col-md-6 col-lg-6">
             <div class="btn-group btn-group-toggle" data-toggle="buttons">
@@ -136,19 +160,19 @@
 
 <div id="webservicediv">
     <div class="row">
-        <div class="col-sm-3 col-md-3 col-lg-3">
+        <div class="col-sm-2 col-md-2 col-lg-2">
             <label for="InputUrl">Url Address</label>
             <input type="url" class="form-control" id="urlAddress" aria-describedby="Url location" placeholder="Url">
             <small id="UrlHelp" class="form-text text-muted">Url Location of the WebService</small>
         </div>
-        <div class="col-sm-3 col-md-3 col-lg-3">
+        <div class="col-sm-2 col-md-2 col-lg-2">
             <label for="methodType">Method Type</label>
             <select class="form-control" id="methodType">
                 <option>POST</option>
                 <option>PUT</option>
             </select>
         </div>
-        <div class="col-sm-3 col-md-3 col-lg-3">
+        <div class="col-sm-2 col-md-2 col-lg-2">
             <div id='TextBoxesGroup'>
                 <div id="TextBoxDiv1">
                     <label>Header #1 : </label><input type='textbox' id='header1'>
@@ -158,8 +182,14 @@
             <input type='button' value='Remove Header' id='removeButton'>
         </div>
 
+       <div class="col-sm-2 col-md-2 col-lg-2">
+            <label for="ApplicationName">Application Name</label>
+            <input type="name" class="form-control" id="appName" aria-describedby="App Name" placeholder="App Name">
+            <small id="UrlHelp" class="form-text text-muted">Url Location of the WebService</small>
+        </div>
 
-        <div class="col-sm-3 col-md-3 col-lg-3">
+
+        <div class="col-sm-2 col-md-2 col-lg-2">
             <button type="button" class="btn btn-success" id='persistBtn'>Persist</button>
         </div>
 
