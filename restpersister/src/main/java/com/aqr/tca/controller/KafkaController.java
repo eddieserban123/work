@@ -1,8 +1,9 @@
 package com.aqr.tca.controller;
 
 
-import com.aqr.tca.beans.JobExecutor;
+import com.aqr.tca.beans.JobAsyncExecutor;
 import com.aqr.tca.beans.Worker;
+import com.aqr.tca.beans.sync.JobSyncExecutor;
 import com.aqr.tca.model.PersistToWebService;
 import com.aqr.tca.service.TopicService;
 import com.aqr.tca.utils.ConsumerBuilder;
@@ -20,7 +21,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 
 import org.apache.logging.log4j.Logger;
@@ -31,7 +31,6 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 
 @RestController
 @RequestMapping("/kafka/topics")
-@Async
 public class KafkaController {
 
     @Autowired
@@ -41,7 +40,12 @@ public class KafkaController {
     private static final Logger logger = LogManager.getLogger(KafkaController.class);
 
     @Autowired
-    JobExecutor jobExecutor;
+    JobAsyncExecutor jobAsyncExecutor;
+
+
+    @Autowired
+    JobSyncExecutor jobSyncExecutor;
+
 
     @Autowired
     ConsumerBuilder cm;
@@ -52,13 +56,13 @@ public class KafkaController {
         return topicService.getTopics();
     }
 
-    //    {"location":"http://localhost:8080","method":"POST","headers":[]}
-// curl -X POST -H "Content-Type: application/json" -d '{"fromTopic":"testtopic1","appName":"AQRPersister","location":"http://localhost:8080","method":"POST","headers":[{"dsdsd":"asa"},{"head2":"val2"}]}' http://localhost:8080/restpersister/kafka/topics/toweb
+
+    // curl -X POST -H "Content-Type: application/json" -d '{"fromTopic":"testtopic1","appName":"AQRPersister","location":"http://localhost:8080","method":"POST","headers":[{"dsdsd":"asa"},{"head2":"val2"}]}' http://localhost:8080/restpersister/kafka/topics/toweb
     @RequestMapping(method = RequestMethod.POST, path = "/toweb", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> moveDataFromTopicsToWebServices(@RequestBody PersistToWebService persist) {
 
 
-        jobExecutor.executeWork(new Worker(persist.getLocation().toString()) {
+        jobAsyncExecutor.executeWork(new Worker(persist.getLocation().toString()) {
             @Override
             public StatusWork call() {
                 try {
@@ -104,29 +108,34 @@ public class KafkaController {
     //curl -XGET http://localhost:8080/restpersister/kafka/topics/statuswork
     @RequestMapping(method = RequestMethod.GET, path = "/statuswork")
     public ResponseEntity<List<String>> getStatusofWork(final PersistToWebService persist) {
-        return new ResponseEntity<>(jobExecutor.getWorkBeingExecuted(), HttpStatus.OK);
+        return new ResponseEntity<>(jobAsyncExecutor.getWorkBeingExecuted(), HttpStatus.OK);
     }
 
 
-    @RequestMapping(method = RequestMethod.GET, path = "/streaming")
-    public StreamingResponseBody getStrteaming() {
+    // curl -X POST -H "Content-Type: application/json" -d '{"fromTopic":"testtopic","appName":"AQRPersister1","location":"http://localhost:8080","method":"POST","headers":[{"dsdsd":"asa"},{"head2":"val2"}]}' http://localhost:8080/restpersister/kafka/topics/streaming
+    @RequestMapping(method = RequestMethod.POST, path = "/streaming", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public StreamingResponseBody getLongStreamingData(@RequestBody PersistToWebService persist) {
         return os -> {
-            int i = 0;
-            while (true) {
-                os.write((String.valueOf(i++).concat(" ")).getBytes());
-                os.flush();
-                logger.error(i);
-                try {
-                    Thread.sleep(1000);
-
-                } catch (InterruptedException e) {
-                    logger.error(e);
-                }
-            }
+            jobSyncExecutor.executeWork(persist, os);
         };
     }
-}
 
+    //curl -XGET http://localhost:8080/restpersister/kafka/topics/statusstreamingwork
+    @RequestMapping(method = RequestMethod.GET, path = "/statusstreamingwork")
+    public ResponseEntity<List<String>> getAsyncStatusofWork(final PersistToWebService persist) {
+        return new ResponseEntity<>(jobSyncExecutor.getWorkBeingExecuted(), HttpStatus.OK);
+    }
+
+
+    //curl -XGET http://localhost:8080/restpersister/kafka/topics/statusstreamingwork
+    @RequestMapping(method = RequestMethod.DELETE, path = "/work/{appName}")
+    public ResponseEntity stopWorker(@PathVariable String appName) {
+        jobSyncExecutor.stopWorker(appName);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+
+}
 
 
 
