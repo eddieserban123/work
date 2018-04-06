@@ -127,7 +127,7 @@ public class KafkaController {
     }
 
 
-    //curl -XGET http://localhost:8080/restpersister/kafka/topics/statusstreamingwork
+    //curl DELETE http://localhost:8080/restpersister/kafka/topics/work/
     @RequestMapping(method = RequestMethod.DELETE, path = "/work/{appName}")
     public ResponseEntity stopWorker(@PathVariable String appName) {
         jobSyncExecutor.stopWorker(appName);
