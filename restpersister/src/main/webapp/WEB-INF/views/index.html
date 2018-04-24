@@ -23,11 +23,6 @@
         $('#cassandradiv').hide();
     }
 
-   function onTableRowClick(e) {
-    alert('sds');
-    alert($e);
-
-  }
 
     $(document).ready(function(){
     hideDivs();
@@ -35,12 +30,15 @@
 
     var counter = 2;
 
+
+
     $("#addButton").click(function () {
 
 	if(counter>10){
             alert("Only 10 Headers allow");
             return false;
 	}
+
 	var newTextBoxDiv = $(document.createElement('div'))
 	     .attr("id", 'TextBoxDiv' + counter);
 
@@ -53,16 +51,17 @@
      });
 
      $("#removeButton").click(function () {
-	if(counter==1){
+	 if(counter==1){
           alert("No more headers to remove");
           return false;
        }
 
-	counter--;
+	 counter--;
 
-        $("#TextBoxDiv" + counter).remove();
+     $("#TextBoxDiv" + counter).remove();
 
      });
+    var currentTopicSelected;
 
      $("#persistBtn").click(function () {
 
@@ -70,10 +69,26 @@
 	for(i=1; i<counter; i++){
    	  msg += "\n Header #" + i + " : " + $('#header' + i).val();
 	}
-    	  alert(msg);
+	if(currentTopicSelected !== null) {
+	    msg+= $(currentTopicSelected).find('td:eq(0)').text();
+	}
+	var url = $('#urlAddress').val()
+	if(url != null) {
+	    msg+=url;
+	}
+    var methodType = $('#methodType').val();
+	if(methodType != null){
+	 msg +=methodType;
+	}
+
+	for (i = 0; i < counter; i++) {
+        text += $('header'+i).val();
+    }
+
+        alert(msg);
      });
 
-    var currentTopicSelected;
+
 
     $("#topicstable tr").click(function(){
         console.log(this);
