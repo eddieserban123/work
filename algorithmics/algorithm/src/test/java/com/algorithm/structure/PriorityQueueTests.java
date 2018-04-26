@@ -22,6 +22,10 @@ public class PriorityQueueTests {
 
     }
 
-    private <T>void assertEquals(PriorityQueue<T extends Comparable> pq, T ... values) {
+    private <T extends Comparable>void assertEquals(PriorityQueue<T> pq, T ... values) {
+        Assert.assertEquals(pq.getData().size(), values.length);
+        for(int i =0;i<values.length;i++) {
+            Assert.assertEquals(values[i].compareTo(pq.getData().get(i)),0);
+        }
     }
 }
