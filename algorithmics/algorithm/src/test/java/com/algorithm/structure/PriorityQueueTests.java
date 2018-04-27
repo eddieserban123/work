@@ -19,8 +19,21 @@ public class PriorityQueueTests {
         PriorityQueue<Integer> pq = new PriorityQueue<>();
         pq.push(4);
         assertEquals(pq,4);
+        pq.push(10);
+        assertEquals(pq,10,4);
+        pq.push(2);
+        assertEquals(pq,10,4,2);
+        pq.push(12);
+        assertEquals(pq,12,10,2,4);
+
+
 
     }
+
+
+
+
+    /*-----------------------helper methods *************************/
 
     private <T extends Comparable>void assertEquals(PriorityQueue<T> pq, T ... values) {
         Assert.assertEquals(pq.getData().size(), values.length);
