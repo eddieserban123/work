@@ -30,7 +30,7 @@ public class HamiltonianCycle {
 
     private static void walk(Set<Integer> markedPath, int element) {
 
-        if (isSol(markedPath)) {
+        if (isSol(markedPath, element)) {
             printSol(markedPath);
         } else {
             if (!markedPath.contains(element)) {
@@ -50,11 +50,11 @@ public class HamiltonianCycle {
         //  markedPath.remove(element);
     }
 
-    private static boolean isSol(Set<Integer> markedPath) {
+    private static boolean isSol(Set<Integer> markedPath, int element) {
         if(markedPath.size() == SIZE) {
             int lastEl = (int) markedPath.stream().toArray()[markedPath.size() - 1];
             int firstEl = (int) markedPath.stream().toArray()[0];
-            return (markedPath.size() == SIZE && thereisAPathFrom(lastEl, firstEl));
+            return (markedPath.size() == SIZE && thereisAPathFrom(lastEl, firstEl) && element == firstEl);
         }
         return false;
     }
