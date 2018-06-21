@@ -6,6 +6,7 @@ import java.util.List;
 public class Sudoku {
 
     private static int SIZE = 9;
+    private static int GRID = 3;
 
     private static int mat[][] = {
             {3, 0, 6, 5, 0, 8, 4, 0, 0},
@@ -40,11 +41,18 @@ public class Sudoku {
     private static void solveSudoku(List<Pair> zeros, int depth) {
         if (isSol(zeros, depth)) printSol();
         else {
-            int val = zeros.get(depth);
-
-             if(checkCurrentValue(zeros, depth)) {
-
-             }
+            Pair pair = zeros.get(depth);
+            int val = mat[pair.i][pair.j];
+            if (val == 0) mat[pair.i][pair.j] = 1;
+            if (checkCurrentValue(zeros, depth)) {
+                mat[pair.i][pair.j]++;
+                solveSudoku(zeros, ++depth);
+            } else {
+                if (mat[pair.i][pair.j] < 9) {
+                    mat[pair.i][pair.j]++;
+                    solveSudoku(zeros, depth);
+                }
+            }
 
         }
     }
@@ -53,11 +61,24 @@ public class Sudoku {
         Pair pair = zeros.get(depth);
         int val = mat[pair.i][pair.j];
         //check line
-        for(int i=0;i<SIZE;i++) {
-            if(i!= pair.i && mat[pair.i][i]==val) return false;
-            if(i!= pair.j && mat[i][pair.j]==val) return false;
+        for (int i = 0; i < SIZE; i++) {
+            if (i != pair.j && mat[pair.i][i] == val) return false;
+            if (i != pair.i && mat[i][pair.j] == val) return false;
         }
-        return  true;
+        return checkRectangle(pair);
+
+    }
+
+    private static boolean checkRectangle(Pair pair) {
+        int val = mat[pair.i][pair.j];
+        int xCorner = GRID * (pair.j / GRID);
+        int yCorner = GRID * (pair.i / GRID);
+
+        for (int i = xCorner; i < xCorner + GRID; i++)
+            for (int j = yCorner; j < yCorner + GRID; j++) {
+                if (i != pair.i && j != pair.j && mat[i][j] == val) return false;
+            }
+        return true;
     }
 
     private static void printSol() {
