@@ -45,17 +45,19 @@ public class Sudoku {
             int val = mat[pair.i][pair.j];
             if (val == 0) mat[pair.i][pair.j] = 1;
             if (checkCurrentValue(zeros, depth)) {
-                mat[pair.i][pair.j]++;
-                solveSudoku(zeros, ++depth);
-            } else {
-                if (mat[pair.i][pair.j] < 9) {
-                    mat[pair.i][pair.j]++;
-                    solveSudoku(zeros, depth);
-                }
+                depth++;
+                pair = zeros.get(depth);
+                mat[pair.i][pair.j]=0;
+                solveSudoku(zeros, depth);
             }
-
+            if (mat[pair.i][pair.j] < 9) {
+                mat[pair.i][pair.j]++;
+                solveSudoku(zeros, depth);
+            }
         }
+
     }
+
 
     private static boolean checkCurrentValue(List<Pair> zeros, int depth) {
         Pair pair = zeros.get(depth);
