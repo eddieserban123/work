@@ -33,28 +33,25 @@ public class Sudoku {
     public static void main(String[] args) {
         List<Pair> zeros = findZeros();
 
-        solveSudoku(zeros, 0);
+        solveSudoku(zeros, 0, 1);
+
 
 
     }
 
-    private static void solveSudoku(List<Pair> zeros, int depth) {
+    private static void solveSudoku(List<Pair> zeros, int depth, int pos) {
         if (isSol(zeros, depth)) printSol();
-        else {
+        if (pos <= 9 && depth < zeros.size()) {
             Pair pair = zeros.get(depth);
-            int val = mat[pair.i][pair.j];
-            if (val == 0) mat[pair.i][pair.j] = 1;
-            if (checkCurrentValue(zeros, depth)) {
-                depth++;
-                pair = zeros.get(depth);
-                mat[pair.i][pair.j]=0;
-                solveSudoku(zeros, depth);
+            mat[pair.i][pair.j] = pos;
+            if (checkCurrentValue(zeros, depth))
+                solveSudoku(zeros, depth + 1, 1);
+            if (pos < 9) {
+                solveSudoku(zeros, depth, pos + 1);
             }
-            if (mat[pair.i][pair.j] < 9) {
-                mat[pair.i][pair.j]++;
-                solveSudoku(zeros, depth);
-            }
+            mat[pair.i][pair.j] = 0;
         }
+
 
     }
 
@@ -73,8 +70,8 @@ public class Sudoku {
 
     private static boolean checkRectangle(Pair pair) {
         int val = mat[pair.i][pair.j];
-        int xCorner = GRID * (pair.j / GRID);
-        int yCorner = GRID * (pair.i / GRID);
+        int yCorner = GRID * (pair.j / GRID);
+        int xCorner = GRID * (pair.i / GRID);
 
         for (int i = xCorner; i < xCorner + GRID; i++)
             for (int j = yCorner; j < yCorner + GRID; j++) {
@@ -94,7 +91,7 @@ public class Sudoku {
     }
 
     private static boolean isSol(List<Pair> zeros, int depth) {
-        return depth == zeros.size() + 1;
+        return depth == zeros.size();
     }
 
     private static List<Pair> findZeros() {
