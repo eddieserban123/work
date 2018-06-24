@@ -17,8 +17,8 @@ public class App {
         FileSystem fs = initHdfs(" hdfs://namenodedns:port/user/hdfs/folder/file.csv")
         createFolder(fs,"");
         String newFolderPath="";
-        String fileName=""; re
-        writeToHDFS(fs, newFolderPath, fileName);a
+        String fileName="";
+        writeToHDFS(fs, newFolderPath, fileName);
 
     }
 
