@@ -1,7 +1,8 @@
 package com.algorithm.backtracking;
 
-import java.util.HashMap;
-import java.util.Map;
+import jdk.nashorn.internal.runtime.regexp.joni.encoding.CharacterType;
+
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
@@ -37,58 +38,63 @@ public class CryptarithmeticPuzzle {
 
     private static String result = "money";
 
-    private static Map<Character, Integer> resolvedChars = new HashMap<>();
-    private static Map<Integer, Character> resolvedNumbers = new HashMap<>();
+
+    private static Map<Character, Integer> solution;
 
     public static void main(String[] args) {
 
-        int noLetters;
-        str1 = new StringBuilder(str1).reverse().toString().toLowerCase();
-        str2 = new StringBuilder(str2).reverse().toString().toLowerCase();
-        result = new StringBuilder(result).reverse().toString().toLowerCase();
-        noLetters = countLetters(str1, str2, result);
-        System.out.println("numbers of letters are " + noLetters);
-        decryptPuzzle(0, 0, 0);
+        solution = countLetters(str1, str2, result);
+        if (solution.size() > 10) {
+            System.out.println("too many letters ! exit");
+            System.exit(1);
+        }
+
+        List<Integer> solNumbers = Collections.nCopies(solution.size(),0);
+
+        decryptPuzzle(solNumbers,0, 0);
     }
 
-    private static void decryptPuzzle(int pos, int depth, int carry) {
-        if (pos == result.length()) printSol();
-        else {
-            Character ch1 = pos >= str1.length() ? null : str1.charAt(pos);
-            //check if cha1 is already solved
-            analyzeChar(pos, depth, ch1, carry);
-            Character ch2 = pos >= str2.length() ? null : str2.charAt(pos);
-            analyzeChar(pos, depth, ch2, carry);
-            //check the chars in result
-            int sum = resolvedChars.get(ch1) + resolvedChars.get(ch2) + carry;
-            Character chRes = resolvedNumbers.get(sum % 10);
-            if (chRes != null && chRes.compareTo(result.charAt(pos)) == 0)
-                decryptPuzzle(pos + 1, 0, sum / 10);  //coul be optimized ? depth = depth ?
-            decryptPuzzle(pos, depth + 1, carry);
+    private static void decryptPuzzle(List<Integer> solNumbers, int pos, int depth) {
+        if (pos == solution.size() && checkPuzzle()) {
+            printSol();
+        } else {
+            if(depth<solution.size()) {
+                solNumbers.set(pos, depth);
+                decryptPuzzle(solNumbers,pos+1,0);
+            }
+
+            solution.put(pos,)
         }
     }
 
-    private static void analyzeChar(int pos, int depth, Character ch1, int carry) {
-        if (resolvedChars.get(ch1) == null) {
-            resolvedNumbers.put(depth, ch1);
-            resolvedChars.put(ch1, depth);
-            decryptPuzzle(pos, depth + 1, carry);
-        }
+    private static boolean checkPuzzle() {
     }
 
     private static void printSol() {
-        resolvedChars.entrySet().stream().forEach(e -> {
-                    System.out.println(e.getKey() + " " + e.getValue() + " ");
-                }
-        );
+        print(str1);
+        print(str2);
+        print(result);
+
+
     }
 
-    private static int countLetters(String str1, String str2, String str3) {
+    private static void print(String str) {
+        String res = solution.entrySet().stream().reduce(str, (accStr, es) ->
+                        accStr.replace(es.getKey(), Character.forDigit(es.getValue(), 10)),
+                (il1, il2) -> il1);
+        System.out.println(str);
+        System.out.println(res);
+    }
+
+
+    private static Map<Character, Integer> countLetters(String str1, String str2, String str3) {
         Map<Character, Integer> map = new HashMap<>();
         String res = str1.concat(str2).concat(str3);
         for (char ch : res.toCharArray()) {
-            map.putIfAbsent(ch, 1);
+            map.putIfAbsent(ch, 0);
         }
-        return map.values().stream().reduce(0, (x, y) -> x + y);
+        return map;
     }
+
+
 }
