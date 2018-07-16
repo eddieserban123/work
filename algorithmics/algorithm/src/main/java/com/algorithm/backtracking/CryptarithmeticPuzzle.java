@@ -5,6 +5,7 @@ import jdk.nashorn.internal.runtime.regexp.joni.encoding.CharacterType;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 /*
 Newspapers and magazines often have crypt-arithmetic puzzles of the form:
@@ -39,7 +40,7 @@ public class CryptarithmeticPuzzle {
     private static String result = "money";
 
 
-    private static Map<Character, Integer> solution;
+    private static List<Character> solution;
 
     public static void main(String[] args) {
 
@@ -49,51 +50,77 @@ public class CryptarithmeticPuzzle {
             System.exit(1);
         }
 
-        List<Integer> solNumbers = Collections.nCopies(solution.size(),0);
+        List<Integer> solNumbers = new ArrayList<>(10);
+        for (int i = 0; i < solution.size(); i++) {
+            solNumbers.add(-1);
+        }
 
-        decryptPuzzle(solNumbers,0, 0);
+
+        decryptPuzzle(solNumbers, 0, 0);
     }
 
     private static void decryptPuzzle(List<Integer> solNumbers, int pos, int depth) {
-        if (pos == solution.size() && checkPuzzle()) {
-            printSol();
-        } else {
-            if(depth<solution.size()) {
-                solNumbers.set(pos, depth);
-                decryptPuzzle(solNumbers,pos+1,0);
-            }
+        if (pos == solution.size() && checkPuzzle(solNumbers)) {
+            printSol(solNumbers);
+        }
+        if (pos < solNumbers.size()) {
+            solNumbers.set(pos, depth);
+            if (checkSolSoFar(solNumbers, pos, depth))
+                decryptPuzzle(solNumbers, pos + 1, 0);
+            if (depth < solNumbers.size())
+                decryptPuzzle(solNumbers, pos, depth + 1);
 
-            solution.put(pos,)
         }
     }
 
-    private static boolean checkPuzzle() {
+
+    private static boolean checkSolSoFar(List<Integer> solNumbers, int pos, int depth) {
+        for (int i = 0; i < pos; i++) {
+            if (solNumbers.get(i) == depth) return false;
+        }
+        return true;
     }
 
-    private static void printSol() {
-        print(str1);
-        print(str2);
-        print(result);
+    private static boolean checkPuzzle(List<Integer> list) {
+
+        int val1 = Integer.valueOf(print(str1, list));
+        int val2 = Integer.valueOf(print(str2, list));
+        int res = Integer.valueOf(print(result, list));
+        return res == val1 + val2;
+
+    }
+
+    private static void printSol(List<Integer> sol) {
+
+        print(str1, sol);
+        print(str2, sol);
+        print(result, sol);
 
 
     }
 
-    private static void print(String str) {
-        String res = solution.entrySet().stream().reduce(str, (accStr, es) ->
-                        accStr.replace(es.getKey(), Character.forDigit(es.getValue(), 10)),
-                (il1, il2) -> il1);
-        System.out.println(str);
-        System.out.println(res);
+    private static String print(String str, List<Integer> sol) {
+
+        String aux = str;
+        for (int i = 0; i < sol.size(); i++) {
+            aux = aux.replace(solution.get(i), Character.forDigit(sol.get(i), 10));
+        }
+        return aux;
     }
 
 
-    private static Map<Character, Integer> countLetters(String str1, String str2, String str3) {
-        Map<Character, Integer> map = new HashMap<>();
+    private static List<Character> countLetters(String str1, String str2, String str3) {
+        List<Character> list = new ArrayList<>();
         String res = str1.concat(str2).concat(str3);
         for (char ch : res.toCharArray()) {
-            map.putIfAbsent(ch, 0);
+            if (!check(ch, list))
+                list.add(ch);
         }
-        return map;
+        return list;
+    }
+
+    private static boolean check(Character ch, List<Character> list) {
+        return list.stream().filter(c -> c.compareTo(ch) == 0).findAny().isPresent();
     }
 
 
