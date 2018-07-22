@@ -36,6 +36,7 @@ public class CryptarithmeticPuzzle {
 
     private static String str1 = "send";
     private static String str2 = "more";
+    private static int checks = 0;
 
     private static String result = "money";
 
@@ -45,6 +46,7 @@ public class CryptarithmeticPuzzle {
     public static void main(String[] args) {
 
         solution = countLetters(str1, str2, result);
+
         if (solution.size() > 10) {
             System.out.println("too many letters ! exit");
             System.exit(1);
@@ -57,17 +59,17 @@ public class CryptarithmeticPuzzle {
 
 
         decryptPuzzle(solNumbers, 0, 0);
+        System.out.println(checks);
     }
 
     private static void decryptPuzzle(List<Integer> solNumbers, int pos, int depth) {
-        if (pos == solution.size() && checkPuzzle(solNumbers)) {
+        if (pos == solution.size() &&checkPuzzle(solNumbers))
             printSol(solNumbers);
-        }
-        if (pos < solNumbers.size()) {
+        if (pos < solution.size()) {
             solNumbers.set(pos, depth);
             if (checkSolSoFar(solNumbers, pos, depth))
                 decryptPuzzle(solNumbers, pos + 1, 0);
-            if (depth < solNumbers.size())
+            if (depth < 9)
                 decryptPuzzle(solNumbers, pos, depth + 1);
 
         }
@@ -86,15 +88,16 @@ public class CryptarithmeticPuzzle {
         int val1 = Integer.valueOf(print(str1, list));
         int val2 = Integer.valueOf(print(str2, list));
         int res = Integer.valueOf(print(result, list));
-        return res == val1 + val2;
+        return res == (val1 + val2);
 
     }
 
     private static void printSol(List<Integer> sol) {
 
-        print(str1, sol);
-        print(str2, sol);
-        print(result, sol);
+        System.out.println(print(str1, sol));
+        System.out.println(print(str2, sol));
+        System.out.println(print(result, sol));
+        System.out.println("");
 
 
     }
