@@ -3,6 +3,7 @@ package com.algorithm.backtracking;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class MagnetPuzzle {
 
@@ -16,37 +17,26 @@ public class MagnetPuzzle {
             this.j = j;
         }
 
+        public Point(int i, int j, int val) {
+            this.i = i;
+            this.j = j;
+            this.val = val;
+        }
+
 
     }
 
     static class Magnet {
         Point first;
         Point second;
-        boolean isEmpty;
-
-        public Magnet(Point first, Point second, boolean isEmpty) {
-            this.first = first;
-            this.second = second;
-            this.isEmpty = isEmpty;
-        }
 
         public Magnet(Point first, Point second) {
             this.first = first;
             this.second = second;
-
         }
 
-        public boolean isEmpty() {
-            return isEmpty;
-        }
-
-
-        public void setEmpty(boolean empty) {
-            isEmpty = empty;
-        }
 
         public int getVal(int i, int j) {
-            if (isEmpty) return 0;
             if (containsPoint(i, j)) {
                 if ((first.i == i) && (first.j == j))
                     return first.val;
@@ -54,6 +44,16 @@ public class MagnetPuzzle {
                     return second.val;
             }
             throw new RuntimeException("coordinate outside !");
+        }
+
+        public Magnet mirror() {
+            return new Magnet(new Point(first.i, first.j, -first.val),
+                    new Point(second.i, second.j, -second.val));
+        }
+
+        public Magnet empty() {
+            return new Magnet(new Point(first.i, first.j, 0),
+                    new Point(second.i, second.j, 0));
         }
 
 
@@ -117,14 +117,74 @@ public class MagnetPuzzle {
                         //do nothing
                 }
             }
-    // encode the following operations: 0 do nothing, 1 mirror, 2 empty
+        // encode the following operations: 0 do nothing, 1 mirror, 2 empty
         int sol[] = new int[magnets.size()];
 
-        doCompute(sol,0,0);
+        doCompute(sol, 0, 0);
     }
 
 
     private static void doCompute(int[] sol, int pos, int depth) {
+        if (pos == sol.length && checkSol(sol)) printSol(sol);
+        if(pos<sol.length) {
+
+        }
+    }
+
+    private static void printSol(int[] sol) {
+        for (int i = 0; i < M; i++)
+            for (int j = 0; j < N; j++) {
+                System.out.print(getMagnetContaintThisPoint(sol, i, j).getVal(i,j));
+            }
+        System.out.println();
+    }
+
+    private static Magnet getMagnetContaintThisPoint(int[] sol, int i, int j) {
+        return IntStream.range(0, sol.length).filter(idx ->
+                magnets.get(idx).containsPoint(i, j)).mapToObj(id ->
+        {
+            Magnet m = magnets.get(id);
+            switch (sol[id]) {
+                case 0:
+                    return m;
+                case 1:
+                    return m.mirror();
+                default:
+                    return m.empty();
+            }
+        }).findFirst().get();
+    }
+
+    private static boolean checkSol(int[] sol) {
+        int sumP, sumN = 0;
+        for (int i = 0; i < M; i++) {
+            sumP = sumN = 0;
+            for (int j = 0; j < N; j++) {
+                if (getMagnetContaintThisPoint(sol, i, j).getVal(i, j) < 0)
+                    sumN++;
+                if (getMagnetContaintThisPoint(sol, i, j).getVal(i, j) > 0)
+                    sumP++;
+            }
+            if (left[i] >= 0 && left[i] != sumP)
+                return false;
+            if (right[i] >= 0 && right[i] != sumN)
+                return false;
+        }
+
+        for (int j = 0; j < N; j++) {
+            sumP = sumN = 0;
+            for (int i = 0; i < M; i++) {
+                if (getMagnetContaintThisPoint(sol, i, j).getVal(i, j) < 0)
+                    sumN++;
+                if (getMagnetContaintThisPoint(sol, i, j).getVal(i, j) > 0)
+                    sumP++;
+            }
+            if (top[j] >= 0 && top[j] != sumP)
+                return false;
+            if (bottom[j] >= 0 && bottom[j] != sumN)
+                return false;
+        }
+        return true;
     }
 }
 
