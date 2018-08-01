@@ -125,25 +125,31 @@ public class MagnetPuzzle {
 
 
     private static void doCompute(int[] sol, int pos, int depth) {
-        if (pos == sol.length && checkSol(sol)) printSol(sol);
-        if(pos<sol.length) {
-
+        if (pos == sol.length && checkSol(sol, sol.length)) printSol(sol);
+        if (pos < sol.length) {
+            if (checkSol(sol, pos))
+                doCompute(sol,pos+1,0);
+            if(depth<3)
+                doCompute(sol,pos,depth+1);
         }
     }
+
+
 
     private static void printSol(int[] sol) {
         for (int i = 0; i < M; i++)
             for (int j = 0; j < N; j++) {
-                System.out.print(getMagnetContaintThisPoint(sol, i, j).getVal(i,j));
+                System.out.print(getMagnetContaintThisPoint(sol, sol.length, i, j).getVal(i, j));
             }
         System.out.println();
     }
 
-    private static Magnet getMagnetContaintThisPoint(int[] sol, int i, int j) {
+    private static Magnet getMagnetContaintThisPoint(int[] sol, int n, int i, int j) {
         return IntStream.range(0, sol.length).filter(idx ->
                 magnets.get(idx).containsPoint(i, j)).mapToObj(id ->
         {
             Magnet m = magnets.get(id);
+            if(id>=n) return m.empty();
             switch (sol[id]) {
                 case 0:
                     return m;
@@ -155,14 +161,14 @@ public class MagnetPuzzle {
         }).findFirst().get();
     }
 
-    private static boolean checkSol(int[] sol) {
+    private static boolean checkSol(int[] sol, int n) {
         int sumP, sumN = 0;
         for (int i = 0; i < M; i++) {
             sumP = sumN = 0;
             for (int j = 0; j < N; j++) {
-                if (getMagnetContaintThisPoint(sol, i, j).getVal(i, j) < 0)
+                if (getMagnetContaintThisPoint(sol, n, i, j).getVal(i, j) < 0)
                     sumN++;
-                if (getMagnetContaintThisPoint(sol, i, j).getVal(i, j) > 0)
+                if (getMagnetContaintThisPoint(sol, n,i, j).getVal(i, j) > 0)
                     sumP++;
             }
             if (left[i] >= 0 && left[i] != sumP)
@@ -174,9 +180,9 @@ public class MagnetPuzzle {
         for (int j = 0; j < N; j++) {
             sumP = sumN = 0;
             for (int i = 0; i < M; i++) {
-                if (getMagnetContaintThisPoint(sol, i, j).getVal(i, j) < 0)
+                if (getMagnetContaintThisPoint(sol,n, i, j).getVal(i, j) < 0)
                     sumN++;
-                if (getMagnetContaintThisPoint(sol, i, j).getVal(i, j) > 0)
+                if (getMagnetContaintThisPoint(sol, n, i, j).getVal(i, j) > 0)
                     sumP++;
             }
             if (top[j] >= 0 && top[j] != sumP)
