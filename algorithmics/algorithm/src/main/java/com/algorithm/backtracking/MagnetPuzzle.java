@@ -3,6 +3,7 @@ package com.algorithm.backtracking;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 public class MagnetPuzzle {
@@ -45,6 +46,7 @@ public class MagnetPuzzle {
             }
             throw new RuntimeException("coordinate outside !");
         }
+
 
         public Magnet mirror() {
             return new Magnet(new Point(first.i, first.j, -first.val),
@@ -97,11 +99,14 @@ public class MagnetPuzzle {
     static int bottom[] = {2, -1, -1, 2, -1, 3};
     static int left[] = {2, 3, -1, -1, -1};
     static int right[] = {-1, -1, -1, 1, -1};
-    static char rules[][] = {{'L', 'R', 'L', 'R', 'T', 'T'},
+    static char rules[][] =
+           {{'L', 'R', 'L', 'R', 'T', 'T'},
             {'L', 'R', 'L', 'R', 'B', 'B'},
             {'T', 'T', 'T', 'T', 'L', 'R'},
             {'B', 'B', 'B', 'B', 'T', 'T'},
             {'L', 'R', 'L', 'R', 'B', 'B'}};
+
+    private static int solAux[][] = new int[M][N];
 
     public static void main(String[] args) {
 
@@ -119,38 +124,26 @@ public class MagnetPuzzle {
             }
         // encode the following operations: 0 do nothing, 1 mirror, 2 empty
         int sol[] = new int[magnets.size()];
-
+        long startTime = System.currentTimeMillis();
         doCompute(sol, 0, 0);
+        System.out.println("duration " + (System.currentTimeMillis() - startTime));
+    }
+
+    private static void arrangeMagnets(int[] sol) {
+      arrangeMagnets(sol,magnets.size()-1);
+
     }
 
 
-    private static void doCompute(int[] sol, int pos, int depth) {
-        if (pos == sol.length && checkSol(sol, sol.length)) printSol(sol);
-        if (pos < sol.length) {
-            if (checkSol(sol, pos))
-                doCompute(sol,pos+1,0);
-            if(depth<3)
-                doCompute(sol,pos,depth+1);
-        }
-    }
-
-
-
-    private static void printSol(int[] sol) {
+    private static void arrangeMagnets(int[] sol, int n) {
         for (int i = 0; i < M; i++)
             for (int j = 0; j < N; j++) {
-                System.out.print(getMagnetContaintThisPoint(sol, sol.length, i, j).getVal(i, j));
+                solAux[i][j] = -2;
             }
-        System.out.println();
-    }
-
-    private static Magnet getMagnetContaintThisPoint(int[] sol, int n, int i, int j) {
-        return IntStream.range(0, sol.length).filter(idx ->
-                magnets.get(idx).containsPoint(i, j)).mapToObj(id ->
+        IntStream.rangeClosed(0, n).mapToObj(i ->
         {
-            Magnet m = magnets.get(id);
-            if(id>=n) return m.empty();
-            switch (sol[id]) {
+            Magnet m = magnets.get(i);
+            switch (sol[i]) {
                 case 0:
                     return m;
                 case 1:
@@ -158,17 +151,51 @@ public class MagnetPuzzle {
                 default:
                     return m.empty();
             }
-        }).findFirst().get();
+        }).forEach(m -> {
+            setPoint(m.first);
+            setPoint(m.second);
+        });
+
     }
+
+    private static void setPoint(Point first) {
+        solAux[first.i][first.j] = first.val;
+    }
+
+
+    private static void doCompute(int[] sol, int pos, int depth) {
+        if (pos == sol.length && checkSol(sol, sol.length))
+            printSol(sol);
+        if (pos < sol.length) {
+            sol[pos]=depth;
+            if (checkNeighbours(sol, pos))
+                doCompute(sol, pos + 1, 0);
+            if (depth < 2)
+                doCompute(sol, pos, depth + 1);
+        }
+    }
+
+
+    private static void printSol(int[] sol) {
+        arrangeMagnets(sol);
+        for (int i = 0; i < M; i++) {
+            for (int j = 0; j < N; j++) {
+                System.out.printf("%2d",solAux[i][j]);
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
 
     private static boolean checkSol(int[] sol, int n) {
         int sumP, sumN = 0;
         for (int i = 0; i < M; i++) {
             sumP = sumN = 0;
             for (int j = 0; j < N; j++) {
-                if (getMagnetContaintThisPoint(sol, n, i, j).getVal(i, j) < 0)
+                if (solAux[i][j] == -1)
                     sumN++;
-                if (getMagnetContaintThisPoint(sol, n,i, j).getVal(i, j) > 0)
+                if (solAux[i][j] == 1)
                     sumP++;
             }
             if (left[i] >= 0 && left[i] != sumP)
@@ -180,15 +207,30 @@ public class MagnetPuzzle {
         for (int j = 0; j < N; j++) {
             sumP = sumN = 0;
             for (int i = 0; i < M; i++) {
-                if (getMagnetContaintThisPoint(sol,n, i, j).getVal(i, j) < 0)
+                if (solAux[i][j] == -1)
                     sumN++;
-                if (getMagnetContaintThisPoint(sol, n, i, j).getVal(i, j) > 0)
+                if (solAux[i][j] == 1)
                     sumP++;
             }
             if (top[j] >= 0 && top[j] != sumP)
                 return false;
             if (bottom[j] >= 0 && bottom[j] != sumN)
                 return false;
+        }
+        return true;
+    }
+
+
+    private static boolean checkNeighbours(int[] sol, int n) {
+        arrangeMagnets(sol,n);
+        for (int i = 0; i < M; i++) {
+            for (int j = 0; j < N; j++) {
+                int nb = (i == M - 1) ? 0 : solAux[i + 1][j];
+                int nr = (j == N - 1) ? 0 : solAux[i][j + 1];
+                if ((solAux[i][j] != 0 && solAux[i][j]  !=-2) &&
+                    (solAux[i][j] == nr || solAux[i][j] == nb))
+                    return false;
+            }
         }
         return true;
     }
