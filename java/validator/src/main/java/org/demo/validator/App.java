@@ -12,6 +12,8 @@ import java.util.Set;
 
 /**
  * Hello world!
+ * https://docs.jboss.org/hibernate/validator/5.0/reference/en-US/html/
+ * validator-customconstraints.html#validator-customconstraints-errormessage
  */
 public class App {
     public static void main(String[] args) throws FileNotFoundException {
@@ -24,14 +26,14 @@ public class App {
         Validator validator1 = validatorFactory1.getValidator();
 
 
-        MFISeriesName emp1 = new MFISeriesName(10, "Name", "email", "123");
+        MFISeriesName mfi = new MFISeriesName(10, "Name", "email", "123");
         List<Values> values = new ArrayList<>();
         for (int i = 0; i < 3;i++) {
             values.add(new Values(i));
         }
-        emp1.setValues(values);
+        mfi.setValues(values);
 
-        Set<ConstraintViolation<MFISeriesName>> validationErrors1 = validator1.validate(emp1);
+        Set<ConstraintViolation<MFISeriesName>> validationErrors1 = validator1.validate(mfi);
 
         if (!validationErrors1.isEmpty()) {
             for (ConstraintViolation<MFISeriesName> error : validationErrors1) {

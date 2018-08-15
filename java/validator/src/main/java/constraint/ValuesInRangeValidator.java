@@ -26,6 +26,14 @@ public class ValuesInRangeValidator implements ConstraintValidator<ValuesInRange
         }
 
         int sum = values.stream().mapToInt(Values::getVal).sum();
-        return sum > min && sum < max;
+        boolean isValid =  sum > min && sum < max;
+        if ( !isValid ) {
+            constraintValidatorContext.disableDefaultConstraintViolation();
+            constraintValidatorContext.buildConstraintViolationWithTemplate(
+                    "{contraint.ValuesInRange.message}"
+            ). addConstraintViolation();
+        }
+        return isValid;
+
     }
 }
