@@ -15,7 +15,6 @@
 			<element name="min">5</element>
 			<element name="max">10</element>
 			</constraint>
-
 		</field>
 
 		<field name="aqrId">
@@ -23,6 +22,7 @@
 			<constraint annotation="javax.validation.constraints.Size">
 				<element name="min">5</element>
 				<element name="max">30</element>
+				<element name="docId">2</element>
 			</constraint>
 		</field>
 		<field name="email">
