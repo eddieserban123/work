@@ -1,9 +1,11 @@
 package org.demo
 
 @groovy.transform.Canonical
+@groovy.transform.EqualsAndHashCode(includes = ["aqrid","price"])
 class Trade {
-    Integer val = 0
     String aqrid = ""
+    Integer price = 0
+    String tradeDate = ""
 
 
 }

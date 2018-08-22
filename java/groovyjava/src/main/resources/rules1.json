@@ -1,3 +1,3 @@
 {
-  "script":"a= list*.val.sum(); if (a<3) {return 100} else return 300"
+  "script":"a= list.toList().unique().groupBy({trade ->trade.aqrid}).values().collect({el->el.size()}).find({n->n>=2}); return a==null"
 }

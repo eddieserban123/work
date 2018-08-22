@@ -27,24 +27,15 @@ class AppGroovy {
 
 
         def list = [
-                [1, "AAQ"],
-                [2, "MMG"],
-                [3, "TRT"]
+                ["1", 12, "02-03-2018"],
+                ["2",  15, "02-03-2018"],
+                ["2",  18, "02-03-2018"]
         ] as Trade[]
 
 
-        binding.setVariable("list", list)
+        def res = list.toList().unique().groupBy({trade ->trade.aqrid}).values().collect({el->el.size()}).find({n->n>=2})
 
-
-        final File file = new File("/opt/rules1.json")
-
-        ObjectMapper mapper = new ObjectMapper()
-        Map<String, String> map = mapper.readValue(file, Map.class)
-
-        String script = map.get("script")
-
-        Object result = shell1.evaluate(script)
-        println(result)
+        println(res==null)
 
 
     }
