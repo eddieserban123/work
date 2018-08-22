@@ -1,0 +1,39 @@
+<constraint-mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:schemaLocation="http://jboss.org/xml/ns/javax/validation/mapping validation-mapping-1.1.xsd"
+                     xmlns="http://jboss.org/xml/ns/javax/validation/mapping" version="1.1">
+
+    <default-package>model</default-package>
+
+    <bean class="Trade" ignore-annotations="true">
+        <field name="aqrId">
+            <constraint annotation="javax.validation.constraints.NotNull" />
+            <constraint annotation="javax.validation.constraints.Size">
+                <element name="min">1</element>
+                <element name="max">5</element>
+            </constraint>
+        </field>
+        <field name="openPrice">
+            <constraint annotation="constraint.annotations.PriceInRangeRule">
+                <element name="min">10</element>
+                <element name="max">38</element>
+                <element name="docId">1</element>
+            </constraint>
+        </field>
+    </bean>
+
+
+    <bean class="Trades" ignore-annotations="false">
+        <class ignore-annotations="false"   >
+            <constraint annotation="constraint.annotations.DifferentTCAOpenPriceWithinAQRIDTradeDateRule">
+                <element name="docId">2</element>
+            </constraint>
+        </class>
+
+        <field name="trades" >
+            <valid/>
+        </field>
+
+    </bean>
+
+
+</constraint-mappings>

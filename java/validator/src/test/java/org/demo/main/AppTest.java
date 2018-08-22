@@ -1,4 +1,4 @@
-package org.demo.validator;
+package org.demo.main;
 
 import static org.junit.Assert.assertTrue;
 

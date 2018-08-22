@@ -1,4 +1,6 @@
-package constraint;
+package constraint.annotations;
+
+import constraint.validators.ValuesInRangeValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

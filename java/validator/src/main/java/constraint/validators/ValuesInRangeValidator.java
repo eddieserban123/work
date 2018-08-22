@@ -1,5 +1,6 @@
-package constraint;
+package constraint.validators;
 
+import constraint.annotations.ValuesInRange;
 import model.Values;
 
 import javax.validation.ConstraintValidator;
@@ -30,7 +31,7 @@ public class ValuesInRangeValidator implements ConstraintValidator<ValuesInRange
         if ( !isValid ) {
             constraintValidatorContext.disableDefaultConstraintViolation();
             constraintValidatorContext.buildConstraintViolationWithTemplate(
-                    "{contraint.ValuesInRange.message}"
+                    "{constraint.ValuesInRange.message}"
             ). addConstraintViolation();
         }
         return isValid;
