@@ -31,15 +31,15 @@ public class xmlParserApp {
             String name = field.getTextContent();
             String parent = field.getParentNode().getAttributes().getNamedItem("annotation").getTextContent();
 
-            NodeList constraints = field.getChildNodes();
-            for (int j = 0; j < constraints.getLength(); j++) {
-                Node constraint = constraints.item(j);
-                String annotation = constraint.
-                        getAttributes().
-                        getNamedItem("annotation").
-                        getTextContent();
-                System.out.println(parent + " " + name + " " + annotation);
-            }
+//            NodeList constraints = field.getChildNodes();
+//            for (int j = 0; j < constraints.getLength(); j++) {
+//                Node constraint = constraints.item(j);
+//                String annotation = constraint.
+//                        getAttributes().
+//                        getNamedItem("annotation").
+//                        getTextContent();
+                System.out.println(parent + " " + name );
+ //           }
 
 
         }

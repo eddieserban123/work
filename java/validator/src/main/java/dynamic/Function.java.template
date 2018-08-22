@@ -1,0 +1,10 @@
+package $packageName;
+import static java.lang.Math.*;
+
+public class $className
+	   implements dynamic.Function {
+
+   public double f(double x) {
+      return ($expression) ;
+   }
+}

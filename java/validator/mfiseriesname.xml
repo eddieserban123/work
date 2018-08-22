@@ -5,6 +5,12 @@
 	<default-package>model</default-package>
 
 	<bean class="MFISeriesName" ignore-annotations="true">
+		<class ignore-annotations="true">
+			<group-sequence>
+				<value>Values</value>
+				<value>CarChecks</value>
+			</group-sequence>
+		</class>
 		<field name="id">
 			<constraint annotation="javax.validation.constraints.Min">
 				<element name="value">1</element>
@@ -14,6 +20,7 @@
 			<constraint annotation="constraint.ValuesInRange">
 			<element name="min">5</element>
 			<element name="max">10</element>
+			<element name="docId">62</element>
 			</constraint>
 		</field>
 
