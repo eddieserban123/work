@@ -5,7 +5,7 @@ import util.BusinessHelper;
 
 import java.io.IOException;
 
-import static groovy.GroovyEvalJson.evalTrades;
+import static groovy.GroovyEval.evalTrades;
 
 public class GroovyApp {
 
