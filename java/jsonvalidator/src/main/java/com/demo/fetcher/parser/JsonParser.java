@@ -1,11 +1,13 @@
-package com.demo.folder.tata.fetcher.parser;
+package com.demo.fetcher.parser;
 
-import com.demo.folder.tata.fetcher.parser.beans.Address;
-import com.demo.folder.tata.fetcher.parser.beans.Geo;
-import com.demo.folder.tata.fetcher.parser.beans.User;
-import com.demo.folder.tata.fetcher.parser.deserializer.AddressDeserializer;
-import com.demo.folder.tata.fetcher.parser.deserializer.GeoDeserializer;
-import com.demo.folder.tata.fetcher.parser.deserializer.UsersDeserializer;
+import com.demo.fetcher.parser.deserializer.HolidayCalendarDeserializer;
+import com.demo.fetcher.parser.deserializer.LiquidHoursDeserializer;
+import com.demo.fetcher.parser.deserializer.MarketDataDeserializer;
+import com.demo.fetcher.parser.deserializer.TranslateSymbolDeserializer;
+import com.demo.fetcher.parser.mfiseriesname.HolidayCalendar;
+import com.demo.fetcher.parser.mfiseriesname.LiquidHours;
+import com.demo.fetcher.parser.mfiseriesname.MarketData;
+import com.demo.fetcher.parser.mfiseriesname.TranslateSymbol;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
@@ -28,12 +30,15 @@ public enum JsonParser {
         SimpleModule mod = new SimpleModule();
 
 
+
+
+
         // Add the custom deserializer to the module
-        mod.addDeserializer(User.class, new UsersDeserializer());
-        mod.addDeserializer(Address.class, new AddressDeserializer());
-        mod.addDeserializer(Geo.class, new GeoDeserializer());
-
-
+        mod.addDeserializer(MarketData.class, new MarketDataDeserializer());
+        mod.addDeserializer(LiquidHours.class, new LiquidHoursDeserializer());
+        mod.addDeserializer(TranslateSymbol.class, new TranslateSymbolDeserializer());
+        mod.addDeserializer(HolidayCalendar.class, new HolidayCalendarDeserializer());
+        //mod.addSerializer(SyncWorker.class, new SyncWorkerSerializer());
         mapper.registerModule(mod);    // Register the module on the mapper
 
     }
