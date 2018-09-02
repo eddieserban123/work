@@ -33,15 +33,15 @@ public class UsersDeserializer extends StdDeserializer<User> {
         JsonNode node = oc.readTree(jsonParser);
 
 
-        HyperSchemaFactoryWrapper userVisitor = new HyperSchemaFactoryWrapper();
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.acceptJsonFormatVisitor(User.class, userVisitor);
-        JsonSchema userSchema = userVisitor.finalSchema();
-
-
-
-        User u = com.demo.folder.tata.fetcher.parser.JsonParser.JSONPARSER.getMapper().readValue(node.asText(),User.class);
-
+//        HyperSchemaFactoryWrapper userVisitor = new HyperSchemaFactoryWrapper();
+//        ObjectMapper mapper = new ObjectMapper();
+//        mapper.acceptJsonFormatVisitor(User.class, userVisitor);
+//        JsonSchema userSchema = userVisitor.finalSchema();
+//
+//
+//
+//        User u = com.demo.folder.tata.fetcher.parser.JsonParser.JSONPARSER.getMapper().readValue(node.asText(),User.class);
+//
         Integer id = node.get("id").asInt();
         String name = node.get("name").asText();
         String username = node.get("username").asText();
