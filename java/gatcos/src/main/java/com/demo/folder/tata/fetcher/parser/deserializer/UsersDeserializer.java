@@ -5,13 +5,8 @@ import com.demo.folder.tata.fetcher.parser.beans.User;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
-import com.fasterxml.jackson.module.jsonSchema.customProperties.HyperSchemaFactoryWrapper;
-import jdk.nashorn.internal.parser.JSONParser;
 
 import java.io.IOException;
 
@@ -58,7 +53,7 @@ public class UsersDeserializer extends StdDeserializer<User> {
         user.setId(id);
         user.setName(name);
         user.setUsername(username);
-        user.setEmail(email);
+        user.setEmaill(email);
         user.setAddress(address);
         user.setPhone(phone);
         user.setWebsite(website);

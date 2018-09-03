@@ -11,7 +11,7 @@
     "username" : {
       "type" : "string"
     },
-    "email" : {
+    "emaill" : {
       "type" : "string"
     },
     "address" : {

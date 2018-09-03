@@ -5,7 +5,7 @@ public class User {
     private Integer id;
     private String name;
     private String username;
-    private String email;
+    private String emaill;
     private Address address;
     private String phone;
     private String website;
@@ -38,12 +38,12 @@ public class User {
         this.username = username;
     }
 
-    public String getEmail() {
-        return email;
+    public String getEmaill() {
+        return emaill;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setEmaill(String emaill) {
+        this.emaill = emaill;
     }
 
     public Address getAddress() {
@@ -84,7 +84,7 @@ public class User {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", username='" + username + '\'' +
-                ", email='" + email + '\'' +
+                ", emaill='" + emaill + '\'' +
                 ", address=" + address +
                 ", phone='" + phone + '\'' +
                 ", website='" + website + '\'' +
