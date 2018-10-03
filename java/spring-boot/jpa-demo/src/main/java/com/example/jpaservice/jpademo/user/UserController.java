@@ -1,5 +1,6 @@
 package com.example.jpaservice.jpademo.user;
 
+import com.example.jpaservice.jpademo.post.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
@@ -46,6 +47,17 @@ public class UserController {
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("{id}").
                 buildAndExpand(savedUser.getId()).toUri();
         return ResponseEntity.created(location).build();
+    }
+
+    @GetMapping(path = "/users/{id}/post")
+    public List<Post> getAllUsersPost(@PathVariable int id) {
+
+        Optional<User> user =  userRepository.findById(id);
+        if (!user.isPresent()) {
+
+            throw new UserNotFoundException(String.format("id - %d", id));
+        }
+        return user.get().getPosts();
     }
 
 
