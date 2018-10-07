@@ -1,6 +1,8 @@
 package com.example.jpaservice.jpademo.user;
 
 import com.example.jpaservice.jpademo.post.Post;
+import com.example.jpaservice.jpademo.post.PostRepository;
+import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
@@ -22,6 +24,9 @@ public class UserController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    PostRepository postRepository;
 
 
     @GetMapping(path = "/users")
@@ -58,6 +63,15 @@ public class UserController {
             throw new UserNotFoundException(String.format("id - %d", id));
         }
         return user.get().getPosts();
+    }
+
+    @PostMapping(path = "/users/{id}/post")
+    public ResponseEntity<Object> createUserPost(@PathVariable Integer id, @RequestBody Post post) {
+        post.setUser(userRepository.getOne(id));
+        Post postSaved= postRepository.save(post);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("{idPost}").
+                buildAndExpand(postSaved.getId()).toUri();
+        return ResponseEntity.created(location).build();
     }
 
 
