@@ -37,7 +37,13 @@ public class Passport {
         this.number = number;
     }
 
-
+    @Override
+    public String toString() {
+        return "Passport{" +
+                "id=" + id +
+                ", number='" + number + '\'' +
+                '}';
+    }
 }
 
 
