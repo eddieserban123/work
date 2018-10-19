@@ -33,6 +33,8 @@ public class JpaApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
       //  logger.info(" *** " + rep.findById(10001L));
         //rep.playWithEntityManager();
-        stRep.saveStudentWithPassport();
+        //stRep.saveStudentWithPassport();
+       // stRep.retrieveStudentandPassport();
+        rep.addReviewsForcourse();
     }
 }

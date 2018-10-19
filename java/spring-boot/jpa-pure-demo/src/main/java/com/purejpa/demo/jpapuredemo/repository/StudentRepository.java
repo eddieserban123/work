@@ -1,7 +1,10 @@
 package com.purejpa.demo.jpapuredemo.repository;
 
+import com.purejpa.demo.jpapuredemo.JpaApplication;
 import com.purejpa.demo.jpapuredemo.entity.Passport;
 import com.purejpa.demo.jpapuredemo.entity.Student;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -16,6 +19,10 @@ public class StudentRepository {
 
     @Autowired
     EntityManager em;
+
+
+    private Logger logger = LoggerFactory.getLogger(StudentRepository.class);
+
 
 
 
@@ -41,6 +48,13 @@ public class StudentRepository {
             em.merge(c);
         return c;
     }
+
+        public void retrieveStudentandPassport() {
+          Student student =   em.find(Student.class, 20001L);
+          Passport passport = student.getPassport();
+          logger.info("*** passport {}", passport);
+
+        }
 
     public void saveStudentWithPassport() {
         Passport p = new Passport("Z123456");

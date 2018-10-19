@@ -10,10 +10,14 @@ public class Review {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private ReviewRating  rating;
+    private ReviewRating rating;
 
     @Column(nullable = false)
     private String description;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Course course;
 
     protected Review() {
     }
@@ -45,6 +49,15 @@ public class Review {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
     }
 }
 

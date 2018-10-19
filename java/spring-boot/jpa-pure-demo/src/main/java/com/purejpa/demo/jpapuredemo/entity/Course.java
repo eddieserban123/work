@@ -5,6 +5,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -24,6 +25,9 @@ public class Course {
     @UpdateTimestamp
     private LocalDateTime updated;
 
+
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "course")
+    private List<Review> reviews;
 
 
     public Course(String name) {
@@ -89,6 +93,20 @@ public class Course {
 
         return Objects.hash(id, name);
     }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void addReview(Review review) {
+        this.reviews.add(review);
+    }
+
+    public void removeReview(Review review) {
+        this.reviews.remove(review);
+    }
+
+
 }
 
 

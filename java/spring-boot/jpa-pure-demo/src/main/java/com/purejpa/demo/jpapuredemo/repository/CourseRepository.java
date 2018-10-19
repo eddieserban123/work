@@ -1,6 +1,8 @@
 package com.purejpa.demo.jpapuredemo.repository;
 
 import com.purejpa.demo.jpapuredemo.entity.Course;
+import com.purejpa.demo.jpapuredemo.entity.Review;
+import com.purejpa.demo.jpapuredemo.entity.ReviewRating;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -50,7 +52,24 @@ public class CourseRepository {
 
 
     }
+    @Transactional
+    public void addReviewsForcourse() {
+        Course course = findById(10003L);
+
+        Review review1 = new Review(ReviewRating.FIVE, "Briliant!!");
+        Review review2 = new Review(ReviewRating.FIVE, "Hatsoff");
+
+        course.addReview(review1);
+        review1.setCourse(course);
+        course.addReview(review2);
+        review2.setCourse(course);
+
+        em.merge(review1);
+        em.merge(review2);
 
 
 
+
+
+    }
 }

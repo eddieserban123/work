@@ -1,15 +1,12 @@
 package com.purejpa.demo.jpapuredemo.repository;
 
-import com.purejpa.demo.jpapuredemo.JpaApplication;
 import com.purejpa.demo.jpapuredemo.entity.Student;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
@@ -29,7 +26,5 @@ public class StudentRepositoryTest {
         logger.info("* student {}", st);
         logger.info("* passport {}", st.getPassport());
         }
-
-
 
 }
