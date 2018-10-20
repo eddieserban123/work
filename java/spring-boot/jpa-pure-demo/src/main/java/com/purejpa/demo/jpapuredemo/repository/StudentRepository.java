@@ -1,6 +1,7 @@
 package com.purejpa.demo.jpapuredemo.repository;
 
 import com.purejpa.demo.jpapuredemo.JpaApplication;
+import com.purejpa.demo.jpapuredemo.entity.Course;
 import com.purejpa.demo.jpapuredemo.entity.Passport;
 import com.purejpa.demo.jpapuredemo.entity.Student;
 import org.slf4j.Logger;
@@ -62,6 +63,21 @@ public class StudentRepository {
 
         Student student = new Student("titi");
         student.setPassport(p);
+        em.persist(student);
+
+    }
+
+    @Transactional
+    public void setStudentAndCourses() {
+        Student student =   em.find(Student.class, 20001L);
+        Course course1 = em.find(Course.class,10001L);
+        Course course2 = em.find(Course.class,10002L);
+
+        student.addCourse(course1);
+        student.addCourse(course2);
+        course1.addStudent(student);
+        course2.addStudent(student);
+
         em.persist(student);
 
     }

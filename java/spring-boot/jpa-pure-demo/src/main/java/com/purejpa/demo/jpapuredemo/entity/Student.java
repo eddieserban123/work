@@ -1,6 +1,7 @@
 package com.purejpa.demo.jpapuredemo.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Student {
@@ -18,6 +19,13 @@ public class Student {
     private Passport passport;
 
 
+    @ManyToMany
+    @JoinTable(name = "STUDENT_COURSE", joinColumns = @JoinColumn(name = "STUDENT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "COURSE_ID"))
+
+    private List<Course> courses;
+
+
     public Student(String name) {
         this.name = name;
     }
@@ -25,6 +33,15 @@ public class Student {
 
     protected Student() {
     }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void addCourse(Course course) {
+        this.courses.add(course);
+    }
+
 
     public Long getId() {
         return id;

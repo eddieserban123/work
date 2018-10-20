@@ -35,6 +35,8 @@ public class JpaApplication implements CommandLineRunner {
         //rep.playWithEntityManager();
         //stRep.saveStudentWithPassport();
        // stRep.retrieveStudentandPassport();
-        rep.addReviewsForcourse();
+       // rep.addReviewsForcourse();
+       // rep.playWithEntityManager();
+        stRep.setStudentAndCourses();
     }
 }

@@ -35,7 +35,21 @@ public class Course {
     }
 
 
+
     public Course() {
+    }
+
+
+
+    @ManyToMany(mappedBy = "courses")
+    private List<Student> students;
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void addStudent(Student student) {
+        this.students.add(student);
     }
 
     public Long getId() {
