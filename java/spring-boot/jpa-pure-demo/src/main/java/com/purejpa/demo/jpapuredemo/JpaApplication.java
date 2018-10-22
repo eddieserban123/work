@@ -1,7 +1,10 @@
 package com.purejpa.demo.jpapuredemo;
 
 
+import com.purejpa.demo.jpapuredemo.entity.employee.FullTimeEmployee;
+import com.purejpa.demo.jpapuredemo.entity.employee.PartTimeEmployee;
 import com.purejpa.demo.jpapuredemo.repository.CourseRepository;
+import com.purejpa.demo.jpapuredemo.repository.EmployeeRepository;
 import com.purejpa.demo.jpapuredemo.repository.StudentRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.math.BigDecimal;
 
 @SpringBootApplication
 public class JpaApplication implements CommandLineRunner {
@@ -23,7 +28,8 @@ public class JpaApplication implements CommandLineRunner {
     @Autowired
     StudentRepository stRep;
 
-
+    @Autowired
+    EmployeeRepository employeeRepository;
     public static void main(String[] args) {
         SpringApplication.run(JpaApplication.class, args);
     }
@@ -37,6 +43,14 @@ public class JpaApplication implements CommandLineRunner {
        // stRep.retrieveStudentandPassport();
        // rep.addReviewsForcourse();
        // rep.playWithEntityManager();
-        stRep.setStudentAndCourses();
+        //stRep.setStudentAndCourses();
+
+        employeeRepository.insert(new PartTimeEmployee("Jill", new BigDecimal("50")));
+        employeeRepository.insert(new FullTimeEmployee("Jack", new BigDecimal("10000")));
+
+        logger.info("All Employees -> {}",
+                employeeRepository.findAll());
+
+
     }
 }
