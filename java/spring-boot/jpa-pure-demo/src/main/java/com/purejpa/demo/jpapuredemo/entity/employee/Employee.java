@@ -2,11 +2,13 @@ package com.purejpa.demo.jpapuredemo.entity.employee;
 
 import javax.persistence.*;
 
-@NamedQueries(value = {
-        @NamedQuery(name="findAllEmployee", query = "select e from Employee e")
-})
-@Entity
-@Inheritance(strategy = InheritanceType.JOINED)
+//@NamedQueries(value = {
+//        @NamedQuery(name="findAllEmployee", query = "select e from Employee e")
+//})
+
+//@Entity
+//@Inheritance(strategy = InheritanceType.JOINED)
+@MappedSuperclass
 public abstract class Employee {
 
     @Id
