@@ -1,8 +1,6 @@
 package com.purejpa.demo.jpapuredemo;
 
 
-import com.purejpa.demo.jpapuredemo.entity.employee.FullTimeEmployee;
-import com.purejpa.demo.jpapuredemo.entity.employee.PartTimeEmployee;
 import com.purejpa.demo.jpapuredemo.repository.CourseRepository;
 import com.purejpa.demo.jpapuredemo.repository.EmployeeRepository;
 import com.purejpa.demo.jpapuredemo.repository.StudentRepository;
@@ -12,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.math.BigDecimal;
 
 @SpringBootApplication
 public class JpaApplication implements CommandLineRunner {
@@ -45,16 +41,20 @@ public class JpaApplication implements CommandLineRunner {
        // rep.playWithEntityManager();
         //stRep.setStudentAndCourses();
 
-        employeeRepository.insert(new PartTimeEmployee("Jill", new BigDecimal("50")));
-        employeeRepository.insert(new FullTimeEmployee("Jack", new BigDecimal("10000")));
+//        employeeRepository.insert(new PartTimeEmployee("Jill", new BigDecimal("50")));
+//        employeeRepository.insert(new FullTimeEmployee("Jack", new BigDecimal("10000")));
+////
+////        logger.info("All Employees -> {}",
+////                employeeRepository.findAll());
 //
-//        logger.info("All Employees -> {}",
-//                employeeRepository.findAll());
+//        logger.info("All FullTimeEmployees -> {}",
+//                employeeRepository.findAllFullEmployees());
+//        logger.info("All PartTimeEmployees -> {}",
+//                employeeRepository.findAllPartTimeEmployees());
 
-        logger.info("All FullTimeEmployees -> {}",
-                employeeRepository.findAllFullEmployees());
-        logger.info("All PartTimeEmployees -> {}",
-                employeeRepository.findAllPartTimeEmployees());
+        logger.info("All Courses With No Student -> {}", rep.allCoursesWithNoStudent());
+        logger.info("All Courses With At Least 2 Students -> {}", rep.allCoursesWithAtLeast2Students());
+        logger.info("All Courses order by Students -> {}", rep.allCoursesOrderByStudents());
 
 
 

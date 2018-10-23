@@ -67,9 +67,23 @@ public class CourseRepository {
         em.merge(review1);
         em.merge(review2);
 
-
-
-
-
     }
+
+    public List<Course> allCoursesWithNoStudent(){
+        return em.createQuery("select c from Course c where c.students is empty ", Course.class).
+                getResultList();
+    }
+
+    public List<Course> allCoursesWithAtLeast2Students(){
+        return em.createQuery("select c from Course c where size(c.students) >2 ", Course.class).
+                getResultList();
+    }
+
+    public List<Course> allCoursesOrderByStudents(){
+        return em.createQuery("select c from Course c order by size(c.students)", Course.class).
+                getResultList();
+    }
+
+
+
 }
