@@ -82,11 +82,11 @@ public class StudentRepository {
 
     }
 
-    public List<Employee> retrieveAllEmployees(){
-        TypedQuery<Employee> query = em.createNamedQuery("findAllEmployee", Employee.class);
-        return query.getResultList();
-    }
 
+    public List<Student> findStudentsWithPassportNumberFormat(){
+        return em.createQuery("select s from Student s where s.passport.number like '%1234%'", Student.class).getResultList();
+
+    }
 
 
 }

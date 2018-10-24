@@ -84,6 +84,11 @@ public class CourseRepository {
                 getResultList();
     }
 
+    public List<Course> coursesLike100Steps(){
+        return em.createQuery("select c from Course c where c.name like '%100 Steps%'", Course.class).
+                getResultList();
+    }
+
 
 
 }

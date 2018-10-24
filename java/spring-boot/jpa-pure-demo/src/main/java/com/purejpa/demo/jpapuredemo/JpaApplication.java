@@ -55,7 +55,9 @@ public class JpaApplication implements CommandLineRunner {
         logger.info("All Courses With No Student -> {}", rep.allCoursesWithNoStudent());
         logger.info("All Courses With At Least 2 Students -> {}", rep.allCoursesWithAtLeast2Students());
         logger.info("All Courses order by Students -> {}", rep.allCoursesOrderByStudents());
+        logger.info("Courses like 100 steps -> {}", rep.coursesLike100Steps());
 
+        logger.info("Student with passport number like  -> {}", stRep.findStudentsWithPassportNumberFormat());
 
 
     }
