@@ -6,6 +6,21 @@ values(10002,'Spring in 50 Steps', sysdate(), sysdate());
 insert into course(id, name, created, updated)
 values(10003,'Spring Boot in 100 Steps', sysdate(), sysdate());
 
+insert into course(id, name, created, updated)
+values(10004,'JPA in 54 Steps', sysdate(), sysdate());
+insert into course(id, name, created, updated)
+values(10005,'Spring in 55 Steps', sysdate(), sysdate());
+insert into course(id, name, created, updated)
+values(10006,'Spring Boot in 106 Steps', sysdate(), sysdate());
+
+
+insert into course(id, name, created, updated)
+values(10007,'JPA in 57 Steps', sysdate(), sysdate());
+insert into course(id, name, created, updated)
+values(10008,'Spring in 58 Steps', sysdate(), sysdate());
+insert into course(id, name, created, updated)
+values(10009,'Spring Boot in 109 Steps', sysdate(), sysdate());
+
 
 insert into passport(id,number)
 values(40001,'E123456');
