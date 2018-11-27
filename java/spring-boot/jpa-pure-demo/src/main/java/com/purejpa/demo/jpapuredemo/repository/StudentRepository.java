@@ -3,7 +3,6 @@ package com.purejpa.demo.jpapuredemo.repository;
 import com.purejpa.demo.jpapuredemo.entity.Course;
 import com.purejpa.demo.jpapuredemo.entity.Passport;
 import com.purejpa.demo.jpapuredemo.entity.Student;
-import com.purejpa.demo.jpapuredemo.entity.employee.Employee;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

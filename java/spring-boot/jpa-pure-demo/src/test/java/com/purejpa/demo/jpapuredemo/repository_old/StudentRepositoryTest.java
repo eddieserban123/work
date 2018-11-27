@@ -1,6 +1,7 @@
-package com.purejpa.demo.jpapuredemo.repository;
+package com.purejpa.demo.jpapuredemo.repository_old;
 
 import com.purejpa.demo.jpapuredemo.entity.Student;
+import com.purejpa.demo.jpapuredemo.repository.StudentRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;

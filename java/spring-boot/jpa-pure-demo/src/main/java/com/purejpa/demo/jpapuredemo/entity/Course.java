@@ -1,7 +1,11 @@
 package com.purejpa.demo.jpapuredemo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
+
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -10,8 +14,13 @@ import java.util.Objects;
 
 @Entity
 @NamedQueries(value = {
-        @NamedQuery(name = "find_all_courses", query = "select c from Course c")
+        @NamedQuery(name = "find_all_courses", query = "select c from Course c"),
+        @NamedQuery(name = "query_get_all_courses_join_fetch",
+                query = "Select  c  From Course c JOIN FETCH c.students s")
 })
+@Cacheable
+@SQLDelete(sql="update course set is_deleted=true where id=?")
+@Where(clause="is_deleted = false")
 public class Course {
 
     @Id
@@ -30,6 +39,11 @@ public class Course {
     private List<Review> reviews;
 
 
+
+
+    private boolean isDeleted;
+
+
     public Course(String name) {
         this.name = name;
     }
@@ -41,6 +55,7 @@ public class Course {
 
 
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "courses")
     private List<Student> students;
 

@@ -1,7 +1,7 @@
 package com.purejpa.demo.jpapuredemo;
 
 
-import com.purejpa.demo.jpapuredemo.repository.CourseRepository;
+import com.purejpa.demo.jpapuredemo.repository.CourseSprinngDataRepository;
 import com.purejpa.demo.jpapuredemo.repository.EmployeeRepository;
 import com.purejpa.demo.jpapuredemo.repository.StudentRepository;
 import org.slf4j.Logger;
@@ -18,14 +18,19 @@ public class JpaApplication implements CommandLineRunner {
     private Logger logger = LoggerFactory.getLogger(JpaApplication.class);
 
 
+//    @Autowired
+//    CourseRepository rep;
+
     @Autowired
-    CourseRepository rep;
+    CourseSprinngDataRepository repData;
+
 
     @Autowired
     StudentRepository stRep;
 
     @Autowired
     EmployeeRepository employeeRepository;
+
     public static void main(String[] args) {
         SpringApplication.run(JpaApplication.class, args);
     }
@@ -33,12 +38,12 @@ public class JpaApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-      //  logger.info(" *** " + rep.findById(10001L));
+        //  logger.info(" *** " + rep.findById(10001L));
         //rep.playWithEntityManager();
         //stRep.saveStudentWithPassport();
-       // stRep.retrieveStudentandPassport();
-       // rep.addReviewsForcourse();
-       // rep.playWithEntityManager();
+        // stRep.retrieveStudentandPassport();
+        // rep.addReviewsForcourse();
+        // rep.playWithEntityManager();
         //stRep.setStudentAndCourses();
 
 //        employeeRepository.insert(new PartTimeEmployee("Jill", new BigDecimal("50")));
@@ -59,8 +64,7 @@ public class JpaApplication implements CommandLineRunner {
 //
 //        logger.info("Student with passport number like  -> {}", stRep.findStudentsWithPassportNumberFormat());
 
-        rep.getAllCoursesInStream().forEach(c -> logger.info(c.toString()));
-
+        repData.findAll();
 
     }
 }

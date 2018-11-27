@@ -3,10 +3,6 @@ package com.purejpa.demo.jpapuredemo.repository;
 import com.purejpa.demo.jpapuredemo.entity.Course;
 import com.purejpa.demo.jpapuredemo.entity.Review;
 import com.purejpa.demo.jpapuredemo.entity.ReviewRating;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.annotations.QueryHints;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.stream.Stream;
+
 
 @Repository
 @Transactional
@@ -97,12 +93,12 @@ public class CourseRepository {
                 getResultList();
     }
 
-    public Stream<Course> getAllCoursesInStream() {
-        //sessionFactory.openStatelessSession(null)
-       //return em.createQuery("select c from Course c",Course.class).
-         //      unwrap(Query.class).stream();
-       return  em.unwrap(Session.class).createQuery("select c from Course c",Course.class).setReadOnly(true).setFetchSize(2).stream();
-    }
+//    public Stream<Course> getAllCoursesInStream() {
+//        //sessionFactory.openStatelessSession(null)
+//       //return em.createQuery("select c from Course c",Course.class).
+//         //      unwrap(Query.class).stream();
+//       return  em.unwrap(Session.class).createQuery("select c from Course c",Course.class).setReadOnly(true).setFetchSize(2).stream();
+//    }
 
 
 

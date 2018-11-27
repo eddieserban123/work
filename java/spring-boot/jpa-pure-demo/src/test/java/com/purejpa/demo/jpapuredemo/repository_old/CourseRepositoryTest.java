@@ -1,6 +1,7 @@
-package com.purejpa.demo.jpapuredemo.repository;
+package com.purejpa.demo.jpapuredemo.repository_old;
 
 import com.purejpa.demo.jpapuredemo.entity.Course;
+import com.purejpa.demo.jpapuredemo.repository.CourseRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,25 +1,25 @@
 
-insert into course(id, name, created, updated)
-values(10001,'JPA in 50 Steps', sysdate(), sysdate());
-insert into course(id, name, created, updated)
-values(10002,'Spring in 50 Steps', sysdate(), sysdate());
-insert into course(id, name, created, updated)
-values(10003,'Spring Boot in 100 Steps', sysdate(), sysdate());
+insert into course(id, name, created, updated, is_deleted)
+values(10001,'JPA in 50 Steps', sysdate(), sysdate(), false);
+insert into course(id, name, created, updated, is_deleted)
+values(10002,'Spring in 50 Steps', sysdate(), sysdate(),false);
+insert into course(id, name, created, updated, is_deleted)
+values(10003,'Spring Boot in 100 Steps', sysdate(), sysdate(),false);
 
-insert into course(id, name, created, updated)
-values(10004,'JPA in 54 Steps', sysdate(), sysdate());
-insert into course(id, name, created, updated)
-values(10005,'Spring in 55 Steps', sysdate(), sysdate());
-insert into course(id, name, created, updated)
-values(10006,'Spring Boot in 106 Steps', sysdate(), sysdate());
+insert into course(id, name, created, updated, is_deleted)
+values(10004,'JPA in 54 Steps', sysdate(), sysdate(), false);
+insert into course(id, name, created, updated,is_deleted)
+values(10005,'Spring in 55 Steps', sysdate(), sysdate(), false);
+insert into course(id, name, created, updated,is_deleted)
+values(10006,'Spring Boot in 106 Steps', sysdate(), sysdate(), false);
 
 
-insert into course(id, name, created, updated)
-values(10007,'JPA in 57 Steps', sysdate(), sysdate());
-insert into course(id, name, created, updated)
-values(10008,'Spring in 58 Steps', sysdate(), sysdate());
-insert into course(id, name, created, updated)
-values(10009,'Spring Boot in 109 Steps', sysdate(), sysdate());
+insert into course(id, name, created, updated, is_deleted)
+values(10007,'JPA in 57 Steps', sysdate(), sysdate(), false);
+insert into course(id, name, created, updated, is_deleted)
+values(10008,'Spring in 58 Steps', sysdate(), sysdate(), false);
+insert into course(id, name, created, updated, is_deleted)
+values(10009,'Spring Boot in 109 Steps', sysdate(), sysdate(), false);
 
 
 insert into passport(id,number)
