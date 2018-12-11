@@ -12,8 +12,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(HelloController.class)
@@ -34,10 +33,11 @@ public class HelloControllerIntegrationTest {
 
     @Test
     public void performWithoutName() throws Exception {
-        mvc.perform(get("/name").
+        mvc.perform(get("/hello").
                 accept(MediaType.TEXT_PLAIN)).
                 andExpect(status().isOk()).
-                andExpect(view().name("hello"));
+                andExpect(view().name("hello")).
+                andExpect(model().attribute("user","World"));
 
     }
 
