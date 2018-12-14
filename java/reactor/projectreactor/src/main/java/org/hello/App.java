@@ -4,6 +4,7 @@ import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.publisher.SynchronousSink;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,5 +59,38 @@ public class App {
 
             }
         });
+
+
+        Flux<String> flux = Flux.generate(
+                () -> 0,
+                (Integer state, SynchronousSink<String> sink) -> {
+                    sink.next("3 x " + state + " = " + 3*state);
+                    if (state == 10) sink.complete();
+                    return state + 1;
+                });
+
+        flux.collectList().subscribe(new Subscriber<>() {
+            @Override
+            public void onSubscribe(Subscription subscription) {
+                subscription.request(1);
+            }
+
+            @Override
+            public void onNext(List<String> strings) {
+                strings.forEach(System.out::println);
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+
+            }
+
+            @Override
+            public void onComplete() {
+                System.out.println("Done !");
+            }
+        });
     }
+
+
 }
