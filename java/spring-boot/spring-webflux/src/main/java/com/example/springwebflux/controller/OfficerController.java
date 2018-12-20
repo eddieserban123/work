@@ -30,6 +30,13 @@ public class OfficerController {
         return repository.findById(id);
     }
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Mono<Officer> saveOfficer(@RequestBody Officer officer) {
+        return repository.save(officer);
+    }
+
+
     @PutMapping("{id}")
     public Mono<ResponseEntity<Officer>> updateOfficer(@PathVariable(value = "id") String id,
                                                        @RequestBody Officer officer) {
