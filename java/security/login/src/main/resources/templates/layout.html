@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+<div th:if="${currentUser}!=null}">
+    <form th:action="@{/logout}" th:method="post">
+        <button type="submit">Log out</button>
+    </form>
+</div>
+
+<div class="container" layout:fragment="content">
+</div>
+</body>
+</html>
