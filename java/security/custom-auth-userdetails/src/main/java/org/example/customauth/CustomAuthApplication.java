@@ -6,7 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
@@ -21,14 +21,14 @@ public class CustomAuthApplication {
 
 	@Bean
 	PasswordEncoder passwordEncoder() {
-		return NoOpPasswordEncoder.getInstance();
+		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
 
 	@Bean
 	CustomUserDetailService  getUserDetailService() {
 
 		Collection<UserDetails> us = Arrays.asList(
-				new CustomUserDetails("eddie","eddie",true,
+				new CustomUserDetails("eddie",passwordEncoder().encode("eddie"),true,
 				"USER","ADMIN"));
 
 		return new CustomUserDetailService(us);
