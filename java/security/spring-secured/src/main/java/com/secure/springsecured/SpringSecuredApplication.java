@@ -52,8 +52,6 @@ public class SpringSecuredApplication implements CommandLineRunner {
 }
 
 
-
-
 class MyUserDetails implements UserDetails {
 
     private User user;
@@ -115,7 +113,7 @@ class MyUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         UserDetails us = new MyUserDetails(userRepo.findUserByEmail(s));
-        if(us == null ) {
+        if (us == null) {
             throw new InvalidParameterException(s);
         }
         return us;
@@ -154,13 +152,19 @@ class Runner implements ApplicationRunner {
         Message msg2 = msgRepository.save(new Message("hey ", cocos));
 
 
-        log.info("eddie " + eddie.toString());
-       authenticate(eddie.getEmail());
+//        log.info("eddie " + eddie.toString());
 
-//        authenticate(cocos.getEmail());
-
+        authenticate(eddie.getEmail());
         log.info("**** " + msgRepository.findByIdMessageAllowed(msg1.getId()));
 
+
+        authenticate(cocos.getEmail());
+        try {
+            log.info("**** " + msgRepository.findByIdMessageAllowed(msg1.getId()));
+
+        } catch (Throwable e) {
+            log.error("couldn't obtain result foe cocos ");
+        }
     }
 
 
@@ -181,7 +185,7 @@ interface MessageRepository extends JpaRepository<Message, Long> {
 
     @Query(QUERY)
     @RolesAllowed("ROLE_ADMIN")
-    Message  findByIdMessageAllowed(Long Id) ;
+    Message findByIdMessageAllowed(Long Id);
 }
 
 @Repository
