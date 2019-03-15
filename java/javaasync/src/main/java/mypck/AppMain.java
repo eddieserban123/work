@@ -7,11 +7,54 @@ public class AppMain {
 
     public static void main(String[] args) {
         Job job = new Job();
-        Integer val = CompletableFuture.
+        Integer val;
+        CompletableFuture<Integer> f1,f2;
+///*
+//  this way they execute  A1 --> A2(sum time t1)
+//                                                       combine t1+t2
+//                         B1 --> B2 (sum time t2)
+//
+//*/
+//        f1 = CompletableFuture.
+//                supplyAsync(()-> job.doTaskA1()).
+//                thenComposeAsync((v)->
+//                        CompletableFuture.supplyAsync(()-> v + job.doTaskA2()) );
+//
+//
+//        f2 = CompletableFuture.
+//                supplyAsync(()-> job.doTaskB1()).
+//                thenComposeAsync((v)->
+//                        CompletableFuture.supplyAsync(()-> v + job.doTaskB2()) );
+//
+//        val = f2.thenCombineAsync(f1, (v1,v2) ->v1 + v2).join();
+
+/*
+  this way they execute  A1 and A2 in parallel(sum time t1)
+                                                       combine t1+t2
+                         B1 and B2 in parallel (sum time t2)
+
+*/
+        f1 = CompletableFuture.
                 supplyAsync(()-> job.doTaskA1()).
-                thenCombineAsync(CompletableFuture.supplyAsync(()-> job.doTaskA2()), (s1,s2) -> s1 + s2
-                ).
-                join();
+                thenApplyAsync(v->
+                        v + job.doTaskA2());
+
+
+        f2 = CompletableFuture.
+                supplyAsync(()-> job.doTaskB1()).
+                thenApplyAsync(v->
+                        v + job.doTaskB2());
+
+        val = f2.thenCombineAsync(f1, (v1,v2) ->v1 + v2).join();
+
+
+
+
+//        Integer val = CompletableFuture.
+//                supplyAsync(()-> job.doTaskA1()).
+//                thenApplyAsync( i -> i + job.doTaskA2()).
+//                thenApplyAsync(i -> i + job.doTaskB1()).
+//                join();
 
         System.out.println(val);
 
@@ -21,6 +64,7 @@ public class AppMain {
 
 
 class Job {
+     ThreadLocal<Integer> val = new ThreadLocal<>();
 
     public Integer doTaskA1(){
         doJob("A1");
@@ -33,17 +77,17 @@ class Job {
     }
 
     public Integer doTaskB1(){
-        doJob("A3");
+        doJob("B1");
         return getAnInt();
     }
 
     public Integer doTaskB2(){
-        doJob("A4");
+        doJob("B2");
         return getAnInt();
     }
 
     private int getAnInt() {
-        return ThreadLocalRandom.current().nextInt(1000, 2000);
+        return val.get();
     }
 
 
@@ -51,12 +95,13 @@ class Job {
 
         try {
             synchronized(this) {
-                System.out.println(" task " + name + " start");
+                System.out.println(" task " + name + " start on threadId " + Thread.currentThread().getId());
+                val.set(ThreadLocalRandom.current().nextInt(10000, 12000));
 
-            } int val = ThreadLocalRandom.current().nextInt(1000, 2000);
-            Thread.sleep(val);
+            }
+            Thread.sleep(val.get());
             synchronized(this) {
-                System.out.println(" task " + name + " finished");
+                System.out.println(" task " + name + " finished in " + val.get().toString() + " ms");
             }
 
         } catch (InterruptedException e) {
