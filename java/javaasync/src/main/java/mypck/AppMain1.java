@@ -3,30 +3,12 @@ package mypck;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class AppMain {
+public class AppMain1 {
 
     public static void main(String[] args) {
         Job job = new Job();
         Integer val;
         CompletableFuture<Integer> f1,f2;
-///*
-//  this way they execute  A1 --> A2(sum time t1)
-//                                                       combine t1+t2
-//                         B1 --> B2 (sum time t2)
-//
-//*/
-//        f1 = CompletableFuture.
-//                supplyAsync(()-> job.doTaskA1()).
-//                thenComposeAsync((v)->
-//                        CompletableFuture.supplyAsync(()-> v + job.doTaskA2()) );
-//
-//
-//        f2 = CompletableFuture.
-//                supplyAsync(()-> job.doTaskB1()).
-//                thenComposeAsync((v)->
-//                        CompletableFuture.supplyAsync(()-> v + job.doTaskB2()) );
-//
-//        val = f2.thenCombineAsync(f1, (v1,v2) ->v1 + v2).join();
 
 /*
   this way they execute  A1 and A2 in parallel(sum time t1)
@@ -48,13 +30,6 @@ public class AppMain {
         val = f2.thenCombineAsync(f1, (v1,v2) ->v1 + v2).join();
 
 
-
-
-//        Integer val = CompletableFuture.
-//                supplyAsync(()-> job.doTaskA1()).
-//                thenApplyAsync( i -> i + job.doTaskA2()).
-//                thenApplyAsync(i -> i + job.doTaskB1()).
-//                join();
 
         System.out.println(val);
 
