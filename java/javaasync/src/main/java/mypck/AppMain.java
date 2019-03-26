@@ -68,25 +68,25 @@ class Job {
 
     public Integer doTaskA1(){
         doJob("A1");
-        return getAnInt();
+        return getAValue();
     }
 
     public Integer doTaskA2(){
         doJob("A2");
-        return getAnInt();
+        return getAValue();
     }
 
     public Integer doTaskB1(){
         doJob("B1");
-        return getAnInt();
+        return getAValue();
     }
 
     public Integer doTaskB2(){
         doJob("B2");
-        return getAnInt();
+        return getAValue();
     }
 
-    private int getAnInt() {
+    private int getAValue() {
         return val.get();
     }
 
