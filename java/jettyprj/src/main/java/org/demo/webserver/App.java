@@ -1,30 +1,39 @@
 package org.demo.webserver;
 
-import org.demo.webserver.servlet.PriceServlet;
+import io.reactivex.Flowable;
+import org.apache.http.client.fluent.Request;
+import org.demo.webserver.server.MyServer;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.ServletHandler;
 
-import java.util.concurrent.Flow;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Hello world!
  */
+//   Flowable.just(4,6,7).subscribe(System.out::println);
 public class App {
+    private static int PORT = 8888;
     public static void main(String[] args) throws Exception {
-        startServer();
-        
+       Server s =  MyServer.start(PORT);
+       Thread.sleep(3000);
+
+
+
+        Flowable.interval(1000, TimeUnit.MILLISECONDS).
+                map(v-> getPrice("/price")).
+                map(Double::parseDouble).blockingSubscribe(System.out::println);
+
+        s.join();
     }
 
-    private static void startServer() throws Exception {
-        System.out.println("Hello World!");
-        Server server = new Server(8888);
-        ServletHandler servletHandler = new ServletHandler();
-        servletHandler.addServletWithMapping(PriceServlet.class, "/price");
-        server.setHandler(servletHandler);
 
-        server.start();
-        server.dumpStdErr();
-        server.join();
+    private static String getPrice(String url) throws IOException {
+        return Request.Get("http://localhost:" + PORT + url)
+            .execute()
+            .returnContent()
+            .asString()
+            .trim();
     }
 }
 
