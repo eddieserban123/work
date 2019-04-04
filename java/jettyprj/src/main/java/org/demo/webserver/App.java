@@ -18,11 +18,16 @@ public class App {
        Server s =  MyServer.start(PORT);
        Thread.sleep(3000);
 
-
-
-        Flowable.interval(1000, TimeUnit.MILLISECONDS).
+        Flowable<Double> f1 = Flowable.interval(1000, TimeUnit.MILLISECONDS).
                 map(v-> getPrice("/price")).
-                map(Double::parseDouble).blockingSubscribe(System.out::println);
+                map(Double::parseDouble);
+
+
+        Flowable<Double> f2 = Flowable.interval(1000, TimeUnit.MILLISECONDS).
+                map(v-> getPrice("/price")).
+                map(Double::parseDouble);
+
+        f1.zipWith(f2, (v1,v2) -> String.format("%.2f %.2f %.2f",v1,v2,v1+v2)).blockingSubscribe(System.out::println);
 
         s.join();
     }
