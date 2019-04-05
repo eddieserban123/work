@@ -1,7 +1,6 @@
 package org.demo.webserver;
 
 import io.reactivex.Flowable;
-import io.reactivex.Observable;
 import org.apache.http.client.fluent.Request;
 import org.demo.webserver.server.MyServer;
 import org.eclipse.jetty.server.Server;
@@ -9,17 +8,15 @@ import org.eclipse.jetty.server.Server;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Hello world!
- */
-//   Flowable.just(4,6,7).subscribe(System.out::println);
-public class App {
+public class App01SimpleFlowable {
     private static int PORT = 8888;
 
     public static void main(String[] args) throws Exception {
-        Server s = MyServer.start(PORT);
-        Observable
-
+        Server s =  MyServer.start(PORT);
+        Flowable.interval(1000, TimeUnit.MILLISECONDS).
+                map(v-> getPrice("/price")).
+                map(Double::parseDouble).
+                blockingSubscribe(System.out::println);
         s.join();
     }
 
@@ -32,5 +29,3 @@ public class App {
                 .trim();
     }
 }
-
-
