@@ -1,4 +1,4 @@
-package org.demo.webserver;
+package org.demo.webserver.javarx;
 
 import io.reactivex.Flowable;
 import org.apache.http.client.fluent.Request;
@@ -8,18 +8,19 @@ import org.eclipse.jetty.server.Server;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-public class App021ZipFlowableWithdifferentRate {
+public class App020ZipFlowableWithSameRate {
     private static int PORT = 8888;
 
     public static void main(String[] args) throws Exception {
         Server s = MyServer.start(PORT);
 
-        Flowable<Double> f1 = Flowable.interval(100, TimeUnit.MILLISECONDS).
+        Flowable<Double> f1 = Flowable.interval(1000, TimeUnit.MILLISECONDS).
                 map(v -> getPrice("/price")).
                 map(v -> {
                     System.out.println("  -> " + v);
                     return Double.parseDouble(v);
-                });
+                }).throttleFirst(1000, TimeUnit.MILLISECONDS);
+
 
         Flowable<Double> f2 = Flowable.interval(1000, TimeUnit.MILLISECONDS).
                 map(v -> getPrice("/price")).

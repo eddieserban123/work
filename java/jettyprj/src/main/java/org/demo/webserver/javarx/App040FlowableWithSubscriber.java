@@ -1,4 +1,4 @@
-package org.demo.webserver;
+package org.demo.webserver.javarx;
 
 import io.reactivex.Flowable;
 import org.apache.http.client.fluent.Request;
