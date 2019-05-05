@@ -22,7 +22,7 @@ public class App010SimplePublisher {
         Server s = MyServer.start(PORT);
 
         SubmissionPublisher<String> p = new SubmissionPublisher<>(
-                Executors.newFixedThreadPool(4), 5);
+                Executors.newFixedThreadPool(4), 2);
 
 
         System.out.println(p.getMaxBufferCapacity());
@@ -73,7 +73,7 @@ class MySubscriber implements Flow.Subscriber<String> {
         try {
             logger.log("consumed " + s);
             Thread.sleep(1000);
-            subscription.request(1);
+            subscription.request(10);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

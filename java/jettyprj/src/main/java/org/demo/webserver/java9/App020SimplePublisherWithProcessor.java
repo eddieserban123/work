@@ -9,11 +9,11 @@ import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Flow;
 import java.util.concurrent.SubmissionPublisher;
+import java.util.function.Function;
 
 /**
  * Hello world!
  */
-//   Flowable.just(4,6,7).subscribe(System.out::println);
 public class App020SimplePublisherWithProcessor {
     private static int PORT = 8888;
     private static Logger logger = new Logger();
@@ -21,15 +21,14 @@ public class App020SimplePublisherWithProcessor {
     public static void main(String[] args) throws Exception {
         Server s = MyServer.start(PORT);
 
-        SubmissionPublisher<String> producer = new SubmissionPublisher<>(
-                Executors.newFixedThreadPool(4), 5);
+        SubmissionPublisher<String> producer = new SubmissionPublisher<>();
 
 
         System.out.println(producer.getMaxBufferCapacity());
 
 
         Flow.Subscriber<Double> mySubscriber = new MySubscriber02();
-        Flow.Processor processor = new MyProcessor();
+        Flow.Processor processor = new MyProcessor(Double::parseDouble);
         producer.subscribe(processor);
         processor.subscribe(mySubscriber);
       //  processor.subscribe(mySubscriber);
@@ -55,6 +54,44 @@ public class App020SimplePublisherWithProcessor {
 }
 
 
+class MyProcessor extends SubmissionPublisher<Double> implements Flow.Processor<String, Double>{
+
+    private Flow.Subscription subscription;
+    private Function<String, Double>  transformer;
+    private static Logger logger = new Logger();
+
+    public MyProcessor(Function<String, Double> transformer) {
+        this.transformer = transformer;
+    }
+
+    @Override
+    public void onSubscribe(Flow.Subscription subscription) {
+        this.subscription = subscription;
+        subscription.request(1);
+    }
+
+    @Override
+    public void onNext(String item) {
+
+        Double val = transformer.apply(item);
+        logger.log("transformed " + item);
+        getSubscribers().forEach(s-> submit(val));
+        subscription.request(1);
+
+    }
+
+    @Override
+    public void onError(Throwable throwable) {
+
+    }
+
+    @Override
+    public void onComplete() {
+
+    }
+}
+
+
 class MySubscriber02 implements Flow.Subscriber<Double> {
     private static Logger logger = new Logger();
     Flow.Subscription subscription;
@@ -70,8 +107,8 @@ class MySubscriber02 implements Flow.Subscriber<Double> {
     public void onNext(Double s) {
         try {
             logger.log("consumed " + s);
-            Thread.sleep(1000);
-            subscription.request(1);
+            Thread.sleep(10000);
+            subscription.request(10);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -88,42 +125,4 @@ class MySubscriber02 implements Flow.Subscriber<Double> {
     }
 };
 
-
-
-class MyProcessor implements Flow.Processor<String, Double> {
-
-    private static Logger logger = new Logger();
-    private Flow.Subscriber subscriber;
-    private Flow.Subscription subscription;
-
-
-    @Override
-    public void subscribe(Flow.Subscriber subscriber) {
-        this.subscriber = subscriber;
-
-    }
-
-    @Override
-    public void onSubscribe(Flow.Subscription subscription) {
-        this.subscription = subscription;
-        subscriber.onSubscribe(subscription);
-    }
-
-    @Override
-    public void onNext(String item) {
-        Double val = Double.valueOf(item);
-        logger.log("transformed " + val);
-        subscriber.onNext(val);
-    }
-
-    @Override
-    public void onError(Throwable throwable) {
-
-    }
-
-    @Override
-    public void onComplete() {
-
-    }
-}
 
