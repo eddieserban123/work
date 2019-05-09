@@ -1,12 +1,10 @@
 package org.demo.webserver.http;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
-import java.util.AbstractMap;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -15,10 +13,10 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static java.net.http.HttpClient.*;
-import static java.util.AbstractMap.*;
+import static java.util.AbstractMap.SimpleImmutableEntry;
 import static java.util.stream.Collectors.toList;
 
-public class App020HttpClientAsyncSearch {
+public class App021HttpClientAsyncSearch {
 
     public static void main(String[] args) throws  InterruptedException, ExecutionException {
 
