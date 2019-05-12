@@ -1,5 +1,8 @@
 package org.demo.webserver.http;
 
+import org.demo.webserver.server.MyServer;
+import org.eclipse.jetty.server.Server;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -7,33 +10,30 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Flow;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import static java.net.http.HttpClient.*;
-import static java.util.AbstractMap.SimpleImmutableEntry;
 import static java.util.stream.Collectors.toList;
 
+/*
+ sudo ip link set dev lo mtu 65535
+  sudo ip link list
+ */
 public class App030HttpClientGetStreams {
+
+    private static final int PORT = 8888;
 
     public static void main(String[] args) throws Exception {
 
-        URI uri = URI.create("https://demo.borland.com/testsite/stadyn_largepagewithimages.html");
+        Server s = MyServer.start(PORT);
+        URI uri = URI.create(
+                "http://127.0.0.1:" + PORT + "/book");
         HttpClient client = getHttpClient();
-
         CompletableFuture res = searchOnSite(client, uri);
-        System.in.read();
-    }
-
-    static <T> CompletableFuture<List<T>> sequence(List<CompletableFuture<T>> com) {
-        return CompletableFuture.allOf(com.toArray(new CompletableFuture<?>[com.size()]))
-                .thenApply(v -> com.stream()
-                        .map(CompletableFuture::join)
-                        .collect(toList())
-                );
+        s.join();
     }
 
 
@@ -55,13 +55,6 @@ public class App030HttpClientGetStreams {
     }
 
 
-    private static int countMatches(String text, String textToFind) {
-        Matcher m = Pattern.compile(textToFind).matcher(text);
-        int matches = 0;
-        while (m.find())
-            matches++;
-        return matches;
-    }
 
 
     private static HttpClient getHttpClient() {
@@ -76,6 +69,7 @@ public class App030HttpClientGetStreams {
 
 class StringFinder implements Flow.Subscriber<String> {
 
+    AtomicInteger counter = new AtomicInteger(1);
     private String term;
     private Flow.Subscription subscription;
 
@@ -92,10 +86,11 @@ class StringFinder implements Flow.Subscriber<String> {
     @Override
     public void onNext(String item) {
         System.out.println(item);
-        subscription.request(1);
 
-        try {
-            Thread.sleep(1000);
+        try{
+            if(counter.incrementAndGet()%100_000==0)
+                Thread.sleep(20_000);
+        subscription.request(1);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
