@@ -13,7 +13,7 @@ public class BookServlet extends HttpServlet {
         resp.setContentType("application/text");
         resp.setStatus(HttpServletResponse.SC_OK);
         //resp.getWriter().append("a".repeat(KILO)).append('\n').append("b".repeat(KILO)).close();
-        resp.getWriter().append("ana\nare\nmere");
+        //resp.getWriter().append("ana\nare\nmere");
         for(int i=0;i<1_000_000;i++){
             resp.getWriter().append(String.format("%06d",i) + '\n');
         }

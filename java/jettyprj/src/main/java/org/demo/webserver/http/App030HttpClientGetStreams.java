@@ -19,8 +19,10 @@ import static java.net.http.HttpClient.*;
 import static java.util.stream.Collectors.toList;
 
 /*
- sudo ip link set dev lo mtu 65535
+ alt univers 65535
   sudo ip link list
+
+  tcpdump -A -s 0 'tcp port 8888 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)' -i lo
  */
 public class App030HttpClientGetStreams {
 
@@ -30,7 +32,7 @@ public class App030HttpClientGetStreams {
 
         Server s = MyServer.start(PORT);
         URI uri = URI.create(
-                "http://127.0.0.1:" + PORT + "/book");
+                "http://localhost:" + PORT + "/book");
         HttpClient client = getHttpClient();
         CompletableFuture res = searchOnSite(client, uri);
         s.join();
@@ -88,8 +90,8 @@ class StringFinder implements Flow.Subscriber<String> {
         System.out.println(item);
 
         try{
-            if(counter.incrementAndGet()%100_000==0)
-                Thread.sleep(20_000);
+           //if(counter.incrementAndGet()%100_000==0)
+                Thread.sleep(1);
         subscription.request(1);
         } catch (InterruptedException e) {
             e.printStackTrace();
