@@ -9,7 +9,7 @@ public class ReactivePriceApiClient
     public static Flowable<String> pricesAtInterval()
     {
         return Flowable
-            .interval(100, TimeUnit.MILLISECONDS)
+            .interval(1000, TimeUnit.MILLISECONDS)
             .map(x -> PriceApiService.getPrice());
     }
 
@@ -27,15 +27,15 @@ public class ReactivePriceApiClient
     public static void main(String[] args)
     {
         // Reactive Streams on an interval
-        pricesAtInterval()
-            .blockingSubscribe(System.out::println);
+//        pricesAtInterval()
+//            .blockingSubscribe(System.out::println);
 
         // Using a single value - like a CompletableFuture but composable
-        /*oneLazyPrice()
-            .blockingSubscribe(System.out::println);*/
+        oneLazyPrice()
+            .blockingSubscribe(System.out::println);
 
         // Testing data
-        /*testPrices()
-            .subscribe(System.out::println);*/
+        testPrices()
+            .subscribe(System.out::println);
     }
 }
