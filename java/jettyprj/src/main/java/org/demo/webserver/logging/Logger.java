@@ -15,6 +15,10 @@ public class Logger {
 
                 while (stayAlive) {
                     System.out.println(queue.take());
+                    /**
+                    StackFrame caller = StackWalker.getInstance().walk(frames -> frames.skip(1).findFirst().orElseThrow());
+		            System.out.printf("    [DEBUG | %-12s] %s%n", caller.getMethodName(), message);
+                    **/
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();

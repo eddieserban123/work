@@ -5,6 +5,12 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.demo.webserver.server.servlet.PriceServlet;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 
 public class MyServer {
 
@@ -19,5 +25,18 @@ public class MyServer {
         server.start();
         server.dumpStdErr();
         return server;
+    }
+
+
+    public static void generateBigFile(Path path, int size) throws IOException {
+        Files.createFile(path);
+
+        Files.write(path, String.valueOf('a').repeat(size).getBytes());
+    }
+
+
+    public static void main(String[] args) throws IOException {
+        generateBigFile(Paths.get("/opt/work/bigfile.txt"), 10_000_000);
+        System.out.printf("exit");
     }
 }

@@ -23,6 +23,9 @@ import static java.util.stream.Collectors.toList;
   sudo ip link list
 
   tcpdump -A -s 0 'tcp port 8888 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)' -i lo
+ $ sudo apt-get install inotify-tools libnotify-bin
+    watch 'inotifywait -e access -e attrib /opt/work/bigfile.txt '
+    https://www.opersys.com/LTT/documentation.html
  */
 public class App030HttpClientGetStreams {
 
