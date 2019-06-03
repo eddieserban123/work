@@ -1,8 +1,5 @@
 package org.demo.webserver.http;
 
-import org.demo.webserver.server.MyServer;
-import org.eclipse.jetty.server.Server;
-
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -13,7 +10,6 @@ import java.nio.ByteBuffer;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Flow;
 import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.Flow.Subscription;
 
@@ -27,7 +23,6 @@ import static java.net.http.HttpClient.*;
  */
 public class App031HttpClientPostStreams {
 
-    private static final int PORT = 8888;
 
     public static void main(String[] args) throws Exception {
 
@@ -47,7 +42,6 @@ public class App031HttpClientPostStreams {
                     .uri(uri)
                     .headers("Content-Type", "*/*")
                     .build();
-            Subscriber<String> stringFinder = new StringFinder("");
             return client.sendAsync(request,
                     HttpResponse.BodyHandlers.discarding());
         } catch (Exception e) {
