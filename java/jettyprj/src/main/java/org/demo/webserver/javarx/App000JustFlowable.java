@@ -62,10 +62,10 @@ public class App000JustFlowable {
      */
     public static void example002() {
 
-        printThreadId();
+        printThreadId("main");
         Flowable.just(11.1, 12.3).
                 map(v -> {
-                    printThreadId();
+                    printThreadId("mapper");
                     return v * 2;
                 }).
                 observeOn(Schedulers.computation()).  // for create
@@ -80,7 +80,7 @@ public class App000JustFlowable {
     public static void example003() {
 
 
-        printThreadId();
+        printThreadId("main");
         Flowable.fromCallable(() -> Arrays.asList(1, 2, 3)).
                 flatMap(e -> Flowable.fromArray(e)).
                 observeOn(Schedulers.computation()).  // for create
@@ -98,6 +98,7 @@ public class App000JustFlowable {
 
 
         new Thread(() -> {
+            printThreadId("producer");
             for (int i = 0; i < 10; i++) {
                 try {
                     processor.onNext("a ");
@@ -109,7 +110,7 @@ public class App000JustFlowable {
             processor.onComplete();
         }).start();
 
-
+        printThreadId("main");
         Flowable.fromPublisher(processor).
                 map(c -> c.concat(" b ")).
                 subscribe(new Subscriber<>() {
@@ -147,7 +148,7 @@ public class App000JustFlowable {
     }
 
 
-    private static void printThreadId() {
-        System.out.println(" Thread Id is " + Thread.currentThread().getId());
+    private static void printThreadId(String place) {
+        System.out.println(" Thread Id is " + Thread.currentThread().getId() + " from " + place);
     }
 }
