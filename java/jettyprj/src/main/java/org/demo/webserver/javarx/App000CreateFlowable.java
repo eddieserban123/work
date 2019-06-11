@@ -38,16 +38,17 @@ import java.util.concurrent.TimeUnit;
     myObservable.toFlowable(BackpressureStrategy.MISSING).buffer(256); //but using MISSING might be slower.
     in software developement usually back pressure strategy means your telling the emitter to slow down a bit as the consumer cannot handle the velocity your emitting events.
  */
-public class App000JustFlowable {
+public class App000CreateFlowable {
 
     public static void main(String[] args) {
         //example001();
         //example002();
         //example003();
-        example004();
+        //example004();
+        //example005();
+        example006();
 
 
-        Flowable.fromCallable(() -> 3);
 
     }
 
@@ -88,11 +89,31 @@ public class App000JustFlowable {
                 blockingSubscribe(System.out::println);
     }
 
+    /*
+   Creating my own stream
+   */
+    public static void example004() {
+
+
+
+      Flowable<String> flow =   Flowable.fromPublisher(p-> {
+            p.onNext("aa ");
+            p.onNext("bb ");
+            p.onComplete();
+        } );
+
+            flow.
+                map(c -> c.concat(" b ")).
+                blockingSubscribe(System.out::println);
+
+
+    }
+
 
     /*
-   just wanted to play, it's not quite ok, if we want to simulate numbers as a pump, we should use a Publisher
+    Creating my own stream
     */
-    public static void example004() {
+    public static void example005() {
 
         final PublishProcessor<String> processor = PublishProcessor.create();
 
@@ -111,6 +132,7 @@ public class App000JustFlowable {
         }).start();
 
         printThreadId("main");
+
         Flowable.fromPublisher(processor).
                 map(c -> c.concat(" b ")).
                 subscribe(new Subscriber<>() {
@@ -147,6 +169,15 @@ public class App000JustFlowable {
 
     }
 
+    /*multiple subscriptions*/
+    public static void example006() {
+        Flowable<Double> flowable = Flowable.just(11.1, 12.3).
+                map(v -> v * 2);
+
+        flowable.subscribe(v-> System.out.println(" first Subscriber " + v));
+        flowable.subscribe(v-> System.out.println(" second Subscriber " + v));
+
+    }
 
     private static void printThreadId(String place) {
         System.out.println(" Thread Id is " + Thread.currentThread().getId() + " from " + place);
