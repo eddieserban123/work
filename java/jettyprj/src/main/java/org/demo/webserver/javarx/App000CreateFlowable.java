@@ -1,5 +1,6 @@
 package org.demo.webserver.javarx;
 
+import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.Scheduler;
 import io.reactivex.processors.PublishProcessor;
@@ -49,7 +50,6 @@ public class App000CreateFlowable {
         example006();
 
 
-
     }
 
     public static void example001() {
@@ -83,26 +83,26 @@ public class App000CreateFlowable {
 
         printThreadId("main");
         Flowable.fromCallable(() -> Arrays.asList(1, 2, 3)).
-                flatMap(e -> Flowable.fromArray(e)).
+                flatMap(e -> Flowable.fromIterable(e)).
+                map(v -> v * 2).
                 observeOn(Schedulers.computation()).  // for create
                 subscribeOn(Schedulers.computation()).  //for map
                 blockingSubscribe(System.out::println);
     }
 
     /*
-   Creating my own stream
+        Creating my own stream
    */
     public static void example004() {
 
 
-
-      Flowable<String> flow =   Flowable.fromPublisher(p-> {
+        Flowable<String> flow = Flowable.fromPublisher(p -> {
             p.onNext("aa ");
             p.onNext("bb ");
             p.onComplete();
-        } );
+        });
 
-            flow.
+        flow.
                 map(c -> c.concat(" b ")).
                 blockingSubscribe(System.out::println);
 
@@ -111,7 +111,7 @@ public class App000CreateFlowable {
 
 
     /*
-    Creating my own stream
+        Creating my own stream
     */
     public static void example005() {
 
@@ -169,13 +169,41 @@ public class App000CreateFlowable {
 
     }
 
-    /*multiple subscriptions*/
+
+    /*create an emiter capable of detecting ~onComplete */
     public static void example006() {
+
+        printThreadId("main");
+
+        Flowable.<String>create(e -> {
+            int i = 0;
+            while (!e.isCancelled()) {
+                e.onNext(i++ + "number ");
+            }
+            printThreadId("emitter");
+            e.setCancellable(() -> System.out.println("we got cancel"));
+        }, BackpressureStrategy.MISSING).
+                subscribeOn(Schedulers.io()).
+                map(c -> c.concat(" b ")).
+                take(10).
+                subscribe(v ->
+                        System.out.println(" value received " + v), err -> System.out.println(" error " + err), () -> System.out.println(" completed"));
+
+        try {
+            System.in.read();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /*multiple subscriptions*/
+    public static void example007() {
         Flowable<Double> flowable = Flowable.just(11.1, 12.3).
                 map(v -> v * 2);
 
-        flowable.subscribe(v-> System.out.println(" first Subscriber " + v));
-        flowable.subscribe(v-> System.out.println(" second Subscriber " + v));
+        flowable.subscribe(v -> System.out.println(" first Subscriber " + v));
+        flowable.subscribe(v -> System.out.println(" second Subscriber " + v));
 
     }
 
