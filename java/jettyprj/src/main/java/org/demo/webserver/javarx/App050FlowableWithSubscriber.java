@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 /*
 https://github.com/ReactiveX/RxJava/wiki/Backpressure
 */
-public class App040FlowableWithSubscriber {
+public class App050FlowableWithSubscriber {
     private static int PORT = 8888;
 
     public static void main(String[] args) throws Exception {

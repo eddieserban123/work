@@ -8,7 +8,7 @@ import org.eclipse.jetty.server.Server;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-public class App020ZipFlowableWithSameRate {
+public class App030ZipFlowableWithSameRate {
     private static int PORT = 8888;
 
     public static void main(String[] args) throws Exception {

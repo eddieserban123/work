@@ -47,7 +47,8 @@ public class App000CreateFlowable {
         //example003();
         //example004();
         //example005();
-        example006();
+        //example006();
+        //example007();
 
 
     }
@@ -111,7 +112,7 @@ public class App000CreateFlowable {
 
 
     /*
-        Creating my own stream
+        Creating my own stream as java 9 with backpressure
     */
     public static void example005() {
 
@@ -170,7 +171,7 @@ public class App000CreateFlowable {
     }
 
 
-    /*create an emiter capable of detecting ~onComplete */
+    /*create an emitter capable of detecting ~onComplete but without backpressure, this is why you need a BackPressureStrategy*/
     public static void example006() {
 
         printThreadId("main");
@@ -185,7 +186,7 @@ public class App000CreateFlowable {
         }, BackpressureStrategy.MISSING).
                 subscribeOn(Schedulers.io()).
                 map(c -> c.concat(" b ")).
-                take(10).
+                take(10).  // unsubscribe at 11th element
                 subscribe(v ->
                         System.out.println(" value received " + v), err -> System.out.println(" error " + err), () -> System.out.println(" completed"));
 
