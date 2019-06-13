@@ -12,10 +12,26 @@ public class App010SimpleOperatorsFlowable {
     private static Logger logger = LoggerFactory.getLogger(App010SimpleOperatorsFlowable.class);
 
     public static void main(String[] args) throws IOException {
-        exampleDelay001();
+         example001TimeStamp();
+        //exampleDelay();
     }
 
-    public static void exampleDelay001() throws IOException {
+
+    public static void example001TimeStamp() throws IOException {
+        Flowable.range(0, 10).
+                doOnNext(v->logger.info(" value {} ",v)).
+                timestamp().
+                subscribe(v -> logger.info("recv {}" , v),
+                        (er) -> logger.error("error {}", er),
+                        () -> {
+                            System.out.println("Completed!");
+                        });
+
+        System.in.read();
+    }
+
+
+    public static void exampleDelay() throws IOException {
         Flowable.range(0, 10).
                 doOnNext(v->logger.info(" value {} ",v)).
                 delay(5000, TimeUnit.MILLISECONDS).
