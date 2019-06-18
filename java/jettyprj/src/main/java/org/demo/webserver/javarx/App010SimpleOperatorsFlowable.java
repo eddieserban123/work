@@ -1,6 +1,8 @@
 package org.demo.webserver.javarx;
 
+import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
+import io.reactivex.Single;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,8 +14,10 @@ public class App010SimpleOperatorsFlowable {
     private static Logger logger = LoggerFactory.getLogger(App010SimpleOperatorsFlowable.class);
 
     public static void main(String[] args) throws IOException {
-         example001TimeStamp();
-        //exampleDelay();
+        //example001TimeStamp();
+        //example002Delay();
+        //example003Cache();
+        example004Reduce();
     }
 
 
@@ -31,7 +35,7 @@ public class App010SimpleOperatorsFlowable {
     }
 
 
-    public static void exampleDelay() throws IOException {
+    public static void example002Delay() throws IOException {
         Flowable.range(0, 10).
                 doOnNext(v->logger.info(" value {} ",v)).
                 delay(5000, TimeUnit.MILLISECONDS).
@@ -40,6 +44,34 @@ public class App010SimpleOperatorsFlowable {
                         () -> {
                             System.out.println("Completed!");
                         });
+
+        System.in.read();
+    }
+
+    public static void example003Cache() throws IOException {
+        Flowable<Integer>  flow = Flowable.<Integer>create(e-> {
+            Thread.sleep(5000); //simulate long run
+            e.onNext(10);
+        }, BackpressureStrategy.MISSING)
+                .cache();
+
+        flow.subscribe(v-> logger.info("val1 {} ",v));
+        flow.subscribe(v-> logger.info("val2 {} ",v));
+
+        System.in.read();
+
+
+    }
+
+    public static void example004Reduce() throws IOException {
+        Single<Integer> numbers = Flowable.just(3, 5, -2, 9)
+                .reduce(0, (totalSoFar, val) -> {
+                    logger.info("totalSoFar={}, emitted={}", totalSoFar, val);
+                    return totalSoFar + val;
+                });
+
+        numbers.subscribe(v-> logger.info("val1 {} ",v));
+
 
         System.in.read();
     }
