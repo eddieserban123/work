@@ -7,7 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.concurrent.Flow;
 import java.util.concurrent.TimeUnit;
+
+import static io.reactivex.Flowable.just;
 
 public class App010SimpleOperatorsFlowable {
 
@@ -17,7 +20,9 @@ public class App010SimpleOperatorsFlowable {
         //example001TimeStamp();
         //example002Delay();
         //example003Cache();
-        example004Reduce();
+        //example004Reduce();
+        //example005Defer01();
+        example005Defer02();
     }
 
 
@@ -64,7 +69,7 @@ public class App010SimpleOperatorsFlowable {
     }
 
     public static void example004Reduce() throws IOException {
-        Single<Integer> numbers = Flowable.just(3, 5, -2, 9)
+        Single<Integer> numbers = just(3, 5, -2, 9)
                 .reduce(0, (totalSoFar, val) -> {
                     logger.info("totalSoFar={}, emitted={}", totalSoFar, val);
                     return totalSoFar + val;
@@ -72,7 +77,34 @@ public class App010SimpleOperatorsFlowable {
 
         numbers.subscribe(v-> logger.info("val1 {} ",v));
 
-
         System.in.read();
+    }
+
+    public static void example005Defer01() throws IOException {
+        Flowable<String> flows = Flowable.just(getHttpResponse());
+        logger.info("after blocking");
+        flows.subscribe(val-> logger.info("{} received",val));
+        System.in.read();
+    }
+
+
+    public static void example005Defer02() throws IOException {
+        Flowable<String> flows = Flowable.defer(()->Flowable.just(getHttpResponse()));
+        logger.info("after blocking");
+        flows.subscribe(val-> logger.info("{} received",val));
+        System.in.read();
+    }
+
+
+
+
+    private static String getHttpResponse() {
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return "ana has got apples";
+
     }
 }
