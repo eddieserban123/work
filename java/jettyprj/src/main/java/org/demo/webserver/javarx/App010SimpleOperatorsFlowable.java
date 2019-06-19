@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class App010SimpleOperatorsFlowable {
@@ -17,7 +19,8 @@ public class App010SimpleOperatorsFlowable {
         //example001TimeStamp();
         //example002Delay();
         //example003Cache();
-        example004Reduce();
+        //example004Reduce();
+        example005Collect();
     }
 
 
@@ -59,8 +62,6 @@ public class App010SimpleOperatorsFlowable {
         flow.subscribe(v-> logger.info("val2 {} ",v));
 
         System.in.read();
-
-
     }
 
     public static void example004Reduce() throws IOException {
@@ -71,8 +72,19 @@ public class App010SimpleOperatorsFlowable {
                 });
 
         numbers.subscribe(v-> logger.info("val1 {} ",v));
+        System.in.read();
+    }
 
+    public static void example005Collect() throws IOException {
+      Single<List<Integer>> list =  Flowable.just(3, 5, -2, 9).
+                collect(ArrayList::new, (container, value) -> {
+                    logger.info("adding to container {} value {}", container, value);
+                    container.add(value);
+                });
+
+        list.subscribe(v-> logger.info("val {} ",v));
 
         System.in.read();
+
     }
 }
