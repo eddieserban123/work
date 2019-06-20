@@ -6,15 +6,19 @@ import org.demo.webserver.server.MyServer;
 import org.eclipse.jetty.server.Server;
 
 import java.io.IOException;
+import java.sql.Time;
 import java.util.concurrent.TimeUnit;
 
-public class App030ZipFlowableWithSameRate {
+/*
+https://github.com/ReactiveX/RxJava/wiki/Backpressure
+*/
+public class App033ZipFlowableDifferentRateWithThrottle {
     private static int PORT = 8888;
 
     public static void main(String[] args) throws Exception {
         Server s = MyServer.start(PORT);
 
-        Flowable<Double> f1 = Flowable.interval(1000, TimeUnit.MILLISECONDS).
+        Flowable<Double> f1 = Flowable.interval(100, TimeUnit.MILLISECONDS).
                 map(v -> getPrice("/price")).
                 map(v -> {
                     System.out.println("  -> " + v);
