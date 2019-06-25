@@ -18,7 +18,7 @@ public class MyServer {
     public static Server start(int port) throws Exception {
         org.eclipse.jetty.server.Server server = new org.eclipse.jetty.server.Server(port);
         ServletHandler servletHandler = new ServletHandler();
-        servletHandler.addServletWithMapping(PriceServlet.class, "/price");
+        servletHandler.addServletWithMapping(PriceServlet.class, "/price/*");
         servletHandler.addServletWithMapping(BookServlet.class, "/book");
         server.setHandler(servletHandler);
 
