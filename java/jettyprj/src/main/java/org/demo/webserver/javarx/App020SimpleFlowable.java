@@ -36,15 +36,15 @@ public class App020SimpleFlowable {
 
 
     private static void flatMapExample() {
-        Flowable.just("audi", "bmw", "opel").
-                flatMap(car -> Flowable.just(getPrice("/price/" + car ))).
-                subscribeOn(Schedulers.computation()).
+        Flowable.just("audi", "bmw", "opel","audi", "bmw").
+                flatMap(car -> Flowable.just(getPrice("/price/" + car )),3).
                 blockingSubscribe(val-> logger.info(val));
     }
 
 
 
     private static String getPrice(String url) throws IOException {
+        logger.info(" try {} ",url);
         return Request.Get("http://localhost:" + PORT + url)
                 .execute()
                 .returnContent()

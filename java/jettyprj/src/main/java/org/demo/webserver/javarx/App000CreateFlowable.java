@@ -10,6 +10,8 @@ import org.demo.webserver.server.MyServer;
 import org.eclipse.jetty.server.Server;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -41,9 +43,12 @@ import java.util.concurrent.TimeUnit;
  */
 public class App000CreateFlowable {
 
+    private static Logger logger = LoggerFactory.getLogger(App000CreateFlowable.class);
+
+
     public static void main(String[] args) {
         //example001();
-        //example002();
+        example002();
         //example003();
         //example004();
         //example005();
@@ -56,7 +61,7 @@ public class App000CreateFlowable {
     public static void example001() {
         Flowable.just(11.1, 12.3).
                 map(v -> v * 2).
-                blockingSubscribe(System.out::println);
+                blockingSubscribe(v-> logger.info("{} ", v));
     }
 
     /*
@@ -64,10 +69,10 @@ public class App000CreateFlowable {
      */
     public static void example002() {
 
-        printThreadId("main");
+        logger.info("main");
         Flowable.just(11.1, 12.3).
                 map(v -> {
-                    printThreadId("mapper");
+                    logger.info("mapper");
                     return v * 2;
                 }).
                 observeOn(Schedulers.computation()).  // for create
@@ -82,7 +87,7 @@ public class App000CreateFlowable {
     public static void example003() {
 
 
-        printThreadId("main");
+        logger.info("main");
         Flowable.fromCallable(() -> Arrays.asList(1, 2, 3)).
                 flatMap(e -> Flowable.fromIterable(e)).
                 map(v -> v * 2).
@@ -120,7 +125,7 @@ public class App000CreateFlowable {
 
 
         new Thread(() -> {
-            printThreadId("producer");
+            logger.info("producer");
             for (int i = 0; i < 10; i++) {
                 try {
                     processor.onNext("a ");
@@ -132,7 +137,7 @@ public class App000CreateFlowable {
             processor.onComplete();
         }).start();
 
-        printThreadId("main");
+        logger.info("main");
 
         Flowable.fromPublisher(processor).
                 map(c -> c.concat(" b ")).
@@ -147,7 +152,7 @@ public class App000CreateFlowable {
 
                     @Override
                     public void onNext(String s) {
-                        System.out.println(s + "received");
+                        logger.info( "{} received", s);
                         subscription.request(1);
                     }
 
@@ -158,7 +163,7 @@ public class App000CreateFlowable {
 
                     @Override
                     public void onComplete() {
-                        System.out.println(" On Complete !!!");
+                        logger.info(" On Complete !!!");
                     }
                 });
 
@@ -174,14 +179,14 @@ public class App000CreateFlowable {
     /*create an emitter capable of detecting ~onComplete but without backpressure, this is why you need a BackPressureStrategy*/
     public static void example006() {
 
-        printThreadId("main");
+        logger.info("main");
 
         Flowable.<String>create(e -> {
             int i = 0;
             while (!e.isCancelled()) {
                 e.onNext(i++ + "number ");
             }
-            printThreadId("emitter");
+            logger.info("emitter");
             e.setCancellable(() -> System.out.println("we got cancel"));
         }, BackpressureStrategy.MISSING).
                 subscribeOn(Schedulers.io()).
@@ -208,7 +213,5 @@ public class App000CreateFlowable {
 
     }
 
-    private static void printThreadId(String place) {
-        System.out.println(" Thread Id is " + Thread.currentThread().getId() + " from " + place);
-    }
+
 }
