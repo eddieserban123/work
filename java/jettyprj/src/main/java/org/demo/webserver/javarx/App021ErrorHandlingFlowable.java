@@ -11,10 +11,10 @@ public class App021ErrorHandlingFlowable {
 
 
     public static void main(String[] args) throws Exception {
-        //throwException();
+        throwException();
         //returnAvalueInsteadOfException();
         //signalErrorAndContinue();
-        onErrorResume();
+        //onErrorResume();
 
         System.in.read();
 
