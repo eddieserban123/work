@@ -1,6 +1,8 @@
 package org.demo.webserver.javarx;
 
+import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
+import io.reactivex.schedulers.Schedulers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +12,8 @@ import java.util.concurrent.TimeUnit;
 /*
 onErrorResumeNext( ) — instructs an Observable to emit a sequence of items if it encounters an error
 onErrorReturn( ) — instructs an Observable to emit a particular item when it encounters an error
-onExceptionResumeNext( ) — instructs an Observable to continue emitting items after it encounters an exception (but not another variety of throwable)
+onExceptionResumeNext( ) — instructs an Observable to continue emitting items after it encounters an exception
+(but not another variety of throwable)
 retry( ) — if a source Observable emits an error, resubscribe to it in the hopes that it will complete without error
 retryWhen( ) — if a source Observable emits an error, pass that error to another Observable to determine whether to resubscribe to the source
 
@@ -27,28 +30,38 @@ public class App022TimeoutFlowable {
 
     }
 
-
     private static void timeoutExample() {
-        Flowable<String> executionTimes = Flowable.just("doTask1", "doTask2", "doTask5").
-                flatMap(App022TimeoutFlowable::doSomeAction).
-                timeout(5000, TimeUnit.MILLISECONDS).
-                //onErrorReturn(er-> nameTask("doJiraBackLog", 3000));
-                        onExceptionResumeNext(Flowable.just(nameTask("doJiraBackLog", 3000)));
+        Flowable<String> executionTimes = Flowable.<String>create(e -> {
+                  String taskNames[]= {"doTask1", "doTask2", "doTask3"};
+                  e.onNext(doSomeAction(taskNames[0]));
+                    e.onNext(doSomeAction(taskNames[1]));
+                    e.onNext(doSomeAction(taskNames[2]));
+                    e.onComplete();
+
+                }, BackpressureStrategy.BUFFER).
+                observeOn(Schedulers.computation()).  // for create
+                subscribeOn(Schedulers.computation()).  //for map
+                timeout(3000, TimeUnit.MILLISECONDS);
+            //    onErrorReturn(er-> nameTask("doJiraBackLog", 2000));
 
 
-        executionTimes.blockingSubscribe(v -> logger.info("{}", v));
+
+        executionTimes.subscribe(v -> logger.info("{}", v),
+                err -> logger.error("{}", err),
+        () -> logger.info("completed !!! "));
 
     }
 
 
-    private static Flowable<String> doSomeAction(String taskName) {
+
+    private static String doSomeAction(String taskName) {
         int simulateWorkTime;
         switch (taskName.toLowerCase()) {
             case "dotask1":
                 simulateWorkTime = 2000;
                 break;
             case "dotask2":
-                simulateWorkTime = 6000;
+                simulateWorkTime = 5000;
                 break;
             case "dotask3":
                 simulateWorkTime = 3000;
@@ -58,11 +71,12 @@ public class App022TimeoutFlowable {
         }
         try {
             Thread.sleep(simulateWorkTime);
+        //   logger.info("taskname {} executed", taskName);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        return Flowable.just(nameTask(taskName, simulateWorkTime));
+        return nameTask(taskName, simulateWorkTime);
     }
 
     private static String nameTask(String taskName, int simulateWorkTime) {
