@@ -27,8 +27,8 @@ public class App022TimeoutFlowable {
 
     public static void main(String[] args) throws Exception {
 
-        startTimeoutTest();
-
+       // startTimeoutTest();
+        timeoutExample();
         System.in.read();
 
     }
@@ -39,7 +39,7 @@ public class App022TimeoutFlowable {
                 .flatMap((i) -> emitItems(20))
 
                 .timeout(500, TimeUnit.MILLISECONDS)
-
+                .onErrorResumeNext(Flowable.just(-1))
                 .subscribe(v -> logger.info("{}", v),
                         err -> logger.error("{}", err),
                         () -> logger.info("completed !!! "));
@@ -56,8 +56,8 @@ public class App022TimeoutFlowable {
                 }, BackpressureStrategy.BUFFER).
                 observeOn(Schedulers.computation()).  // for create
                 subscribeOn(Schedulers.computation()).  //for map
-                timeout(3000, TimeUnit.MILLISECONDS);
-            //    onErrorReturn(er-> nameTask("doJiraBackLog", 2000));
+                timeout(3000, TimeUnit.MILLISECONDS).
+                onErrorResumeNext(Flowable.just("doJiraBackLog"));
 
 
 
@@ -88,7 +88,7 @@ public class App022TimeoutFlowable {
             Thread.sleep(simulateWorkTime);
         //   logger.info("taskname {} executed", taskName);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.error("taskname {} is takint too much time", taskName);
         }
 
         return nameTask(taskName, simulateWorkTime);
@@ -109,7 +109,7 @@ public class App022TimeoutFlowable {
 
                 .doOnNext((number) -> {
                     try {
-                        int timeout = ThreadLocalRandom.current().nextInt(600) + 500;
+                        int timeout = ThreadLocalRandom.current().nextInt(500) +100;
 
                         logger.info( "Item: " + number + " will be emitted with a delay around: " + timeout + "ms");
                         Thread.sleep(timeout);
