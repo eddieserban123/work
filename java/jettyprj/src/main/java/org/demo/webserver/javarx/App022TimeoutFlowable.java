@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.Flow;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 /*
@@ -17,17 +18,31 @@ onExceptionResumeNext( ) — instructs an Observable to continue emitting item
 retry( ) — if a source Observable emits an error, resubscribe to it in the hopes that it will complete without error
 retryWhen( ) — if a source Observable emits an error, pass that error to another Observable to determine whether to resubscribe to the source
 
-* */
+http://androidahead.com/2017/12/05/rxjava-operators-part-6-timeout-operator/
+
+*/
 public class App022TimeoutFlowable {
     private static Logger logger = LoggerFactory.getLogger(App022TimeoutFlowable.class);
 
 
     public static void main(String[] args) throws Exception {
 
-        timeoutExample();
+        startTimeoutTest();
 
         System.in.read();
 
+    }
+
+    private static void startTimeoutTest() {
+        Flowable
+                .timer(0, TimeUnit.SECONDS)
+                .flatMap((i) -> emitItems(20))
+
+                .timeout(500, TimeUnit.MILLISECONDS)
+
+                .subscribe(v -> logger.info("{}", v),
+                        err -> logger.error("{}", err),
+                        () -> logger.info("completed !!! "));
     }
 
     private static void timeoutExample() {
@@ -82,4 +97,29 @@ public class App022TimeoutFlowable {
     private static String nameTask(String taskName, int simulateWorkTime) {
         return String.format("task %s took %s", taskName, simulateWorkTime);
     }
+
+
+    private static Flowable<Integer> emitItems(Integer numberOfItems) {
+        logger.info("emitItems() - numberOfItems: " + numberOfItems);
+
+        return Flowable
+
+                // Emit N items based on the "numberOfItems" parameter
+                .range(0, numberOfItems)
+
+                .doOnNext((number) -> {
+                    try {
+                        int timeout = ThreadLocalRandom.current().nextInt(600) + 500;
+
+                        logger.info( "Item: " + number + " will be emitted with a delay around: " + timeout + "ms");
+                        Thread.sleep(timeout);
+                        logger.info( "emitItems() - Emitting number: " + number);
+
+                    } catch (InterruptedException e) {
+                        logger.info( "Got an InterruptedException!");
+                    }
+
+                });
+    }
+
 }
