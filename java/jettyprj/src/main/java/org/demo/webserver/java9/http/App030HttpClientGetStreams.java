@@ -1,6 +1,6 @@
-package org.demo.webserver.http;
+package org.demo.webserver.java9.http;
 
-import org.demo.webserver.server.MyServer;
+import org.demo.webserver.helpers.server.MyServer;
 import org.eclipse.jetty.server.Server;
 
 import java.net.URI;
@@ -8,15 +8,11 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Flow;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static java.net.http.HttpClient.*;
-import static java.util.stream.Collectors.toList;
 
 /*
  alt univers 65535

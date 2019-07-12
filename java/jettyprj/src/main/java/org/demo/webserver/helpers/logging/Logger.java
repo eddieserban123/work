@@ -1,4 +1,4 @@
-package org.demo.webserver.logging;
+package org.demo.webserver.helpers.logging;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;

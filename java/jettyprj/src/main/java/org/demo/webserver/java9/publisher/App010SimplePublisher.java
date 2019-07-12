@@ -1,8 +1,8 @@
-package org.demo.webserver.java9;
+package org.demo.webserver.java9.publisher;
 
 import org.apache.http.client.fluent.Request;
-import org.demo.webserver.logging.Logger;
-import org.demo.webserver.server.MyServer;
+import org.demo.webserver.helpers.logging.Logger;
+import org.demo.webserver.helpers.server.MyServer;
 import org.eclipse.jetty.server.Server;
 
 import java.io.IOException;

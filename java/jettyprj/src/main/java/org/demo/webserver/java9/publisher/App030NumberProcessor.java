@@ -1,6 +1,6 @@
-package org.demo.webserver.java9;
+package org.demo.webserver.java9.publisher;
 
-import org.demo.webserver.logging.Logger;
+import org.demo.webserver.helpers.logging.Logger;
 
 import java.io.IOException;
 import java.util.concurrent.*;

@@ -2,12 +2,8 @@ package org.demo.webserver.javarx;
 
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
-import io.reactivex.Scheduler;
 import io.reactivex.processors.PublishProcessor;
 import io.reactivex.schedulers.Schedulers;
-import org.apache.http.client.fluent.Request;
-import org.demo.webserver.server.MyServer;
-import org.eclipse.jetty.server.Server;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 import org.slf4j.Logger;
@@ -15,8 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.concurrent.Flow;
-import java.util.concurrent.TimeUnit;
 
 /*
     Observable vs Flowable rxJava2. You may use Observable for example:

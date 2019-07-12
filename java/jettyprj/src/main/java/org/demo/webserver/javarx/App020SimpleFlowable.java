@@ -1,16 +1,14 @@
 package org.demo.webserver.javarx;
 
 import io.reactivex.Flowable;
-import io.reactivex.schedulers.Schedulers;
 import org.apache.http.client.fluent.Request;
-import org.demo.webserver.server.MyServer;
+import org.demo.webserver.helpers.server.MyServer;
 import org.eclipse.jetty.server.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 
 public class App020SimpleFlowable {
     private static int PORT = 8888;

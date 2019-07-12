@@ -2,7 +2,7 @@ package org.demo.webserver.javarx;
 
 import io.reactivex.Flowable;
 import org.apache.http.client.fluent.Request;
-import org.demo.webserver.server.MyServer;
+import org.demo.webserver.helpers.server.MyServer;
 import org.eclipse.jetty.server.Server;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;

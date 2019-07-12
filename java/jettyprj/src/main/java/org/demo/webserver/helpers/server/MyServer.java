@@ -1,11 +1,10 @@
-package org.demo.webserver.server;
+package org.demo.webserver.helpers.server;
 
-import org.demo.webserver.server.servlet.BookServlet;
+import org.demo.webserver.helpers.server.servlet.BookServlet;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHandler;
-import org.demo.webserver.server.servlet.PriceServlet;
+import org.demo.webserver.helpers.server.servlet.PriceServlet;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

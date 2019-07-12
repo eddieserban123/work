@@ -1,4 +1,4 @@
-package org.demo.webserver.http;
+package org.demo.webserver.java9.http;
 
 import java.io.IOException;
 import java.net.URI;
@@ -6,7 +6,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
-import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

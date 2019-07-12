@@ -1,4 +1,4 @@
-package org.demo.webserver.server.servlet;
+package org.demo.webserver.helpers.server.servlet;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
