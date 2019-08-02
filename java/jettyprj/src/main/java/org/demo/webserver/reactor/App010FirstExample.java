@@ -11,8 +11,8 @@ public class App010FirstExample {
     private static Logger logger = LoggerFactory.getLogger(App010FirstExample.class);
     public static void main(String[] args) {
       //  createSimpleExamplewithSimpleSubscriber();
-        createSimpleExamplewithBakpressureSubscriber01();
-        //doSmthAndThrowAnError();
+      //  createSimpleExamplewithBakpressureSubscriber01();
+      //  doSmthAndThrowAnError();
 
     }
 
@@ -20,7 +20,7 @@ public class App010FirstExample {
     private static void createSimpleExamplewithSimpleSubscriber() {
         Flux<String> seq = Flux.just("foo", "bar", "foobar");
         //Arrays.asList("foo", "bar", "foobar");
-        
+
 
         seq.subscribe(v-> logger.info(" data is {} " ,v),
                 er-> logger.error("error {} ", er.getLocalizedMessage()),
