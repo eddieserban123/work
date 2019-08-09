@@ -10,6 +10,10 @@ import org.springframework.context.support.AbstractApplicationContext;
 
 import java.util.List;
 
+
+//export SPRING_PROFILES_ACTIVE=demo
+//mvn spring-boot:run
+
 @SpringBootApplication
 public class EreportApplication implements CommandLineRunner {
 
@@ -26,10 +30,10 @@ public class EreportApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		createPersons();
+
 	}
 
-
+	// not needed anymore since we have an initializer
 	private void createPersons() {
 		final Person p1 = new Person( "123","John");
 		final Person p2 = new Person( "125","Mary");
