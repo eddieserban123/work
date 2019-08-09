@@ -86,4 +86,9 @@ public class CassandraConfig extends AbstractReactiveCassandraConfiguration {
         return Collections.singletonList("CREATE TABLE IF NOT EXISTS " + keyspace +
                 ".person(id text PRIMARY KEY, name text) ");
     }
+
+//    @Override
+//    protected List<String> getShutdownScripts() {
+//        return List.of("DROP KEYSPACE IF EXISTS " + keyspace + ";");
+//    }
 }
