@@ -41,6 +41,8 @@ public class WebSecurityConfig {
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http
+                .csrf()
+                .disable()
                 .authorizeExchange()
                 .anyExchange().authenticated()
                 .and()
@@ -48,4 +50,6 @@ public class WebSecurityConfig {
                 .formLogin();
         return http.build();
     }
+
+
 }

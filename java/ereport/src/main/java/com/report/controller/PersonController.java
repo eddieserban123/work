@@ -15,7 +15,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping(value = "/person", produces = MediaType.APPLICATION_JSON_VALUE)
-@Profile("classic")
+//@Profile("classic")
 public class PersonController {
 
     private final MediaType mediaType = MediaType.APPLICATION_JSON;

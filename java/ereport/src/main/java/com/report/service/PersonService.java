@@ -2,9 +2,12 @@ package com.report.service;
 
 
 import com.report.entity.Person;
+import com.report.event.PersonCreatedEvent;
 import com.report.repository.PersonRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -15,6 +18,7 @@ import reactor.core.publisher.Mono;
 public class PersonService {
 
     private final PersonRepository personRepository;
+    private final ApplicationEventPublisher publisher;
 
     public Flux<Person> all() {
         return personRepository.findAll();
@@ -36,7 +40,8 @@ public class PersonService {
     }
 
     public Mono<Person> create(String id, String name) {
-        return personRepository.save(new Person(id, name));//.doOnSuccess() ;  //Mono doesn't have onNext() event !
+        return personRepository.save(new Person(id, name)).
+                doOnSuccess(entity -> publisher.publishEvent(new PersonCreatedEvent(entity)));
     }
 
 
