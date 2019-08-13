@@ -13,8 +13,8 @@ import reactor.core.publisher.Mono;
 import java.net.URI;
 
 
-@RestController
-@RequestMapping(value = "/person", produces = MediaType.APPLICATION_JSON_VALUE)
+//@RestController
+//@RequestMapping(value = "/person", produces = MediaType.APPLICATION_JSON_VALUE)
 //@Profile("classic")
 public class PersonController {
 

@@ -56,32 +56,32 @@ public class PersonCreatedEventListener implements ApplicationListener<PersonCre
     public void onApplicationEvent(PersonCreatedEvent personCreatedEvent) {
         queue.offer(personCreatedEvent);
     }
-
-    @Bean
-    WebSocketHandler webSocketHandler(
-            ObjectMapper objectMapper, // <5>
-            PersonCreatedEventListener eventPublisher // <6>
-    ) {
-
-        Flux<PersonCreatedEvent> publish = Flux.create(eventPublisher).share(); // <7>
-
-        return session -> {
-
-            Flux<WebSocketMessage> messageFlux = publish.map(evt -> {
-                try {
-                    Person profile = (Person) evt.getSource(); // <1>
-                    Map<String, String> data = new HashMap<>(); // <2>
-                    data.put("id", profile.getId());
-                    return objectMapper.writeValueAsString(data); // <3>
-                } catch (JsonProcessingException e) {
-                    throw new RuntimeException(e);
-                }
-            }).map(str -> {
-                //log.info("sending " + str);
-                return session.textMessage(str);
-            });
-
-            return session.send(messageFlux);
-        };
-    }
+//
+//    @Bean
+//    WebSocketHandler webSocketHandler(
+//            ObjectMapper objectMapper, // <5>
+//            PersonCreatedEventListener eventPublisher // <6>
+//    ) {
+//
+//        Flux<PersonCreatedEvent> publish = Flux.create(eventPublisher).share(); // <7>
+//
+//        return session -> {
+//
+//            Flux<WebSocketMessage> messageFlux = publish.map(evt -> {
+//                try {
+//                    Person profile = (Person) evt.getSource(); // <1>
+//                    Map<String, String> data = new HashMap<>(); // <2>
+//                    data.put("id", profile.getId());
+//                    return objectMapper.writeValueAsString(data); // <3>
+//                } catch (JsonProcessingException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }).map(str -> {
+//                //log.info("sending " + str);
+//                return session.textMessage(str);
+//            });
+//
+//            return session.send(messageFlux);
+//        };
+//    }
 }
