@@ -35,12 +35,12 @@ public class App023HotFlowable {
     public static void main(String[] args) throws Exception {
 
         //coldObservable();
-        //hotObservable();
+        hotObservable();
 
         //asyncSubject();
         //behaviourSubject();
         //publishSubject();
-        replySubject();
+     //   replySubject();
 
         System.in.read();
 
@@ -48,17 +48,17 @@ public class App023HotFlowable {
 
     private static void coldObservable() {
         logger.info("---cold---");
-        Observable<Integer> cold = getColdObservable();
+        Observable<Long> cold = Observable.interval(200, TimeUnit.MILLISECONDS);
 
 
         cold.subscribe(v -> logger.info("subscriber1 recevied {}", v),
                 err -> logger.error(" subscriber1 error {}", err));
 
+        addSomeDelay();
 
         cold.subscribe(v -> logger.info("subscriber2 recevied {}", v),
                 err -> logger.error(" subscriber2 error {}", err));
 
-        addSomeDelay();
 
     }
 
@@ -74,22 +74,21 @@ public class App023HotFlowable {
 
     private static void hotObservable() {
         logger.info("---hot---");
-        Observable<Integer> cold = getColdObservable();
+        Observable<Long> cold = Observable.interval(200, TimeUnit.MILLISECONDS);
 
-        ConnectableObservable<Integer> hot =  cold.publish();
+        ConnectableObservable<Long> hot =  cold.publish();
 
 
-
-      //  hot.connect(); //this trigger  even if we don't have subscribers !
+        hot.connect(); //this trigger  even if we don't have subscribers !
 
         hot.subscribe(v -> logger.info("subscriber1 recevied {}", v),
                 err -> logger.error(" subscriber1 error {}", err));
 
 
+        addSomeDelay();
         hot.subscribe(v -> logger.info("subscriber2 recevied {}", v),
                 err -> logger.error(" subscriber2 error {}", err));
 
-        hot.connect(); //this trigger
 
     }
 
