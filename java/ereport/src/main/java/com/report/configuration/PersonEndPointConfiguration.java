@@ -17,7 +17,8 @@ public class PersonEndPointConfiguration {
         return route(GET("/person"), handler::all)
                 .andRoute(GET("/person/{id}"), handler::getById)
                 .andRoute(POST("/person"), handler::create)
-                .andRoute(PUT("/person/{id}"), handler::updateById);
+                .andRoute(PUT("/person/{id}"), handler::updateById)
+                .andRoute(DELETE("/person/{id}"), handler::deleteById);
 
     }
 }

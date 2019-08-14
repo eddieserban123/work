@@ -6,7 +6,6 @@ import com.report.event.PersonCreatedEvent;
 import com.report.repository.PersonRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
