@@ -5,34 +5,51 @@ import com.report.service.PersonService;
 import org.reactivestreams.Publisher;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.server.HandlerFunction;
-import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-import static javax.swing.text.html.FormSubmitEvent.MethodType.GET;
+import java.net.URI;
+
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
-import static org.springframework.web.reactive.function.server.ServerResponse.ok;
+import static org.springframework.web.reactive.function.server.ServerResponse.*;
 
 @Component
 public class PersonHandler {
 
-    private final PersonService profileService;
+    private final PersonService personService;
 
-    PersonHandler(PersonService profileService) {
-        this.profileService = profileService;
+    PersonHandler(PersonService personService) {
+        this.personService = personService;
     }
 
     public Mono<ServerResponse> all(ServerRequest r) {
-        return defaultReadResponse(profileService.all());
+        return defaultReadResponse(personService.all());
     }
 
 
     public Mono<ServerResponse> getById(ServerRequest r) {
-        return defaultReadResponse(profileService.get(id(r)));
+        return defaultReadResponse(personService.get(id(r)));
     }
 
+    public Mono<ServerResponse> create(ServerRequest r) {
+        Mono<Person> mono = r.bodyToMono(Person.class)
+                .flatMap(p -> personService.create(p.getId(), p.getName()));
+
+        return Mono.from(mono).flatMap(p ->
+                created(URI.create("/person/" + p.getId())).
+                        contentType(MediaType.APPLICATION_JSON).build()
+        );
+    }
+
+    public Mono<ServerResponse> updateById(ServerRequest r) {
+        Mono<Person> mono = r.bodyToMono(Person.class).
+                flatMap(p -> personService
+                        .update(id(r), p.getName()));
+        //should treat the error case also
+        return Mono.from(mono).flatMap(p-> noContent().build()
+        );
+    }
 
 
     private static Mono<ServerResponse> defaultReadResponse(Publisher<Person> profiles) {
