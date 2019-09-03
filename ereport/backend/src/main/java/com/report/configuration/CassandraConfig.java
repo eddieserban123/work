@@ -13,6 +13,7 @@ import org.springframework.data.cassandra.core.cql.keyspace.DropKeyspaceSpecific
 import org.springframework.data.cassandra.core.cql.keyspace.KeyspaceOption;
 import org.springframework.data.cassandra.repository.config.EnableReactiveCassandraRepositories;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -83,8 +84,11 @@ public class CassandraConfig extends AbstractReactiveCassandraConfiguration {
 
     @Override
     protected List<String> getStartupScripts() {
-        return Collections.singletonList("CREATE TABLE IF NOT EXISTS " + keyspace +
-                ".person(id text PRIMARY KEY, name text) ");
+        return Arrays.asList("CREATE TABLE IF NOT EXISTS " + keyspace +
+                ".person(id text PRIMARY KEY, name text) ",
+                "CREATE TABLE IF NOT EXISTS " + keyspace +
+                        ".classroom(id text PRIMARY KEY, capacity int, room_number text) "
+                );
     }
 
 //    @Override

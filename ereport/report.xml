@@ -33,3 +33,28 @@
   <configuration>
   </configuration>
   <tdelta>0</tdelta>
+  <configuration>
+    <fileobject>
+      <filename>209.141.039.035.08080-192.168.000.129.57256</filename>
+      <filesize>260</filesize>
+      <tcpflow startime='2019-09-01T16:39:38.588389Z' endtime='2019-09-01T16:39:38.786709Z' src_ipn='209.141.39.35' dst_ipn='192.168.0.129' mac_daddr='00:00:00:01:00:06' mac_saddr='ac:22:05:7e:00:77' packets='5' srcport='8080' dstport='57256' family='2' />
+    </fileobject>
+    <fileobject>
+      <filename>176.113.071.019.08080-192.168.000.129.57258</filename>
+      <filesize>202</filesize>
+      <tcpflow startime='2019-09-01T16:39:38.484944Z' endtime='2019-09-01T16:39:39.727510Z' src_ipn='176.113.71.19' dst_ipn='192.168.0.129' mac_daddr='00:00:00:01:00:06' mac_saddr='ac:22:05:7e:00:77' packets='10' srcport='8080' dstport='57258' family='2' />
+    </fileobject>
+    <fileobject>
+      <filename>209.141.039.035.08080-192.168.000.129.57268</filename>
+      <filesize>260</filesize>
+      <tcpflow startime='2019-09-01T16:39:39.524105Z' endtime='2019-09-01T16:39:39.991020Z' src_ipn='209.141.39.35' dst_ipn='192.168.0.129' mac_daddr='00:00:00:01:00:06' mac_saddr='ac:22:05:7e:00:77' packets='5' srcport='8080' dstport='57268' family='2' />
+    </fileobject>
+    <fileobject>
+      <filename>209.141.039.035.08080-192.168.000.129.57316</filename>
+      <filesize>260</filesize>
+      <tcpflow startime='2019-09-01T16:39:40.502624Z' endtime='2019-09-01T16:39:40.793077Z' src_ipn='209.141.39.35' dst_ipn='192.168.0.129' mac_daddr='00:00:00:01:00:06' mac_saddr='ac:22:05:7e:00:77' packets='5' srcport='8080' dstport='57316' family='2' />
+    </fileobject>
+    <fileobject>
+      <filesize>0</filesize>
+      <tcpflow startime='2019-09-01T16:39:39.524554Z' endtime='2019-09-01T16:39:40.812569Z' src_ipn='176.113.71.19' dst_ipn='192.168.0.129' mac_daddr='00:00:00:01:00:06' mac_saddr='ac:22:05:7e:00:77' packets='3' srcport='8080' dstport='57270' family='2' />
+    </fileobject>

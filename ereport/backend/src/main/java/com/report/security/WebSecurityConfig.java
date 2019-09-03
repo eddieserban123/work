@@ -25,6 +25,7 @@ import java.util.Arrays;
 * */
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
+
 public class WebSecurityConfig {
 
     @Bean

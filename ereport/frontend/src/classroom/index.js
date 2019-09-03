@@ -16,7 +16,7 @@ class classRoom extends Component {
                 </div> 
                 <div className="row">
                     <div className="row md-7">
-                        <img src = {'https://picsum.photos/id/${classroom.id}/600/300'}></img>
+                        <img src = {'https://picsum.photos/id/${classroom.id}/600/300'}/>
                     </div> 
                     <div className = "col-md-5">
                         <p className="size">${classroom.size}</p>

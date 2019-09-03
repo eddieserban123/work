@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './main-page.css';
 import Header from './header';
-import selectedClass from './selected-class';
+import SelectedClass from './selected-class';
 
 
 class App extends Component {
@@ -37,6 +37,7 @@ class App extends Component {
     return (
     <div classname="container">
     <Header subtitle="New way of keeping reports"/>
+    <SelectedClass classSelected = "1"/>
     </div>
     );
   }
