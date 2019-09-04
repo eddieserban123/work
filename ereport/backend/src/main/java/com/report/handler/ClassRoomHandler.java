@@ -1,6 +1,7 @@
 package com.report.handler;
 
-import com.report.entity.ClassRoom;
+import com.report.entity.classroom.ClassRoom;
+import com.report.entity.classroom.ClassRoomKey;
 import com.report.service.ClassRoomService;
 import lombok.AllArgsConstructor;
 import org.reactivestreams.Publisher;
@@ -32,40 +33,41 @@ public class ClassRoomHandler {
 
 
     public Mono<ServerResponse> getById(ServerRequest r) {
-        return defaultReadResponse(classRoomService.get(id(r)));
+        return defaultReadResponse(classRoomService.get(new ClassRoomKey(id(r), year_month(r))));
     }
 
     public Mono<ServerResponse> create(ServerRequest r) {
         Mono<ClassRoom> mono = r.bodyToMono(ClassRoom.class)
-                .flatMap(c -> classRoomService.create(c.getId(), c.getCapacity(), c.getRoomNumber()));
+                .flatMap(c -> classRoomService.create(c.getKey().getId(), c.getKey().getYear_month(), c.getCapacity(),
+                        c.getRoomNumber(), c.getDescription(), c.getPicture_id()));
 
         return Mono.from(mono).flatMap(c ->
-        {
-            try {
+                {
+                    try {
 
-                String encodedQuery = URLEncoder.encode( c.getId(),"UTF8");
-                return created(URI.create(String.format("/classRoom/%s", encodedQuery , "UTF8" ))).
-                        contentType(MediaType.APPLICATION_JSON).build();
+                        String encodedQuery = URLEncoder.encode(c.getKey().getId(), "UTF8");
+                        return created(URI.create(String.format("/classRoom/%s", encodedQuery, "UTF8"))).
+                                contentType(MediaType.APPLICATION_JSON).build();
 
-            } catch (UnsupportedEncodingException e) {
-               return  Mono.error(e);
-            }
-        }
+                    } catch (UnsupportedEncodingException e) {
+                        return Mono.error(e);
+                    }
+                }
         );
     }
 
     public Mono<ServerResponse> deleteById(ServerRequest r) {
-        return classRoomService.delete(id(r)).flatMap(
-               c->  noContent().build()
+        return classRoomService.delete(id(r), year_month(r)).flatMap(
+                c -> noContent().build()
         );
     }
 
     public Mono<ServerResponse> updateById(ServerRequest r) {
         Mono<ClassRoom> mono = r.bodyToMono(ClassRoom.class).
                 flatMap(c -> classRoomService
-                        .update(id(r), c.getCapacity(), c.getRoomNumber()));
+                        .update(id(r), year_month(r), c.getCapacity(), c.getRoomNumber(), c.getRoomNumber(), c.getDescription()));
         //should treat the error case also
-        return Mono.from(mono).flatMap(p-> noContent().build()
+        return Mono.from(mono).flatMap(p -> noContent().build()
         );
     }
 
@@ -78,5 +80,9 @@ public class ClassRoomHandler {
 
     private static String id(ServerRequest r) {
         return r.pathVariable("id");
+    }
+
+    private static String year_month(ServerRequest r) {
+        return r.pathVariable("year_month");
     }
 }

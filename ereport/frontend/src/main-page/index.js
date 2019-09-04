@@ -6,16 +6,16 @@ import SelectedClass from './selected-class';
 
 
 class App extends Component {
-  state = {}
+  state = {classRooms:[{"id":"small 1", "capacity":12, "room_number":23}]}
 
  componentDidMount() {
-   this.fetchPersons();
+   this.fetchClassRooms();
  }
  
 
-  fetchPersons =() => {
+  fetchClassRooms =() => {
 
-    let url = "http://localhost:8080/person";
+    let url = "http://localhost:8080/classroom";
     let username = 'user';
     let password = 'user';
 
@@ -28,8 +28,9 @@ class App extends Component {
     console.log('Basic ' + btoa(username + ":" + password));
     fetch(new Request(url, {method:'GET', headers: h}))
     .then(rsp => rsp.json())
-    .then(persons => {
-      this.persons = persons;
+    .then(classRooms => {
+      this.classRooms = classRooms;
+      this.state= {classRooms: classRooms}; 
     })
   }
 
@@ -37,7 +38,7 @@ class App extends Component {
     return (
     <div classname="container">
     <Header subtitle="New way of keeping reports"/>
-    <SelectedClass classSelected = "1"/>
+    <SelectedClass classRoom = {this.state.classRooms[0]} />
     </div>
     );
   }

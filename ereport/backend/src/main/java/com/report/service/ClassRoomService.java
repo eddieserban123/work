@@ -1,6 +1,7 @@
 package com.report.service;
 
-import com.report.entity.ClassRoom;
+import com.report.entity.classroom.ClassRoom;
+import com.report.entity.classroom.ClassRoomKey;
 import com.report.repository.ClassRoomRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -21,23 +22,31 @@ public class ClassRoomService {
         return classRoomRepository.findAll();
     }
 
-    public Mono<ClassRoom> get(String id) {
+    public Mono<ClassRoom> get(ClassRoomKey id) {
         return classRoomRepository.findById(id);
     }
 
-    public Mono<ClassRoom> update(String name, Integer capacity, String roomNumber) {
-        return classRoomRepository.findById(name).
-                map(c -> new ClassRoom(c.getId(), capacity, roomNumber)).
+    public Mono<ClassRoom> update(String id, String year_month, Integer capacity, String roomNumber, String description, String picture_id) {
+        ClassRoomKey key = new ClassRoomKey(id, year_month);
+        return classRoomRepository.findById(key).
+                map(c -> new ClassRoom().setKey(key).setCapacity(capacity).setDescription(description).setRoomNumber(roomNumber).setPicture_id(picture_id)).
                 flatMap(classRoomRepository::save);   // Mono(Mono) !
     }
 
-    public Mono<ClassRoom> delete(String id) {
-        return classRoomRepository.findById(id).
-                flatMap(c -> classRoomRepository.deleteById(c.getId()).thenReturn(c));  //Then returns whatever Mono you put in it. thenReturn wraps whatever value you put into it into a Mono and returns it.
+    public Mono<ClassRoom> delete(String id, String year_month) {
+        ClassRoomKey key = new ClassRoomKey(id, year_month);
+        return classRoomRepository.findById(key).
+                flatMap(c -> classRoomRepository.deleteById(c.getKey()).thenReturn(c));  //Then returns whatever Mono you put in it. thenReturn wraps whatever value you put into it into a Mono and returns it.
     }
 
-    public Mono<ClassRoom> create(String id, Integer capacity, String roomNo) {
-        return classRoomRepository.save(new ClassRoom(id, capacity, roomNo));
+    //TODO implement a delete class for all years too ?
+
+    public Mono<ClassRoom> create(String id, String year_month, Integer capacity, String roomNumber, String description, String picture_id) {
+        return classRoomRepository.save(new ClassRoom().
+                setKey(new ClassRoomKey(id, year_month)).
+                setCapacity(capacity).
+                setDescription(description).
+                setPicture_id(picture_id));
     }
 
 

@@ -84,10 +84,10 @@ public class CassandraConfig extends AbstractReactiveCassandraConfiguration {
 
     @Override
     protected List<String> getStartupScripts() {
-        return Arrays.asList("CREATE TABLE IF NOT EXISTS " + keyspace +
-                ".person(id text PRIMARY KEY, name text) ",
+        return Arrays.asList("CREATE TABLE IF NOT EXISTS " + keyspace + ".person(id text PRIMARY KEY, name text) ",
+                "CREATE TABLE IF NOT EXISTS " + keyspace + ".classroom_image(id text PRIMARY KEY, pict blob) ",
                 "CREATE TABLE IF NOT EXISTS " + keyspace +
-                        ".classroom(id text PRIMARY KEY, capacity int, room_number text) "
+                        ".classroom(id text , year_month text, capacity int, room_number text, description text, picture_id text, PRIMARY KEY (id, year_month))"
                 );
     }
 

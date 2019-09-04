@@ -1,10 +1,8 @@
-package com.report.configuration;
+package com.report.router;
 
-import com.report.handler.ClassRoomHandler;
 import com.report.handler.PersonHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
@@ -30,14 +28,14 @@ classroom:
  */
 
 @Configuration
-public class PersonEndPointConfiguration {
+public class PersonRouter {
     @Bean
-    RouterFunction<ServerResponse> routes(ClassRoomHandler handler) {
-        return route(GET("/classroom"), handler::all)
-                .andRoute(GET("/classroom/{id}"), handler::getById)
-                .andRoute(POST("/classroom"), handler::create)
-                .andRoute(PUT("/classroom/{id}"), handler::updateById)
-                .andRoute(DELETE("/classroom/{id}"), handler::deleteById);
+    RouterFunction<ServerResponse> personRoutes(PersonHandler handler) {
+        return route(GET("/person"), handler::all)
+                .andRoute(GET("/person/{id}"), handler::getById)
+                .andRoute(POST("/person"), handler::create)
+                .andRoute(PUT("/person/{id}"), handler::updateById)
+                .andRoute(DELETE("/person/{id}"), handler::deleteById);
 
     }
 }

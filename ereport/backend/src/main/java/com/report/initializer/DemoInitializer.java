@@ -1,13 +1,13 @@
 package com.report.initializer;
 
-import com.report.entity.ClassRoom;
+import com.report.entity.classroom.ClassRoom;
 import com.report.entity.Person;
+import com.report.entity.classroom.ClassRoomKey;
 import com.report.repository.ClassRoomRepository;
 import com.report.repository.PersonRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
@@ -39,12 +39,21 @@ public class DemoInitializer implements ApplicationListener<ApplicationReadyEven
 
         classRepository.deleteAll().thenMany(
                 Flux.just(
-                        new ClassRoom("small 1", 15, "3"),
-                        new ClassRoom("medium 1", 15, "7"),
-                        new ClassRoom("large 1", 20, "10"),
-                        new ClassRoom("small 2", 15, "4"),
-                        new ClassRoom("medium 2", 15, "8"),
-                        new ClassRoom("large 2", 20, "11")
+                        new ClassRoom("small 1", "2019-01").setCapacity(15).setRoomNumber("3").setDescription("a lovely room for new alpacas!"),
+                        new ClassRoom("small 2", "2019-01").setCapacity(15).setRoomNumber("4").setDescription("a lovely room for teddy bear !"),
+                        new ClassRoom("small 3", "2019-01").setCapacity(15).setRoomNumber("5").setDescription("a lovely room for baby goats !"),
+
+                        new ClassRoom("medium 1", "2019-01").setCapacity(17).setRoomNumber("7").setDescription("let your dreams bloom!"),
+                        new ClassRoom("medium 2", "2019-01").setCapacity(17).setRoomNumber("8").setDescription("who's enter here always smile"),
+                        new ClassRoom("medium 3", "2019-01").setCapacity(17).setRoomNumber("9").setDescription("a little spark of kindness can put a colossal burst of sunshine"),
+
+
+                        new ClassRoom("large 1", "2019-01").setCapacity(20).setRoomNumber("7").setDescription("think big start small!"),
+                        new ClassRoom("large 2", "2019-01").setCapacity(20).setRoomNumber("8").setDescription("you are going to be great , keep going !"),
+                        new ClassRoom("large 3", "2019-01").setCapacity(20).setRoomNumber("9").setDescription("start each day with a grateful heart")
+
+
+
                         ).flatMap(classRepository::save)).subscribe();
     }
 }
