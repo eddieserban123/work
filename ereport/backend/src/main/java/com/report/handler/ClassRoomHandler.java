@@ -39,7 +39,7 @@ public class ClassRoomHandler {
     public Mono<ServerResponse> create(ServerRequest r) {
         Mono<ClassRoom> mono = r.bodyToMono(ClassRoom.class)
                 .flatMap(c -> classRoomService.create(c.getKey().getId(), c.getKey().getYear_month(), c.getCapacity(),
-                        c.getRoomNumber(), c.getDescription(), c.getPicture_id()));
+                        c.getRoomNumber(), c.getDescription()));
 
         return Mono.from(mono).flatMap(c ->
                 {
@@ -65,7 +65,7 @@ public class ClassRoomHandler {
     public Mono<ServerResponse> updateById(ServerRequest r) {
         Mono<ClassRoom> mono = r.bodyToMono(ClassRoom.class).
                 flatMap(c -> classRoomService
-                        .update(id(r), year_month(r), c.getCapacity(), c.getRoomNumber(), c.getRoomNumber(), c.getDescription()));
+                        .update(id(r), year_month(r), c.getCapacity(), c.getRoomNumber(), c.getDescription()));
         //should treat the error case also
         return Mono.from(mono).flatMap(p -> noContent().build()
         );

@@ -35,6 +35,4 @@ public class ClassRoom {
 
     private String description;
 
-    private String picture_id;
-
 }

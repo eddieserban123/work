@@ -9,6 +9,11 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import static org.springframework.web.reactive.function.server.RequestPredicates.*;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
+/*
+curl --data '{"id":"small 3", "year_month":"2018-01","capacity":15, "room_number":"20", "description":"once upon a time"}' -v -u "user:user" -XPOST  -H "Content-Type:application/json" -H "Accept:application/json" http://localhost:8080/classroom/
+
+ curl -v -u "user:user" -H "Accept:application/json" -XGET http://localhost:8080/classroom
+ */
 
 @Configuration
 public class ClassRoomRouter {

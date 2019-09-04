@@ -13,10 +13,6 @@ persons:
  curl --data '{"id":"1","name":"ana"}' -v -u "user:user" -XPOST  -H "Content-Type:application/json" -H "Accept:application/json" http://localhost:8080/person/
  curl -v -u "user:user" -H "Accept:application/json" -XGET http://localhost:8080/person
 
-classroom:
- curl --data '{"id":"small 3","capacity":15, "roomNumber":"11"}' -v -u "user:user" -XPOST  -H "Content-Type:application/json" -H "Accept:application/json" http://localhost:8080/classroom/
- curl -v -u "user:user" -H "Accept:application/json" -XGET http://localhost:8080/classroom
-
 
 
   docker run --name cas --rm --network testnet -p 9042:9042 -d cassandra:latest

@@ -30,11 +30,16 @@ public class ClassRoomDeserializer extends StdDeserializer<ClassRoom> {
         key.setYear_month(classNode.get("year_month").textValue());
 
         classroom.setKey(key);
-        classroom.setRoomNumber(classNode.get("room_number").textValue());
-        classroom.setPicture_id(classNode.get("picture_id").textValue());
-        classroom.setDescription(classNode.get("description").textValue());
-        classroom.setCapacity(classNode.get("capacity").intValue());
+        if (classNode.get("room_number") != null) {
+            classroom.setRoomNumber(classNode.get("room_number").textValue());
+        }
 
+        if (classNode.get("description") != null) {
+            classroom.setDescription(classNode.get("description").textValue());
+        }
+        if (classNode.get("capacity") != null) {
+            classroom.setCapacity(classNode.get("capacity").intValue());
+        }
         return classroom;
 
 

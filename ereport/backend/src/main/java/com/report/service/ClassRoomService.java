@@ -26,10 +26,10 @@ public class ClassRoomService {
         return classRoomRepository.findById(id);
     }
 
-    public Mono<ClassRoom> update(String id, String year_month, Integer capacity, String roomNumber, String description, String picture_id) {
+    public Mono<ClassRoom> update(String id, String year_month, Integer capacity, String roomNumber, String description) {
         ClassRoomKey key = new ClassRoomKey(id, year_month);
         return classRoomRepository.findById(key).
-                map(c -> new ClassRoom().setKey(key).setCapacity(capacity).setDescription(description).setRoomNumber(roomNumber).setPicture_id(picture_id)).
+                map(c -> new ClassRoom().setKey(key).setCapacity(capacity).setDescription(description).setRoomNumber(roomNumber)).
                 flatMap(classRoomRepository::save);   // Mono(Mono) !
     }
 
@@ -41,12 +41,12 @@ public class ClassRoomService {
 
     //TODO implement a delete class for all years too ?
 
-    public Mono<ClassRoom> create(String id, String year_month, Integer capacity, String roomNumber, String description, String picture_id) {
+    public Mono<ClassRoom> create(String id, String year_month, Integer capacity, String roomNumber, String description) {
         return classRoomRepository.save(new ClassRoom().
                 setKey(new ClassRoomKey(id, year_month)).
                 setCapacity(capacity).
-                setDescription(description).
-                setPicture_id(picture_id));
+                setRoomNumber(roomNumber).
+                setDescription(description));
     }
 
 
