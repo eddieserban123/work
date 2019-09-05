@@ -6,7 +6,7 @@ import SelectedClass from './selected-class';
 
 
 class App extends Component {
-  state = {classRooms:[{"id":"small 1", "capacity":12, "room_number":23}]}
+  state = {classRooms:[{"id":"small 1", "capacity":12, "room_number":3}]}
 
  componentDidMount() {
    this.fetchClassRooms();
@@ -36,7 +36,7 @@ class App extends Component {
 
   render() {
     return (
-    <div classname="container">
+    <div class="container">
     <Header subtitle="New way of keeping reports"/>
     <SelectedClass classRoom = {this.state.classRooms[0]} />
     </div>

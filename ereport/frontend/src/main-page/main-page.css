@@ -7,3 +7,9 @@
   font-size: x-large;
   color: coral;
 }
+
+.selectedClass {
+  border-radius: 2px;
+  background-color: rgb(255, 190, 166);
+}
+

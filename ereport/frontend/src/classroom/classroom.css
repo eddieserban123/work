@@ -2,3 +2,8 @@
     font-size: larger;
     color: coral;
 }
+
+ img.resize {
+    max-width: 90%;
+    max-height: 90%;
+}
