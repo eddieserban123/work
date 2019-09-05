@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.report.entity.classroom.ClassRoom;
+import com.report.entity.imageroom.ImageRoom;
 import com.report.parsers.ClassRoomDeserializer;
+import com.report.parsers.ImageRoomSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,9 +21,8 @@ public class JsonConfig {
         SimpleModule module =
                 new SimpleModule("CustomClassRoomDeSerializer", new Version(1, 0, 0, null, null, null));
         module.addDeserializer(ClassRoom.class, new ClassRoomDeserializer());
-
+        module.addSerializer(ImageRoom.class, new ImageRoomSerializer());
         mapper.registerModule(module);
-
         return mapper;
     }
 

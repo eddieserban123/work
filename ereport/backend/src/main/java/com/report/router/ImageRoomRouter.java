@@ -14,6 +14,9 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 
 /*
 
+curl -v -u "user:user" -H "Accept:image/jpeg" -XGET "http://localhost:8080/image/room?number=3&year_month=2019-01"
+
+
 curl -v -u "user:user" -F  "number=3" -F "year_month=2019-01" -F "file=@/home/eddie/Downloads/kindergardeen/001.jpg" http://localhost:8080/image/room
 
  */
@@ -22,8 +25,8 @@ curl -v -u "user:user" -F  "number=3" -F "year_month=2019-01" -F "file=@/home/ed
 public class ImageRoomRouter {
     @Bean
     RouterFunction<ServerResponse> roomImagesRoute(ImageRoomHandler handler) {
-        return route(GET("/image/room/"), handler::get)
-                .andRoute(POST("/image/room/").and(RequestPredicates.accept(MediaType.MULTIPART_FORM_DATA)), handler::create);
+        return route(GET("/image/room"), handler::get)
+                .andRoute(POST("/image/room").and(RequestPredicates.accept(MediaType.MULTIPART_FORM_DATA)), handler::create);
 
     }
 }
