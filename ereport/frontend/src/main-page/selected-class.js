@@ -2,6 +2,8 @@ import React from 'react';
 import ClassRoom from '../classroom';
 
 const selectedClass = (props) => {
+    console.log("selected class");  
+    console.log(JSON.stringify(props));
     if (props.classRoom) 
       return ( 
           <div>

@@ -4,6 +4,7 @@ import "./classroom.css"
 class classRoom extends Component {
     state = {  }
     render() { 
+        console.log( JSON.stringify(this.props.classRoom));
         const classroom = this.props.classRoom;
         return ( 
             <div>
@@ -16,7 +17,7 @@ class classRoom extends Component {
                 </div> 
                 <div class="row">
                     <div class="col-md-7">
-                        <img class="resize" src = {`http://localhost:8080/image/room?number=${classroom.room_number}&year_month=2019-01`}/>
+                        <img class="resize" src = {`http://localhost:8080/image/room?number=${classroom.roomNumber}&year_month=${classroom.year_month}`}/>
                     </div> 
                     <div class = "col-md-5">
                         <p class="capacity">{classroom.capacity}</p>

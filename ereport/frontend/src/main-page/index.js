@@ -3,15 +3,17 @@ import logo from './logo.svg';
 import './main-page.css';
 import Header from './header';
 import SelectedClass from './selected-class';
+import SearchClassRoom from './search-classrom'
 
 
 class App extends Component {
-  state = {classRooms:[{"id":"small 1", "capacity":12, "room_number":3}]}
-
- componentDidMount() {
-   this.fetchClassRooms();
- }
+  state = {activeClassRoom:{},
+           classRooms:[]}
+  
  
+ componentDidMount() {
+  this.fetchClassRooms();
+}
 
   fetchClassRooms =() => {
 
@@ -29,16 +31,25 @@ class App extends Component {
     fetch(new Request(url, {method:'GET', headers: h}))
     .then(rsp => rsp.json())
     .then(classRooms => {
-      this.classRooms = classRooms;
-      this.state= {classRooms: classRooms}; 
+      console.log(JSON.stringify(classRooms));    
+//      this.classRooms = classRooms;
+     this.setState({activeClassRoom:classRooms[0]});
+     this.setState({classRooms}); 
+
     })
+  }
+
+  setActiveClassRoom = (classRoomIndex) => {
+    console.log(JSON.stringify(classRoomIndex));
+    this.setState({activeClassRoom:this.state.classRooms[classRoomIndex]});
   }
 
   render() {
     return (
     <div class="container">
     <Header subtitle="New way of keeping reports"/>
-    <SelectedClass classRoom = {this.state.classRooms[0]} />
+     <SearchClassRoom classRooms= {this.state.classRooms} setActiveClassRoom={this.setActiveClassRoom}/>
+     <SelectedClass classRoom = {this.state.activeClassRoom} /> 
     </div>
     );
   }

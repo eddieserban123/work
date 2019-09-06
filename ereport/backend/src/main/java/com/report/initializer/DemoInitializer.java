@@ -5,11 +5,23 @@ import com.report.entity.Person;
 import com.report.entity.classroom.ClassRoomKey;
 import com.report.repository.ClassRoomRepository;
 import com.report.repository.PersonRepository;
+import com.report.util.MultiPartBodyPublisher;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+import java.util.Base64;
+
+import static java.net.http.HttpClient.newBuilder;
 
 @Log4j2
 @Component
@@ -53,7 +65,43 @@ public class DemoInitializer implements ApplicationListener<ApplicationReadyEven
                         new ClassRoom("large 3", "2019-01").setCapacity(20).setRoomNumber("9").setDescription("start each day with a grateful heart")
 
 
+                ).flatMap(classRepository::save)).subscribe();
 
-                        ).flatMap(classRepository::save)).subscribe();
+
+        HttpClient client = newBuilder()
+                .version(HttpClient.Version.HTTP_1_1)
+                .connectTimeout(Duration.ofSeconds(10))
+                .followRedirects(HttpClient.Redirect.ALWAYS)
+                .build();
+
+        MultiPartBodyPublisher publisher = new MultiPartBodyPublisher()
+                .addPart("number", "3")
+                .addPart("year_month", "2019-01")
+                .addPart("someInputStream", () -> this.getClass().getResourceAsStream("/image/room/006.jpg"),
+                        "006.jpg", "img/jpeg");
+        //.addPart("someFile", pathObject);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/image/room"))
+                .header("Content-Type", "multipart/form-data; boundary=" + publisher.getBoundary())
+                .header("Authorization", basicAuth("user", "user"))
+                .header("Expect", "100-continue")
+                .timeout(Duration.ofSeconds(20))
+                .POST(publisher.build())
+                .build();
+
+
+        try {
+            client.send(request,HttpResponse.BodyHandlers.discarding());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    private static String basicAuth(String username, String password) {
+        return "Basic " + Base64.getEncoder().encodeToString((username + ":" + password).getBytes());
     }
 }
