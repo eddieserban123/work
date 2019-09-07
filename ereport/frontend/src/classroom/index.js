@@ -20,8 +20,8 @@ class classRoom extends Component {
                         <img class="resize" src = {`http://localhost:8080/image/room?number=${classroom.roomNumber}&year_month=${classroom.year_month}`}/>
                     </div> 
                     <div class = "col-md-5">
-                        <p class="capacity">{classroom.capacity}</p>
-                        <p>sdsdsd</p>
+                        <p class="capacity">capacity of max {classroom.capacity} children allowed </p>
+                        <p>{classroom.description}</p>
                     </div>
                 </div>    
             </div>

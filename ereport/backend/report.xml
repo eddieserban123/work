@@ -21,15 +21,24 @@
     </build_environment>
     <execution_environment>
       <os_sysname>Linux</os_sysname>
-      <os_release>4.15.0-58-generic</os_release>
-      <os_version>#64-Ubuntu SMP Tue Aug 6 11:12:41 UTC 2019</os_version>
+      <os_release>4.15.0-60-generic</os_release>
+      <os_version>#67-Ubuntu SMP Thu Aug 22 16:55:30 UTC 2019</os_version>
       <host>eddie-lenovo</host>
       <arch>x86_64</arch>
       <command_line>tcpflow -i any -c port 8080</command_line>
       <uid>0</uid>
-      <start_time>2019-09-03T13:19:34Z</start_time>
+      <start_time>2019-09-07T10:05:36Z</start_time>
     </execution_environment>
   </creator>
   <configuration>
   </configuration>
   <tdelta>0</tdelta>
+  <configuration>
+    <fileobject>
+      <filesize>0</filesize>
+      <tcpflow startime='2019-09-07T13:06:28.371731Z' endtime='2019-09-07T13:06:28.371944Z' src_ipn='0.0.0.0' dst_ipn='0.0.0.0' mac_daddr='00:00:03:04:00:06' packets='3' srcport='41256' dstport='8080' family='10' />
+    </fileobject>
+    <fileobject>
+      <filesize>0</filesize>
+      <tcpflow startime='2019-09-07T13:06:28.371753Z' endtime='2019-09-07T13:06:28.372093Z' src_ipn='0.0.0.0' dst_ipn='0.0.0.0' mac_daddr='00:00:03:04:00:06' packets='2' srcport='8080' dstport='41256' family='10' />
+    </fileobject>
