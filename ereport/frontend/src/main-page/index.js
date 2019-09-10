@@ -39,9 +39,9 @@ class App extends Component {
     })
   }
 
-  setActiveClassRoom = (classRoomIndex) => {
-    console.log(JSON.stringify(classRoomIndex));
-    this.setState({activeClassRoom:this.state.classRooms[classRoomIndex]});
+  setActiveClassRoom = (classRoom) => {
+    console.log(JSON.stringify(classRoom));
+    this.setState({activeClassRoom:classRoom});
   }
 
   render() {

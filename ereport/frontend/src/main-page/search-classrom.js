@@ -7,9 +7,9 @@ class SearchClassRoom extends Component {
       }
 
     onSearchChange=(e) => {
-        const classroom=e.target.value;
-        this.setState({selectedOption: classroom });
-        this.props.setActiveClassRoom(classroom);
+        const index=e.target.value;
+        this.state.SelectedOption= this.props.classRooms[index] ;
+        this.props.setActiveClassRoom(this.state.SelectedOption);
     }
     render() { 
         const search = this.state.selectedOption;
