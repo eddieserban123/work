@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
+import java.time.LocalDate;
+
 
 @Data
 @AllArgsConstructor
@@ -18,4 +20,6 @@ public class Person {
     private String id;
 
     private String name;
+
+    private LocalDate birth;
 }

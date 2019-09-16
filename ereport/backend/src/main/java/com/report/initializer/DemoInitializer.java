@@ -18,6 +18,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 
 import java.net.MalformedURLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
@@ -44,10 +46,10 @@ public class DemoInitializer implements ApplicationListener<ApplicationReadyEven
         try {
 
             personRepository.deleteAll().thenMany(
-                    Flux.just(new Person("123", "John"),
-                            new Person("125", "Mary"),
-                            new Person("124", "Peter"),
-                            new Person("126", "John")).flatMap(personRepository::save)).subscribe();
+                    Flux.just(new Person("123", "John", LocalDate.of(2015, 12,1)),
+                            new Person("125", "Mary",  LocalDate.of(2014, 7,12)),
+                            new Person("124", "Peter", LocalDate.of(2014, 4,20)),
+                            new Person("126", "John", LocalDate.of(2016, 4,30))).flatMap(personRepository::save)).subscribe();
 
             List<ClassRoom> classRooms = Arrays.asList(
                     new ClassRoom("small 1", "2019-01").setCapacity(15).setRoomNumber("3").setDescription("a lovely room for new alpacas!"),

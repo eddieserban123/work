@@ -40,15 +40,15 @@ public class EreportApplication implements CommandLineRunner {
 
     // not needed anymore since we have an initializer
     private void createPersons() {
-        final Person p1 = new Person("123", "John");
-        final Person p2 = new Person("125", "Mary");
-        final Person p3 = new Person("124", "Peter");
-        final Person p4 = new Person("126", "John");
-
-        personRepository.insert(List.of(p1, p2, p3, p4)).subscribe();
-        System.out.println("starting findAll");
-        personRepository.findAll().log().map(Person::getName).subscribe(p -> System.out.println("findAll: " + p));
-        System.out.println("starting findByKeyFirstName");
-
+//        final Person p1 = new Person("123", "John");
+//        final Person p2 = new Person("125", "Mary");
+//        final Person p3 = new Person("124", "Peter");
+//        final Person p4 = new Person("126", "John");
+//
+//        personRepository.insert(List.of(p1, p2, p3, p4)).subscribe();
+//        System.out.println("starting findAll");
+//        personRepository.findAll().log().map(Person::getName).subscribe(p -> System.out.println("findAll: " + p));
+//        System.out.println("starting findByKeyFirstName");
+//
     }
 }
