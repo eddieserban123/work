@@ -46,10 +46,17 @@ public class DemoInitializer implements ApplicationListener<ApplicationReadyEven
         try {
 
             personRepository.deleteAll().thenMany(
-                    Flux.just(new Person("123", "John", LocalDate.of(2015, 12,1)),
-                            new Person("125", "Mary",  LocalDate.of(2014, 7,12)),
-                            new Person("124", "Peter", LocalDate.of(2014, 4,20)),
-                            new Person("126", "John", LocalDate.of(2016, 4,30))).flatMap(personRepository::save)).subscribe();
+                    Flux.just(
+                            new Person("123", "John", "Lenon", LocalDate.of(2015, 12, 1)),
+                            new Person("125", "Mary", "Poppins", LocalDate.of(2014, 7, 12)),
+                            new Person("124", "Peter", "Krugger", LocalDate.of(2014, 4, 20)),
+                            new Person("126", "Sophia", "Lorren", LocalDate.of(2016, 4, 30)),
+                            new Person("127", "Ana", "Ionescu", LocalDate.of(2015, 12, 1)),
+                            new Person("128", "Elena", "Serban", LocalDate.of(2014, 7, 12)),
+                            new Person("129", "Maria", "Cristescu", LocalDate.of(2015, 4, 20)),
+                            new Person("130", "Eva", "Sanduleanu", LocalDate.of(2016, 4, 30))
+
+                    ).flatMap(personRepository::save)).subscribe();
 
             List<ClassRoom> classRooms = Arrays.asList(
                     new ClassRoom("small 1", "2019-01").setCapacity(15).setRoomNumber("3").setDescription("a lovely room for new alpacas!"),
@@ -74,7 +81,6 @@ public class DemoInitializer implements ApplicationListener<ApplicationReadyEven
 
             WebClient webClient = WebClient.create();
             classRooms.stream().forEach(c -> uploadImage(buildPart(c.getRoomNumber(), c.getKey().getYear_month()), webClient));
-
 
 
         } catch (Exception e) {

@@ -37,7 +37,7 @@ public class PersonController {
 
     @PostMapping
     Publisher<ResponseEntity<Person>> create(@RequestBody Person person) {
-        return personService.create(person.getId(), person.getName(), person.getBirth()).
+        return personService.create(person.getId(), person.getFirstName(), person.getLastName(), person.getBirth()).
                 map(p -> ResponseEntity.created(URI.create("/person/" + p.getId())).
                         contentType(mediaType).build());
     }
@@ -50,7 +50,7 @@ public class PersonController {
     @PutMapping("/{id}")
     Publisher<ResponseEntity<Person>> updateById(@PathVariable("id") String id, @RequestBody Person person) {
         return Mono.just(person).
-                flatMap(p -> personService.update(id, p.getName(), p.getBirth())).
+                flatMap(p -> personService.update(id, p.getFirstName(), p.getLastName(), p.getBirth())).
                 map(p -> ResponseEntity.ok().contentType(mediaType).build());
     }
 

@@ -35,7 +35,7 @@ public class PersonHandler {
 
     public Mono<ServerResponse> create(ServerRequest r) {
         Mono<Person> mono = r.bodyToMono(Person.class)
-                .flatMap(p -> personService.create(p.getId(), p.getName(), p.getBirth()));
+                .flatMap(p -> personService.create(p.getId(), p.getFirstName(), p.getLastName(), p.getBirth()));
 
         return Mono.from(mono).flatMap(p ->
                 created(URI.create("/person/" + p.getId())).
@@ -45,16 +45,16 @@ public class PersonHandler {
 
     public Mono<ServerResponse> deleteById(ServerRequest r) {
         return personService.delete(id(r)).flatMap(
-               p->  noContent().build()
+                p -> noContent().build()
         );
     }
 
     public Mono<ServerResponse> updateById(ServerRequest r) {
         Mono<Person> mono = r.bodyToMono(Person.class).
                 flatMap(p -> personService
-                        .update(id(r), p.getName(), p.getBirth()));
+                        .update(id(r), p.getFirstName(), p.getFirstName(), p.getBirth()));
         //should treat the error case also
-        return Mono.from(mono).flatMap(p-> noContent().build()
+        return Mono.from(mono).flatMap(p -> noContent().build()
         );
     }
 

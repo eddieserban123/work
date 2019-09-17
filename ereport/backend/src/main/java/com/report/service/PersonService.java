@@ -29,9 +29,9 @@ public class PersonService {
         return personRepository.findById(id);
     }
 
-    public Mono<Person> update(String id, String name, LocalDate birth) {
+    public Mono<Person> update(String id, String firstName, String lastName, LocalDate birth) {
         return personRepository.findById(id).
-                map(p -> new Person(p.getId(), name, birth)).
+                map(p -> new Person(p.getId(), firstName, lastName, birth)).
                 flatMap(personRepository::save);   // Mono(Mono) !
     }
 
@@ -40,8 +40,8 @@ public class PersonService {
                 flatMap(p -> personRepository.deleteById(p.getId()).thenReturn(p));  //Then returns whatever Mono you put in it. thenReturn wraps whatever value you put into it into a Mono and returns it.
     }
 
-    public Mono<Person> create(String id, String name, LocalDate birth) {
-        return personRepository.save(new Person(id, name, birth)).
+    public Mono<Person> create(String id, String firstName, String lastName, LocalDate birth) {
+        return personRepository.save(new Person(id, firstName, lastName, birth)).
                 doOnSuccess(entity -> publisher.publishEvent(new PersonCreatedEvent(entity)));
     }
 

@@ -10,7 +10,7 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 /*
 persons:
- curl --data '{"id":"1","name":"ana"}' -v -u "user:user" -XPOST  -H "Content-Type:application/json" -H "Accept:application/json" http://localhost:8080/person/
+ curl --data '{"id":"1","firstName":"gerogiana","lastName":"neacsu", "birth": "2016/03/03"}' -v -u "user:user" -XPOST  -H "Content-Type:application/json" -H "Accept:application/json" http://localhost:8080/person/
  curl -v -u "user:user" -H "Accept:application/json" -XGET http://localhost:8080/person
 
 

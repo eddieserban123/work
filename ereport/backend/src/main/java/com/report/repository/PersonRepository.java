@@ -10,5 +10,4 @@ import reactor.core.publisher.Mono;
 public interface  PersonRepository extends ReactiveCassandraRepository<Person, String> {
 
     Mono<Person> findById(String id);
-    Flux<Person> findByName(String name);
 }
