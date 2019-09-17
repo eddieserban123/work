@@ -1,27 +1,18 @@
 package com.report.configuration;
 
 
-import com.datastax.driver.core.PlainTextAuthProvider;
-import com.datastax.driver.core.TypeCodec;
 import com.datastax.driver.core.policies.ConstantReconnectionPolicy;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.cassandra.config.AbstractReactiveCassandraConfiguration;
 import org.springframework.data.cassandra.config.CassandraClusterFactoryBean;
 import org.springframework.data.cassandra.config.SchemaAction;
-import org.springframework.data.cassandra.core.convert.CassandraCustomConversions;
 import org.springframework.data.cassandra.core.cql.keyspace.CreateKeyspaceSpecification;
 import org.springframework.data.cassandra.core.cql.keyspace.DropKeyspaceSpecification;
 import org.springframework.data.cassandra.core.cql.keyspace.KeyspaceOption;
 import org.springframework.data.cassandra.repository.config.EnableReactiveCassandraRepositories;
-import org.springframework.data.convert.Jsr310Converters;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Configuration
@@ -96,8 +87,8 @@ public class CassandraConfig extends AbstractReactiveCassandraConfiguration {
                 "CREATE TABLE IF NOT EXISTS " + keyspace + ".image_room(room_number text, year_month text, content blob, PRIMARY KEY(room_number, year_month)) ",
                 "CREATE TABLE IF NOT EXISTS " + keyspace +
                         ".classroom(id text , year_month text, capacity int, room_number text, description text, PRIMARY KEY (id, year_month))",
-                "CREATE TABLE IF NOT EXISTS " + keyspace + ".classroom_kids (id_classroom text, snapshot date, person_id text, PRIMARY KEY(id_classroom, snapshot))",
-                "CREATE TABLE IF NOT EXISTS " + keyspace + ".classroom_changes (id_classroom text, change date, PRIMARY KEY(id_classroom))"
+                "CREATE TABLE IF NOT EXISTS " + keyspace + ".classroom_kids (id_classroom text, snapshot_date date, person_id text, PRIMARY KEY(id_classroom, snapshot_date))  WITH CLUSTERING ORDER BY (snapshot DESC); ",
+                "CREATE TABLE IF NOT EXISTS " + keyspace + ".classroom_changes (id_classroom text, change date, PRIMARY KEY(id_classroom)) "
         );
     }
 
