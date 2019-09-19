@@ -2,15 +2,22 @@ package com.report.configuration;
 
 
 import com.datastax.driver.core.policies.ConstantReconnectionPolicy;
+import com.report.entity.classroomkids.ClassRoomKids;
+import com.report.entity.classroomkids.ClassRoomKidsKey;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.cassandra.config.AbstractReactiveCassandraConfiguration;
 import org.springframework.data.cassandra.config.CassandraClusterFactoryBean;
 import org.springframework.data.cassandra.config.SchemaAction;
+import org.springframework.data.cassandra.core.CassandraOperations;
 import org.springframework.data.cassandra.core.cql.keyspace.CreateKeyspaceSpecification;
 import org.springframework.data.cassandra.core.cql.keyspace.DropKeyspaceSpecification;
 import org.springframework.data.cassandra.core.cql.keyspace.KeyspaceOption;
+import org.springframework.data.cassandra.core.mapping.CassandraPersistentEntity;
 import org.springframework.data.cassandra.repository.config.EnableReactiveCassandraRepositories;
+import org.springframework.data.cassandra.repository.query.CassandraEntityInformation;
+import org.springframework.data.cassandra.repository.support.MappingCassandraEntityInformation;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,6 +25,18 @@ import java.util.List;
 @Configuration
 @EnableReactiveCassandraRepositories(basePackages = "com.report")
 public class CassandraConfig extends AbstractReactiveCassandraConfiguration {
+
+
+    @Bean
+    public CassandraEntityInformation information(CassandraOperations cassandraTemplate) {
+        CassandraPersistentEntity<ClassRoomKids> entity =
+                (CassandraPersistentEntity<ClassRoomKids>)
+                        cassandraTemplate
+                                .getConverter()
+                                .getMappingContext()
+                                .getRequiredPersistentEntity(ClassRoomKids.class);
+        return new MappingCassandraEntityInformation<>(entity, cassandraTemplate.getConverter());
+    }
 
     @Value("${cassandra.contactpoints}")
     private String contactPoints;
@@ -87,8 +106,8 @@ public class CassandraConfig extends AbstractReactiveCassandraConfiguration {
                 "CREATE TABLE IF NOT EXISTS " + keyspace + ".image_room(room_number text, year_month text, content blob, PRIMARY KEY(room_number, year_month)) ",
                 "CREATE TABLE IF NOT EXISTS " + keyspace +
                         ".classroom(id text , year_month text, capacity int, room_number text, description text, PRIMARY KEY (id, year_month))",
-                "CREATE TABLE IF NOT EXISTS " + keyspace + ".classroom_kids (id_classroom text, snapshot_date date, person_id text, PRIMARY KEY(id_classroom, snapshot_date))  WITH CLUSTERING ORDER BY (snapshot DESC); ",
-                "CREATE TABLE IF NOT EXISTS " + keyspace + ".classroom_changes (id_classroom text, change date, PRIMARY KEY(id_classroom)) "
+                "CREATE TABLE IF NOT EXISTS " + keyspace + ".classroom_kids (id_classroom text, snapshot_date date, person_id text, PRIMARY KEY(id_classroom, snapshot_date))  WITH CLUSTERING ORDER BY (snapshot_date DESC); ",
+                "CREATE TABLE IF NOT EXISTS " + keyspace + ".classroom_changes (id_classroom text, year int, month int, day int, PRIMARY KEY(year, month))  WITH CLUSTERING ORDER BY (month DESC)"
         );
     }
 
