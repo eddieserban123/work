@@ -6,10 +6,12 @@ import com.datastax.driver.core.Session;
 import com.report.entity.classroomkids.ClassRoomKids;
 import com.report.entity.classroomkids.ClassRoomKidsKey;
 import org.springframework.data.cassandra.core.CassandraOperations;
+import org.springframework.data.cassandra.core.ReactiveCassandraOperations;
 import org.springframework.data.cassandra.core.cql.support.CachedPreparedStatementCreator;
 import org.springframework.data.cassandra.core.cql.support.PreparedStatementCache;
 import org.springframework.data.cassandra.repository.query.CassandraEntityInformation;
 import org.springframework.data.cassandra.repository.support.SimpleCassandraRepository;
+import org.springframework.data.cassandra.repository.support.SimpleReactiveCassandraRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -22,16 +24,16 @@ Every time a kid is leaving/coming a classroom, the event is recorder in both ta
 and classroom_changes
  */
 @Repository
-public class ClassRoomKidsRepository extends SimpleCassandraRepository<ClassRoomKids, ClassRoomKidsKey> {
+public class ClassRoomKidsRepository extends SimpleReactiveCassandraRepository<ClassRoomKids, ClassRoomKidsKey> {
 
     private final Session session;
-    private final CassandraOperations cassandraTemplate;
+    private final ReactiveCassandraOperations cassandraTemplate;
     private final PreparedStatementCache cache = PreparedStatementCache.create();
 
     public ClassRoomKidsRepository(
             Session session,
             CassandraEntityInformation entityInformation,
-            CassandraOperations cassandraTemplate) {
+            ReactiveCassandraOperations cassandraTemplate) {
         super(entityInformation, cassandraTemplate);
         this.session = session;
         this.cassandraTemplate = cassandraTemplate;

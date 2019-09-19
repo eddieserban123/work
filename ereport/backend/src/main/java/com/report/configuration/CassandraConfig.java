@@ -11,6 +11,7 @@ import org.springframework.data.cassandra.config.AbstractReactiveCassandraConfig
 import org.springframework.data.cassandra.config.CassandraClusterFactoryBean;
 import org.springframework.data.cassandra.config.SchemaAction;
 import org.springframework.data.cassandra.core.CassandraOperations;
+import org.springframework.data.cassandra.core.ReactiveCassandraOperations;
 import org.springframework.data.cassandra.core.cql.keyspace.CreateKeyspaceSpecification;
 import org.springframework.data.cassandra.core.cql.keyspace.DropKeyspaceSpecification;
 import org.springframework.data.cassandra.core.cql.keyspace.KeyspaceOption;
@@ -28,7 +29,7 @@ public class CassandraConfig extends AbstractReactiveCassandraConfiguration {
 
 
     @Bean
-    public CassandraEntityInformation information(CassandraOperations cassandraTemplate) {
+    public CassandraEntityInformation information(ReactiveCassandraOperations cassandraTemplate) {
         CassandraPersistentEntity<ClassRoomKids> entity =
                 (CassandraPersistentEntity<ClassRoomKids>)
                         cassandraTemplate
