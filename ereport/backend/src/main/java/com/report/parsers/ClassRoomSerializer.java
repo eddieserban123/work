@@ -4,19 +4,17 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.report.entity.classroom.ClassRoom;
-import com.report.entity.imageroom.ImageRoom;
 
 import java.io.IOException;
-import java.util.Base64;
 
-public class ClassRommSerializer extends StdSerializer<ClassRoom> {
+public class ClassRoomSerializer extends StdSerializer<ClassRoom> {
 
 
-    public ClassRommSerializer() {
+    public ClassRoomSerializer() {
         this(null);
     }
 
-    public ClassRommSerializer(Class<ClassRoom> t) {
+    public ClassRoomSerializer(Class<ClassRoom> t) {
         super(t);
     }
 

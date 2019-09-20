@@ -40,7 +40,9 @@ public class ClassRoomKidsRepository extends SimpleReactiveCassandraRepository<C
     }
 
     public void insertKidInClassRoom(String classRoomId, LocalDate snapShotDate, String personId) {
-        BatchStatement batch = new BatchStatement(BatchStatement.Type.LOGGED).add(insertKidInClassRoomQuery(classRoomId,snapShotDate,personId));
+        BatchStatement batch = new BatchStatement(BatchStatement.Type.LOGGED).
+                add(insertKidInClassRoomQuery(classRoomId, snapShotDate, personId))
+                .add(insertAChangeInClassRoomChanges(classRoomId, snapShotDate));
 
         session.execute(batch);
     }
@@ -60,6 +62,23 @@ public class ClassRoomKidsRepository extends SimpleReactiveCassandraRepository<C
                 .setDate("snapshot_date", toCqlDate(snapShotDate))
                 .setString("id_classroom", classRoomId)
                 .setString("person_id", personId);
+    }
+
+    private BoundStatement insertAChangeInClassRoomChanges(String classRoomId, LocalDate date) {
+        return CachedPreparedStatementCreator.of(
+                cache,
+                insertInto("classroom_changes").
+                        value("id_classroom", bindMarker("id_classroom")).
+                        value("year", bindMarker("year")).
+                        value("month", bindMarker("month")).
+                        value("day", bindMarker("day"))
+        )
+                .createPreparedStatement(session)
+                .bind()
+                .setString("id_classroom", classRoomId)
+                .setInt("year", date.getYear())
+                .setInt("month", date.getMonthValue())
+                .setInt("day", date.getDayOfMonth());
 
 
     }
