@@ -1,0 +1,39 @@
+
+teacher
+	id
+	name
+
+
+
+person 
+       id
+       name
+
+
+room   id
+       no
+       date	
+       pict
+
+
+group  id,
+       order,
+       type  --> small, big, ant bla
+
+
+
+persons
+	id,
+	persons_id	
+
+
+goup_promotion                            group_promotion_changes
+	id  (name)				y 	
+	date                                    m  
+	teacher_id                              d
+	room_id                                 type (teacher,room, group, persons)  
+	group_id
+	persons_id
+
+
+ 
