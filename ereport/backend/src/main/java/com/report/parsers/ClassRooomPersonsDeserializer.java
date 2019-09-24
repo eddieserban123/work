@@ -5,30 +5,29 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.report.entity.Person;
-import com.report.entity.classroomkids.ClassRoomKids;
-import com.report.entity.classroomkids.ClassRoomKidsKey;
+import com.report.entity.classroompersons.ClassRoomPersons;
+import com.report.entity.classroompersons.ClassRoomPersonsKey;
 import com.report.util.AppDateFormatter;
 
 import java.io.IOException;
 import java.time.LocalDate;
 
-public class ClassRooomKidsDeserializer extends StdDeserializer<ClassRoomKids> {
+public class ClassRooomPersonsDeserializer extends StdDeserializer<ClassRoomPersons> {
 
 
-    public ClassRooomKidsDeserializer() {
+    public ClassRooomPersonsDeserializer() {
         this(null);
     }
 
-    public ClassRooomKidsDeserializer(Class<?> vc) {
+    public ClassRooomPersonsDeserializer(Class<?> vc) {
         super(vc);
     }
 
     @Override
-    public ClassRoomKids deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+    public ClassRoomPersons deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
         JsonNode classNode = jsonParser.getCodec().readTree(jsonParser);
-        ClassRoomKids classRoomKids = new ClassRoomKids();
-        ClassRoomKidsKey key = new ClassRoomKidsKey();
+        ClassRoomPersons classRoomPersons = new ClassRoomPersons();
+        ClassRoomPersonsKey key = new ClassRoomPersonsKey();
 
         if (classNode.get("id_classroom") != null) {
             key.setId_classroom(classNode.get("id_classroom").textValue());
@@ -38,14 +37,14 @@ public class ClassRooomKidsDeserializer extends StdDeserializer<ClassRoomKids> {
             key.setSnapshot_date(LocalDate.parse(classNode.get("snapshot_date").textValue(), AppDateFormatter.getDateFormatter()));
         }
 
-        classRoomKids.setKey(key);
+        classRoomPersons.setKey(key);
 
         if (classNode.get("person_id") != null) {
-            classRoomKids.setPersonId(classNode.get("person_id").textValue());
+            classRoomPersons.setPersonId(classNode.get("person_id").textValue());
         }
 
 
-        return classRoomKids;
+        return classRoomPersons;
 
 
     }

@@ -1,9 +1,8 @@
 package com.report.handler;
 
 import com.report.entity.classroom.ClassRoom;
-import com.report.entity.classroomkids.ClassRoomKids;
-import com.report.service.ClassRoomKidsService;
-import com.report.util.AppDateFormatter;
+import com.report.entity.classroompersons.ClassRoomPersons;
+import com.report.service.ClassRoomPersonsService;
 import lombok.AllArgsConstructor;
 import org.reactivestreams.Publisher;
 import org.springframework.data.cassandra.core.CassandraTemplate;
@@ -18,22 +17,21 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
 
-import static com.report.util.AppDateFormatter.*;
 import static com.report.util.AppDateFormatter.getDateFormatter;
 import static org.springframework.web.reactive.function.server.ServerResponse.*;
 
 @Component
 @AllArgsConstructor
-public class ClassRoomKidsHandler {
+public class ClassRoomPersonsHandler {
 
-    private final ClassRoomKidsService classRoomKidsService;
+    private final ClassRoomPersonsService classRoomPersonsService;
     private final CassandraTemplate cassandraTemplate;
 
 
     public Mono<ServerResponse> create(ServerRequest r) {
-        return r.bodyToMono(ClassRoomKids.class).flatMap(c -> {
+        return r.bodyToMono(ClassRoomPersons.class).flatMap(c -> {
             try {
-                classRoomKidsService.insertKidInClassRoom(c.getKey().getId_classroom(), c.getKey().getSnapshot_date(), c.getPersonId());
+                classRoomPersonsService.insertPeronsInClassRoom(c.getKey().getId_classroom(), c.getKey().getSnapshot_date(), c.getPersonId());
                 String classRoomIdEncoded = URLEncoder.encode(c.getKey().getId_classroom(), "UTF8");
                 String dateEncoded = URLEncoder.encode(c.getKey().getSnapshot_date().format(getDateFormatter()), "UTF8");
 

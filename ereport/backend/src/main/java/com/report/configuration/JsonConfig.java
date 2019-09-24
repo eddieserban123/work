@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.report.entity.Person;
 import com.report.entity.classroom.ClassRoom;
-import com.report.entity.classroomkids.ClassRoomKids;
+import com.report.entity.classroompersons.ClassRoomPersons;
 import com.report.parsers.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +24,7 @@ public class JsonConfig {
         module.addSerializer(ClassRoom.class, new ClassRoomSerializer());
         module.addSerializer(Person.class, new PersonSerializer());
         module.addDeserializer(Person.class, new PersonDeserializer());
-        module.addDeserializer(ClassRoomKids.class, new ClassRooomKidsDeserializer());
+        module.addDeserializer(ClassRoomPersons.class, new ClassRooomPersonsDeserializer());
 
         mapper.registerModule(module);
         return mapper;

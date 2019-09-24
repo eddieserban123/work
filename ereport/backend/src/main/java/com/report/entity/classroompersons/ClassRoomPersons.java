@@ -1,4 +1,4 @@
-package com.report.entity.classroomkids;
+package com.report.entity.classroompersons;
 
 
 import lombok.AllArgsConstructor;
@@ -15,18 +15,18 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
-@Table("classroom_kids")
-public class ClassRoomKids {
+@Table("classroom_persons")
+public class ClassRoomPersons {
 
     @PrimaryKey
-    private ClassRoomKidsKey key;
+    private ClassRoomPersonsKey key;
 
-    public ClassRoomKids(ClassRoomKidsKey key) {
+    public ClassRoomPersons(ClassRoomPersonsKey key) {
         this.key = key;
     }
 
-    public ClassRoomKids(String id_classroom, LocalDate snapshot_date) {
-        this(new ClassRoomKidsKey(id_classroom, snapshot_date));
+    public ClassRoomPersons(String id_classroom, LocalDate snapshot_date) {
+        this(new ClassRoomPersonsKey(id_classroom, snapshot_date));
     }
 
     @Column("person_id")

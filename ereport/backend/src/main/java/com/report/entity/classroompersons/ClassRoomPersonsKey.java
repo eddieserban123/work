@@ -1,4 +1,4 @@
-package com.report.entity.classroomkids;
+package com.report.entity.classroompersons;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +19,7 @@ import java.time.LocalDate;
 @EqualsAndHashCode
 @Accessors(chain = true)
 @PrimaryKeyClass
-public class ClassRoomKidsKey implements Serializable {
+public class ClassRoomPersonsKey implements Serializable {
 
     @PrimaryKeyColumn(name = "id_classroom", ordinal = 0,
             type = PrimaryKeyType.PARTITIONED)

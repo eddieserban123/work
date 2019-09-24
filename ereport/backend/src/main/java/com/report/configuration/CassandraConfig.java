@@ -2,15 +2,13 @@ package com.report.configuration;
 
 
 import com.datastax.driver.core.policies.ConstantReconnectionPolicy;
-import com.report.entity.classroomkids.ClassRoomKids;
-import com.report.entity.classroomkids.ClassRoomKidsKey;
+import com.report.entity.classroompersons.ClassRoomPersons;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.cassandra.config.AbstractReactiveCassandraConfiguration;
 import org.springframework.data.cassandra.config.CassandraClusterFactoryBean;
 import org.springframework.data.cassandra.config.SchemaAction;
-import org.springframework.data.cassandra.core.CassandraOperations;
 import org.springframework.data.cassandra.core.ReactiveCassandraOperations;
 import org.springframework.data.cassandra.core.cql.keyspace.CreateKeyspaceSpecification;
 import org.springframework.data.cassandra.core.cql.keyspace.DropKeyspaceSpecification;
@@ -30,12 +28,12 @@ public class CassandraConfig extends AbstractReactiveCassandraConfiguration {
 
     @Bean
     public CassandraEntityInformation information(ReactiveCassandraOperations cassandraTemplate) {
-        CassandraPersistentEntity<ClassRoomKids> entity =
-                (CassandraPersistentEntity<ClassRoomKids>)
+        CassandraPersistentEntity<ClassRoomPersons> entity =
+                (CassandraPersistentEntity<ClassRoomPersons>)
                         cassandraTemplate
                                 .getConverter()
                                 .getMappingContext()
-                                .getRequiredPersistentEntity(ClassRoomKids.class);
+                                .getRequiredPersistentEntity(ClassRoomPersons.class);
         return new MappingCassandraEntityInformation<>(entity, cassandraTemplate.getConverter());
     }
 
@@ -107,7 +105,7 @@ public class CassandraConfig extends AbstractReactiveCassandraConfiguration {
                 "CREATE TABLE IF NOT EXISTS " + keyspace + ".image_room(room_number text, year_month text, content blob, PRIMARY KEY(room_number, year_month)) ",
                 "CREATE TABLE IF NOT EXISTS " + keyspace +
                         ".classroom(id text , year_month text, capacity int, room_number text, description text, PRIMARY KEY (id, year_month))",
-                "CREATE TABLE IF NOT EXISTS " + keyspace + ".classroom_kids (id_classroom text, snapshot_date date, person_id text, PRIMARY KEY(id_classroom, snapshot_date))  WITH CLUSTERING ORDER BY (snapshot_date DESC); ",
+                "CREATE TABLE IF NOT EXISTS " + keyspace + ".classroom_persons (id_classroom text, snapshot_date date, person_id text, PRIMARY KEY(id_classroom, snapshot_date, person_id))  WITH CLUSTERING ORDER BY (snapshot_date DESC); ",
                 "CREATE TABLE IF NOT EXISTS " + keyspace + ".classroom_changes (id_classroom text, year int, month int, day int, PRIMARY KEY(year, month))  WITH CLUSTERING ORDER BY (month DESC)"
         );
     }

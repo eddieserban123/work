@@ -3,6 +3,7 @@ package com.report.initializer;
 import com.google.common.collect.ImmutableBiMap;
 import com.report.entity.Person;
 import com.report.entity.classroom.ClassRoom;
+import com.report.repository.ClassRoomPersonsRepository;
 import com.report.repository.ClassRoomRepository;
 import com.report.repository.PersonRepository;
 import lombok.extern.log4j.Log4j2;
@@ -32,31 +33,37 @@ public class DemoInitializer implements ApplicationListener<ApplicationReadyEven
 
     private final PersonRepository personRepository;
     private final ClassRoomRepository classRepository;
+    private final ClassRoomPersonsRepository classRoomsPersonsRepository;
 
 
-    public DemoInitializer(PersonRepository repository, ClassRoomRepository classRepository) {
+    public DemoInitializer(PersonRepository repository, ClassRoomRepository classRepository, ClassRoomPersonsRepository classRoomsPersonsRepository) {
         this.personRepository = repository;
         this.classRepository = classRepository;
+        this.classRoomsPersonsRepository = classRoomsPersonsRepository;
     }
 
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
 
+        List<Person>  persons = Arrays.asList(  new Person("123", "John", "Lenon", LocalDate.of(2015, 12, 1)),
+                new Person("125", "Mary", "Poppins", LocalDate.of(2014, 7, 12)),
+                new Person("124", "Peter", "Krugger", LocalDate.of(2014, 4, 20)),
+                new Person("126", "Sophia", "Lorren", LocalDate.of(2016, 4, 30)),
+                new Person("127", "Ana", "Ionescu", LocalDate.of(2015, 12, 1)),
+                new Person("128", "Elena", "Serban", LocalDate.of(2014, 7, 12)),
+                new Person("129", "Maria", "Cristescu", LocalDate.of(2015, 4, 20)),
+                new Person("130", "Eva", "Sanduleanu", LocalDate.of(2016, 4, 30))
+        );
+
         try {
-
+            //creating persons
             personRepository.deleteAll().thenMany(
-                    Flux.just(
-                            new Person("123", "John", "Lenon", LocalDate.of(2015, 12, 1)),
-                            new Person("125", "Mary", "Poppins", LocalDate.of(2014, 7, 12)),
-                            new Person("124", "Peter", "Krugger", LocalDate.of(2014, 4, 20)),
-                            new Person("126", "Sophia", "Lorren", LocalDate.of(2016, 4, 30)),
-                            new Person("127", "Ana", "Ionescu", LocalDate.of(2015, 12, 1)),
-                            new Person("128", "Elena", "Serban", LocalDate.of(2014, 7, 12)),
-                            new Person("129", "Maria", "Cristescu", LocalDate.of(2015, 4, 20)),
-                            new Person("130", "Eva", "Sanduleanu", LocalDate.of(2016, 4, 30))
-
+                    Flux.fromIterable(
+                     persons
                     ).flatMap(personRepository::save)).subscribe();
+
+            //creating classrooms
 
             List<ClassRoom> classRooms = Arrays.asList(
                     new ClassRoom("small 1", "2019-01").setCapacity(15).setRoomNumber("3").setDescription("a lovely room for new alpacas!"),
@@ -72,7 +79,7 @@ public class DemoInitializer implements ApplicationListener<ApplicationReadyEven
                     new ClassRoom("large 2", "2019-01").setCapacity(20).setRoomNumber("8").setDescription("you are going to be great , keep going !"),
                     new ClassRoom("large 3", "2019-01").setCapacity(20).setRoomNumber("9").setDescription("start each day with a grateful heart"));
 
-
+            //adding images to rooms/years
             classRepository.deleteAll().
                     thenMany(
                             Flux.fromIterable(classRooms).flatMap(classRepository::save)
@@ -81,6 +88,22 @@ public class DemoInitializer implements ApplicationListener<ApplicationReadyEven
 
             WebClient webClient = WebClient.create();
             classRooms.stream().forEach(c -> uploadImage(buildPart(c.getRoomNumber(), c.getKey().getYear_month()), webClient));
+
+
+            //adding persons to classrooms on some dates
+
+            classRoomsPersonsRepository.insertPersonInClassRoom(classRooms.get(0).getRoomNumber(), LocalDate.of(2019,9,15), persons.get(0).getId());
+            classRoomsPersonsRepository.insertPersonInClassRoom(classRooms.get(0).getRoomNumber(), LocalDate.of(2019,9,15), persons.get(1).getId());
+            classRoomsPersonsRepository.insertPersonInClassRoom(classRooms.get(0).getRoomNumber(), LocalDate.of(2019,9,15), persons.get(2).getId());
+
+            classRoomsPersonsRepository.insertPersonInClassRoom(classRooms.get(1).getRoomNumber(), LocalDate.of(2019,9,15), persons.get(3).getId());
+            classRoomsPersonsRepository.insertPersonInClassRoom(classRooms.get(1).getRoomNumber(), LocalDate.of(2019,9,15), persons.get(4).getId());
+
+            classRoomsPersonsRepository.insertPersonInClassRoom(classRooms.get(0).getRoomNumber(), LocalDate.of(2019,9,17), persons.get(5).getId());
+
+
+
+
 
 
         } catch (Exception e) {

@@ -3,14 +3,12 @@ package com.report.repository;
 import com.datastax.driver.core.BatchStatement;
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Session;
-import com.report.entity.classroomkids.ClassRoomKids;
-import com.report.entity.classroomkids.ClassRoomKidsKey;
-import org.springframework.data.cassandra.core.CassandraOperations;
+import com.report.entity.classroompersons.ClassRoomPersons;
+import com.report.entity.classroompersons.ClassRoomPersonsKey;
 import org.springframework.data.cassandra.core.ReactiveCassandraOperations;
 import org.springframework.data.cassandra.core.cql.support.CachedPreparedStatementCreator;
 import org.springframework.data.cassandra.core.cql.support.PreparedStatementCache;
 import org.springframework.data.cassandra.repository.query.CassandraEntityInformation;
-import org.springframework.data.cassandra.repository.support.SimpleCassandraRepository;
 import org.springframework.data.cassandra.repository.support.SimpleReactiveCassandraRepository;
 import org.springframework.stereotype.Repository;
 
@@ -24,13 +22,13 @@ Every time a kid is leaving/coming a classroom, the event is recorder in both ta
 and classroom_changes
  */
 @Repository
-public class ClassRoomKidsRepository extends SimpleReactiveCassandraRepository<ClassRoomKids, ClassRoomKidsKey> {
+public class ClassRoomPersonsRepository extends SimpleReactiveCassandraRepository<ClassRoomPersons, ClassRoomPersonsKey> {
 
-    private final Session session;
     private final ReactiveCassandraOperations cassandraTemplate;
+    private final Session session;
     private final PreparedStatementCache cache = PreparedStatementCache.create();
 
-    public ClassRoomKidsRepository(
+    public ClassRoomPersonsRepository(
             Session session,
             CassandraEntityInformation entityInformation,
             ReactiveCassandraOperations cassandraTemplate) {
@@ -39,20 +37,19 @@ public class ClassRoomKidsRepository extends SimpleReactiveCassandraRepository<C
         this.cassandraTemplate = cassandraTemplate;
     }
 
-    public void insertKidInClassRoom(String classRoomId, LocalDate snapShotDate, String personId) {
+    public void insertPersonInClassRoom(String classRoomId, LocalDate snapShotDate, String personId) {
         BatchStatement batch = new BatchStatement(BatchStatement.Type.LOGGED).
-                add(insertKidInClassRoomQuery(classRoomId, snapShotDate, personId))
+                add(insertPersonInClassRoomQuery(classRoomId, snapShotDate, personId))
                 .add(insertAChangeInClassRoomChanges(classRoomId, snapShotDate));
-
         session.execute(batch);
+
     }
 
 
-    private BoundStatement insertKidInClassRoomQuery(String classRoomId, LocalDate snapShotDate, String personId) {
+    private BoundStatement insertPersonInClassRoomQuery(String classRoomId, LocalDate snapShotDate, String personId) {
         return CachedPreparedStatementCreator.of(
                 cache,
-
-                insertInto("classroom_kids").
+                insertInto("classroom_persons").
                         value("id_classroom", bindMarker("id_classroom")).
                         value("snapshot_date", bindMarker("snapshot_date")).
                         value("person_id", bindMarker("person_id"))
