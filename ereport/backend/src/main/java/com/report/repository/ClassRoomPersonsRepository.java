@@ -76,10 +76,7 @@ public class ClassRoomPersonsRepository extends SimpleReactiveCassandraRepositor
                 .setInt("year", date.getYear())
                 .setInt("month", date.getMonthValue())
                 .setInt("day", date.getDayOfMonth());
-
-
     }
-
 
     private com.datastax.driver.core.LocalDate toCqlDate(LocalDate date) {
         return com.datastax.driver.core.LocalDate.fromYearMonthDay(
