@@ -22,9 +22,10 @@ group  id,
 
 
 
-persons
-	id,
-	persons_id	
+group_promotions_persons_changes				group_promotions_teachers_changes		group_promotions_room_changes	     group_promotions_group_changes					
+	group_promotion_id,						group_promotion_id,				gpi		                 gpi				
+	snasphot_date							snasphot_date                                   sd                               sd
+	person_id    PK(group_pr_id,s_date,p_id)			teacher_id			                room_id                          group_id
 
 
 goup_promotion                            group_promotion_changes
@@ -36,4 +37,6 @@ goup_promotion                            group_promotion_changes
 	persons_id
 
 
- 
+ create TABLE group_promotion_changes(y int, m int, d int, type text, primary key (type, y,m,d))
+
+
