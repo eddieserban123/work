@@ -38,6 +38,7 @@ public class ClassRoomPersonsRepository extends SimpleReactiveCassandraRepositor
     }
 
     public void insertPersonInClassRoom(String classRoomId, LocalDate snapShotDate, String personId) {
+
         //1 get previous change date for the classrommId (you could trigger many selects starting from the current year, previous year and so on
         //2 get all previous persons from the classroma (select * from classroom_persons where classroomId and snapshot date
         //3 add new persons to the previous set of persons and insert into the classroom 
