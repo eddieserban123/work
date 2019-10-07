@@ -106,7 +106,7 @@ public class CassandraConfig extends AbstractReactiveCassandraConfiguration {
                 "CREATE TABLE IF NOT EXISTS " + keyspace +
                         ".classroom(id text , year_month text, capacity int, room_number text, description text, PRIMARY KEY (id, year_month))",
                 "CREATE TABLE IF NOT EXISTS " + keyspace + ".classroom_persons (id_classroom text, snapshot_date date, person_id text, PRIMARY KEY(id_classroom, snapshot_date, person_id))  WITH CLUSTERING ORDER BY (snapshot_date DESC); ",
-                "CREATE TABLE IF NOT EXISTS " + keyspace + ".classroom_changes (id_classroom text, year int, month int, day int, PRIMARY KEY(year, month))  WITH CLUSTERING ORDER BY (month DESC)"
+                "CREATE TABLE IF NOT EXISTS " + keyspace + ".classroom_changes (id_classroom text, year int, month int, day int, PRIMARY KEY((id_classroom, year), month, day))  WITH CLUSTERING ORDER BY (month DESC,day DESC) "
         );
     }
 
