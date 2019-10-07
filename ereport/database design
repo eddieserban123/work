@@ -1,30 +1,20 @@
 
-teacher
-	id
-	name
-
-
-
-person 
-       id
-       name
-
-
-room   id
-       no
-       date	
-       pict
-
-
+teacher                     person                           room
+	id                     id                                id
+	name                   name...                           no
+                                                                 date
+                                                                 pict
+       
 group  id,
        order,
        type  --> small, big, ant bla
 
 
 
-persons
-	id,
-	persons_id	
+group_promotions_persons_changes				group_promotions_teachers_changes		group_promotions_room_changes	     group_promotions_group_changes					
+	group_promotion_id,						group_promotion_id,				gpi		                 gpi				
+	snasphot_date							snasphot_date                                   sd                               sd
+	person_id    PK(group_pr_id,s_date,p_id)			teacher_id			                room_id                          group_id
 
 
 goup_promotion                            group_promotion_changes
@@ -35,5 +25,6 @@ goup_promotion                            group_promotion_changes
 	group_id
 	persons_id
 
+create TABLE group_promotion_changes(y int, m int, d int, type text, primary key (type, y,m,d))
 
- 
+how to upgrade a group_promotion
