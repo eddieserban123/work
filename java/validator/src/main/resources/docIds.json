@@ -1,8 +1,0 @@
-[{
-  "docId": 1,
-  "businessMessage": "Price is not in the specified range. According to business case the price should be in a defined range. See wiki.section prices"
-},
-{
-  "docId": 2,
-  "businessMessage": "Cross row check. Different TCAOpenPrice within AQRID-TradeDate group (Section 3  check 4)"
-}]
