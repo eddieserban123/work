@@ -39,5 +39,8 @@ public class ClassRoomChangesKey implements Serializable {
     private Integer day;
 
 
-
+    public ClassRoomChangesKey(String id, Integer year) {
+        this.id = id;
+        this.year = year;
+    }
 }

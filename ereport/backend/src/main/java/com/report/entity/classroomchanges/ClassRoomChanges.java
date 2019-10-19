@@ -19,8 +19,8 @@ public class ClassRoomChanges {
     @PrimaryKey
     private ClassRoomChangesKey key;
 
-    public ClassRoomChanges(String idClassRoom, Integer year, Integer month, Integer day) {
-        this(new ClassRoomChangesKey(idClassRoom, year, month, day));
+    public ClassRoomChanges(String idClassRoom, Integer year) {
+        this(new ClassRoomChangesKey(idClassRoom, year));
     }
 
 }

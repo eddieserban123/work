@@ -1,6 +1,9 @@
 package com.report;
 
 import com.report.entity.Person;
+import com.report.entity.classroomchanges.ClassRoomChanges;
+import com.report.entity.classroomchanges.ClassRoomChangesKey;
+import com.report.repository.ClassRoomChangesRepository;
 import com.report.repository.ClassRoomRepository;
 import com.report.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +12,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -27,6 +31,10 @@ public class EreportApplication implements CommandLineRunner {
     private ClassRoomRepository classRoomRepository;
 
     @Autowired
+    private ClassRoomChangesRepository classRoomChanges;
+
+
+    @Autowired
     private AbstractApplicationContext context;
 
     public static void main(String[] args) {
@@ -38,6 +46,9 @@ public class EreportApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
+        Mono<ClassRoomChanges> cc = classRoomChanges.findByIdClassroomAndYear(new ClassRoomChangesKey("3",2019));
+
+        cc.subscribe(System.out::println);
     }
 
     // not needed anymore since we have an initializer
