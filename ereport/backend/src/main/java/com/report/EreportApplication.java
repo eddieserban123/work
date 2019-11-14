@@ -12,8 +12,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -46,7 +48,7 @@ public class EreportApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        Mono<ClassRoomChanges> cc = classRoomChanges.findByIdClassroomAndYear(new ClassRoomChangesKey("3",2019));
+        Flux<ClassRoomChanges> cc = classRoomChanges.findAllById(Arrays.asList(new ClassRoomChangesKey("3", 2019)));
 
         cc.subscribe(System.out::println);
     }

@@ -7,14 +7,15 @@ import com.report.entity.classroomchanges.ClassRoomChangesKey;
 import org.springframework.data.cassandra.repository.Query;
 import org.springframework.data.cassandra.repository.ReactiveCassandraRepository;
 import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Repository
 public interface ClassRoomChangesRepository extends ReactiveCassandraRepository<ClassRoomChanges, ClassRoomChangesKey> {
 
-    Mono<ClassRoomChanges> findByIdClassroomAndYear(ClassRoomChangesKey id);
+//    Mono<ClassRoomChanges> findByIdClassroomAndYear(ClassRoomChangesKey id);
 
-//    @Query("select * from preschool.classroom_changes solr_query = ?0")
-//    Mono<ClassRoomChanges> findMono(String query);
+    @Query(value = "SELECT * FROM  preschool.classroom_changes WHERE id_classroom = ?0 and year = ?1 ")
+    Flux<ClassRoomChanges> findAllByKey(String id_classroom, int year);
 
 }
