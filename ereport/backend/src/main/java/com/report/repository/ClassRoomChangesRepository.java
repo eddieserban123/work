@@ -1,21 +1,24 @@
 package com.report.repository;
 
-import com.report.entity.classroom.ClassRoom;
-import com.report.entity.classroom.ClassRoomKey;
 import com.report.entity.classroomchanges.ClassRoomChanges;
 import com.report.entity.classroomchanges.ClassRoomChangesKey;
-import org.springframework.data.cassandra.repository.Query;
-import org.springframework.data.cassandra.repository.ReactiveCassandraRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.data.cassandra.core.ReactiveCassandraTemplate;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+
+import static com.datastax.driver.core.querybuilder.QueryBuilder.eq;
+import static com.datastax.driver.core.querybuilder.QueryBuilder.select;
 
 @Repository
-public interface ClassRoomChangesRepository extends ReactiveCassandraRepository<ClassRoomChanges, ClassRoomChangesKey> {
+@AllArgsConstructor
+public class ClassRoomChangesRepository {
 
-//    Mono<ClassRoomChanges> findByIdClassroomAndYear(ClassRoomChangesKey id);
+    private ReactiveCassandraTemplate reactiveCassandraOperations;
 
-    @Query(value = "SELECT * FROM  preschool.classroom_changes WHERE id_classroom = ?0 and year = ?1 ")
-    Flux<ClassRoomChanges> findAllByKey(String id_classroom, int year);
+    public Flux<ClassRoomChanges> findAllChanges(String keyspace, String table, ClassRoomChangesKey key) {
+        return reactiveCassandraOperations.select( select().from(keyspace, table).
+                where(eq("id_classroom", key.getId())).and((eq("year",key.getYear()))), ClassRoomChanges.class);
+    }
 
 }

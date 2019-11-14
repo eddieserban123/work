@@ -101,12 +101,17 @@ public class CassandraConfig extends AbstractReactiveCassandraConfiguration {
 
     @Override
     protected List<String> getStartupScripts() {
-        return Arrays.asList("CREATE TABLE IF NOT EXISTS " + keyspace + ".person(id text, first_name text,last_name text, birth date, PRIMARY KEY(id) ) ",
-                "CREATE TABLE IF NOT EXISTS " + keyspace + ".image_room(room_number text, year_month text, content blob, PRIMARY KEY(room_number, year_month)) ",
+        return Arrays.asList(
+                "CREATE TABLE IF NOT EXISTS " + keyspace +
+                        ".person(id text, first_name text,last_name text, birth date, PRIMARY KEY(id) ) ",
+                "CREATE TABLE IF NOT EXISTS " + keyspace +
+                        ".image_room(room_number text, year_month text, content blob, PRIMARY KEY(room_number, year_month)) ",
                 "CREATE TABLE IF NOT EXISTS " + keyspace +
                         ".classroom(id text , year_month text, capacity int, room_number text, description text, PRIMARY KEY (id, year_month))",
-                "CREATE TABLE IF NOT EXISTS " + keyspace + ".classroom_persons (id_classroom text, snapshot_date date, person_id text, PRIMARY KEY(id_classroom, snapshot_date, person_id))  WITH CLUSTERING ORDER BY (snapshot_date DESC); ",
-                "CREATE TABLE IF NOT EXISTS " + keyspace + ".classroom_changes (id_classroom text, year int, month int, day int, PRIMARY KEY((id_classroom, year), month, day))  WITH CLUSTERING ORDER BY (month DESC,day DESC) "
+                "CREATE TABLE IF NOT EXISTS " + keyspace +
+                        ".classroom_persons (id_classroom text, snapshot_date date, person_id text, PRIMARY KEY(id_classroom, snapshot_date, person_id))  WITH CLUSTERING ORDER BY (snapshot_date DESC); ",
+                "CREATE TABLE IF NOT EXISTS " + keyspace +
+                        ".classroom_changes (id_classroom text, year int, month int, day int, PRIMARY KEY((id_classroom, year), month, day))  WITH CLUSTERING ORDER BY (month DESC,day DESC) "
         );
     }
 

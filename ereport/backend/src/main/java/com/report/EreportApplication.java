@@ -48,7 +48,8 @@ public class EreportApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        Flux<ClassRoomChanges> cc = classRoomChanges.findAllById(Arrays.asList(new ClassRoomChangesKey("3", 2019)));
+        Flux<ClassRoomChanges> cc = classRoomChanges.findAllChanges("preschool",
+                "classroom_changes", new ClassRoomChangesKey("3", 2019));
 
         cc.subscribe(System.out::println);
     }
