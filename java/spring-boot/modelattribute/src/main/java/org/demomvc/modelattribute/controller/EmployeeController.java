@@ -49,8 +49,4 @@ public class EmployeeController {
         return "employeeView";
     }
 
-    @ModelAttribute
-    public void addAttributes(final Model model) {
-        model.addAttribute("msg", "Welcome to the Netherlands!");
-    }
 }
