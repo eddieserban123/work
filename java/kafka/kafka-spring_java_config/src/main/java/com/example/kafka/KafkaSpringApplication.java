@@ -1,6 +1,7 @@
 package com.example.kafka;
 
 import com.example.kafka.consumer.Consumer01;
+import com.example.kafka.consumer.Consumer02;
 import com.example.kafka.producer.Producer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -27,9 +28,14 @@ public class KafkaSpringApplication {
 	public static void main(String[] args) throws IOException {
 		ConfigurableApplicationContext context = SpringApplication.run(KafkaSpringApplication.class, args);
 		Producer producer = context.getBean(Producer.class);
-		Consumer01 consumer = context.getBean(Consumer01.class);
+		Consumer02 consumer = context.getBean(Consumer02.class);
 		System.in.read();
 		producer.sendMessage("ana are mere");
+		producer.sendMessage("ana are si pere");
+		producer.sendMessage("ana are si alune ");
+		producer.sendMessage("ana are si prune ");
+		producer.sendMessage("ana are si mere ");
+
 		System.in.read();
 	}
 

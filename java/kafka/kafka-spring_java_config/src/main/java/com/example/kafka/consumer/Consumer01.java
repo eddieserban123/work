@@ -8,13 +8,13 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
-import static com.example.kafka.util.Constants.TOPIC_NAME;
-
-
-@Service
+/*
+Enable it !
+still on the same thread :(
+ */
+//@Service
 public class Consumer01 {
 
     private final Logger logger = LoggerFactory.getLogger(Consumer01.class);
