@@ -1,6 +1,8 @@
 kafka:
   bootstrapAddress: localhost:9092
 
-message:
-  topic:
+topic:
+  message:
     name: test
+  greeting:
+    name: greetings

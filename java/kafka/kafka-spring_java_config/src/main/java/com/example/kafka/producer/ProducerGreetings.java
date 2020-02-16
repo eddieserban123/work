@@ -1,5 +1,6 @@
 package com.example.kafka.producer;
 
+import com.example.kafka.pojo.Greeting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,29 +13,29 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 
 
 @Service
-public class Producer {
+public class ProducerGreetings {
 
-    private static final Logger logger = LoggerFactory.getLogger(Producer.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProducerGreetings.class);
 
 
     @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+    private KafkaTemplate<String, Greeting> kafkaTemplate;
 
 
-    @Value(value = "${topic.message.name}")
+    @Value(value = "${topic.greeting.name}")
     private String topicName;
 
 
-    public void sendMessage(String message) {
-        logger.info(String.format("#### -> Producing message -> %s", message));
+    public void sendGreeting(Greeting greeting) {
+        logger.info(String.format("#### -> Producing greeting -> %s", greeting));
 
-        ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(topicName, message);
+        ListenableFuture<SendResult<String, Greeting>> future = kafkaTemplate.send(topicName, greeting);
 
-        future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
+        future.addCallback(new ListenableFutureCallback<>() {
 
             @Override
-            public void onSuccess(SendResult<String, String> result) {
-                logger.info(String.format("Sent message=[ %s] with offset=[ %s ]", message, result.getRecordMetadata().offset()));
+            public void onSuccess(SendResult<String, Greeting> result) {
+                logger.info(String.format("Sent message=[ %s] with offset=[ %s ]", greeting, result.getRecordMetadata().offset()));
             }
 
             @Override

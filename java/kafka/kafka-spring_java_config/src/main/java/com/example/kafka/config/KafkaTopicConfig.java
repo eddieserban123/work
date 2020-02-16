@@ -19,8 +19,12 @@ public class KafkaTopicConfig {
     @Value(value = "${kafka.bootstrapAddress}")
     private String bootstrapAddress;
 
-    @Value(value = "${message.topic.name}")
+    @Value(value = "${topic.message.name}")
     private String topicName;
+
+
+    @Value(value = "${topic.greeting.name}")
+    private String greetingName;
 
 
     @Bean
@@ -30,8 +34,16 @@ public class KafkaTopicConfig {
         return new KafkaAdmin(configs);
     }
 
-    @Bean
-    public NewTopic topic1() {
-        return new NewTopic(topicName, 1, (short) 1);
-    }
+//    //do i need this ?
+//    @Bean
+//    public NewTopic topic1() {
+//        return new NewTopic(topicName, 1, (short) 1);
+//    }
+//
+//    //do i need this ?
+//    @Bean
+//    public NewTopic topicGreetings() {
+//        return new NewTopic(greetingName, 3, (short) 2);
+//    }
 }
+

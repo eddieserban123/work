@@ -21,7 +21,7 @@ public class Consumer02 {
     private final Logger logger = LoggerFactory.getLogger(Consumer02.class);
     private CountDownLatch latch = new CountDownLatch(3);
 
-    @KafkaListener(id = "id0", groupId = "foo", topicPartitions = {@TopicPartition(topic= "${message.topic.name}",
+    @KafkaListener(id = "id0", groupId = "foo", topicPartitions = {@TopicPartition(topic= "${topic.message.name}",
             partitions = {"0"})}, containerFactory = "fooKafkaListenerContainerFactory")
     public void listenGroupFoo1(@Payload String message,
                                @Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition) {
@@ -30,7 +30,7 @@ public class Consumer02 {
         latch.countDown();
     }
 
-    @KafkaListener(id = "id1", groupId = "foo", topicPartitions = {@TopicPartition(topic= "${message.topic.name}",
+    @KafkaListener(id = "id1", groupId = "foo", topicPartitions = {@TopicPartition(topic= "${topic.message.name}",
             partitions = {"1"})}, containerFactory = "fooKafkaListenerContainerFactory")
     public void listenGroupFoo2(@Payload String message,
                                @Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition) {
@@ -39,7 +39,7 @@ public class Consumer02 {
         latch.countDown();
     }
 
-    @KafkaListener(id = "id2", groupId = "foo", topicPartitions = {@TopicPartition(topic= "${message.topic.name}",
+    @KafkaListener(id = "id2", groupId = "foo", topicPartitions = {@TopicPartition(topic= "${topic.message.name}",
             partitions = {"2"})}, containerFactory = "fooKafkaListenerContainerFactory")
     public void listenGroupFoo3(@Payload String message,
                                 @Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition) {

@@ -2,7 +2,10 @@ package com.example.kafka;
 
 import com.example.kafka.consumer.Consumer01;
 import com.example.kafka.consumer.Consumer02;
+import com.example.kafka.consumer.ConsumerGreetings;
+import com.example.kafka.pojo.Greeting;
 import com.example.kafka.producer.Producer;
+import com.example.kafka.producer.ProducerGreetings;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -30,11 +33,20 @@ public class KafkaSpringApplication {
 		Producer producer = context.getBean(Producer.class);
 		Consumer02 consumer = context.getBean(Consumer02.class);
 		System.in.read();
-		producer.sendMessage("ana are mere");
-		producer.sendMessage("ana are si pere");
-		producer.sendMessage("ana are si alune ");
-		producer.sendMessage("ana are si prune ");
-		producer.sendMessage("ana are si mere ");
+//		producer.sendMessage("ana are mere");
+//		producer.sendMessage("ana are si pere");
+//		producer.sendMessage("ana are si alune ");
+//		producer.sendMessage("ana are si prune ");
+//		producer.sendMessage("ana are si mere ");
+
+		System.in.read();
+		ProducerGreetings producerGreetings = context.getBean(ProducerGreetings.class);
+		producerGreetings.sendGreeting(new Greeting("titi", "hello"));
+		producerGreetings.sendGreeting(new Greeting("george", "hello"));
+		System.in.read();
+		ConsumerGreetings consumerGreet = context.getBean(ConsumerGreetings.class);
+
+
 
 		System.in.read();
 	}
