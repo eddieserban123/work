@@ -49,6 +49,15 @@ public class KafkaConsumerConfig {
         return kafkaListenerContainerFactory("foo");
     }
 
+    // adding filtering capability , messages that contains "mere" are discarded !!!!
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, String> filterKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, String> factory =  kafkaListenerContainerFactory("filter");
+        factory.setRecordFilterStrategy(record -> record.value().contains("mere"));
+        return factory;
+    }
+
     // another type
 
 

@@ -2,6 +2,7 @@ package com.example.kafka;
 
 import com.example.kafka.consumer.Consumer01;
 import com.example.kafka.consumer.Consumer02;
+import com.example.kafka.consumer.Consumer03Filtered;
 import com.example.kafka.consumer.ConsumerGreetings;
 import com.example.kafka.pojo.Greeting;
 import com.example.kafka.producer.Producer;
@@ -24,6 +25,9 @@ bin/kafka-server-start.sh config/server1.properties
 bin/kafka-server-start.sh config/server2.properties
 bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 2 --partitions 3 --topic test
 
+mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"
+
+
  */
 @SpringBootApplication
 public class KafkaSpringApplication {
@@ -31,13 +35,14 @@ public class KafkaSpringApplication {
 	public static void main(String[] args) throws IOException {
 		ConfigurableApplicationContext context = SpringApplication.run(KafkaSpringApplication.class, args);
 		Producer producer = context.getBean(Producer.class);
-		Consumer02 consumer = context.getBean(Consumer02.class);
+	//	Consumer02 consumer = context.getBean(Consumer02.class);
+		Consumer03Filtered consumer = context.getBean(Consumer03Filtered.class);
 		System.in.read();
-//		producer.sendMessage("ana are mere");
-//		producer.sendMessage("ana are si pere");
-//		producer.sendMessage("ana are si alune ");
-//		producer.sendMessage("ana are si prune ");
-//		producer.sendMessage("ana are si mere ");
+		producer.sendMessage("ana are mere");
+		producer.sendMessage("ana are si pere");
+		producer.sendMessage("ana are si alune ");
+		producer.sendMessage("ana are si prune ");
+		producer.sendMessage("ana are si mere ");
 
 		System.in.read();
 		ProducerGreetings producerGreetings = context.getBean(ProducerGreetings.class);

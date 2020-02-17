@@ -12,38 +12,37 @@ import org.springframework.stereotype.Service;
 import java.util.concurrent.CountDownLatch;
 
 
-// https://github.com/eugenp/tutorials/tree/master/spring-kafka
 
 // diferrent threads !!! yes
-//@Service
-public class Consumer02 {
+@Service
+public class Consumer03Filtered {
 
-    private final Logger logger = LoggerFactory.getLogger(Consumer02.class);
+    private final Logger logger = LoggerFactory.getLogger(Consumer03Filtered.class);
     private CountDownLatch latch = new CountDownLatch(3);
 
-    @KafkaListener(id = "id0", groupId = "foo", topicPartitions = {@TopicPartition(topic= "${topic.message.name}",
-            partitions = {"0"})}, containerFactory = "fooKafkaListenerContainerFactory")
+    @KafkaListener(id = "id0", groupId = "filter", topicPartitions = {@TopicPartition(topic= "${topic.message.name}",
+            partitions = {"0"})}, containerFactory = "filterKafkaListenerContainerFactory")
     public void listenGroupFoo1(@Payload String message,
                                @Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition) {
-        logger.info(String.format("#### -> Consumed message -> %s from partition %s Thread Id %s",
+        logger.info(String.format("#### -> Filter Consumed message -> %s from partition %s Thread Id %s",
                 message, partition, Thread.currentThread().getId()));
         latch.countDown();
     }
 
-    @KafkaListener(id = "id1", groupId = "foo", topicPartitions = {@TopicPartition(topic= "${topic.message.name}",
-            partitions = {"1"})}, containerFactory = "fooKafkaListenerContainerFactory")
+    @KafkaListener(id = "id1", groupId = "filter", topicPartitions = {@TopicPartition(topic= "${topic.message.name}",
+            partitions = {"1"})}, containerFactory = "filterKafkaListenerContainerFactory")
     public void listenGroupFoo2(@Payload String message,
                                @Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition) {
-        logger.info(String.format("#### -> Consumed message -> %s from partition %s Thread Id %s",
+        logger.info(String.format("#### -> Filter Consumed message -> %s from partition %s Thread Id %s",
                 message, partition, Thread.currentThread().getId()));
         latch.countDown();
     }
 
-    @KafkaListener(id = "id2", groupId = "foo", topicPartitions = {@TopicPartition(topic= "${topic.message.name}",
-            partitions = {"2"})}, containerFactory = "fooKafkaListenerContainerFactory")
+    @KafkaListener(id = "id2", groupId = "filter", topicPartitions = {@TopicPartition(topic= "${topic.message.name}",
+            partitions = {"2"})}, containerFactory = "filterKafkaListenerContainerFactory")
     public void listenGroupFoo3(@Payload String message,
                                 @Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition) {
-        logger.info(String.format("#### -> Consumed message -> %s from partition %s Thread Id %s",
+        logger.info(String.format("#### -> Filter Consumed message -> %s from partition %s Thread Id %s",
                 message, partition, Thread.currentThread().getId()));
         latch.countDown();
     }
