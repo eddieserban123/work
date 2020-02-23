@@ -1,5 +1,7 @@
 package com.example;
 
+
+import com.example.consumer.Consumer;
 import com.example.pojo.User;
 import com.example.producer.Producer;
 import org.springframework.boot.SpringApplication;
@@ -7,7 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import java.io.IOException;
-import java.util.function.Consumer;
 
 /*
 https://www.confluent.io/blog/schema-registry-avro-in-spring-boot-application-tutorial/
@@ -34,7 +35,8 @@ public class KafkaSpringApplication {
 		Producer producer = context.getBean(Producer.class);
 		Consumer consumer = context.getBean(Consumer.class);
 
-		producer.sendMessage(new User("peter", 46));
+		producer.sendMessage(new User("peter", 46, "02123123"));
+
 
 		System.in.read();
 	}

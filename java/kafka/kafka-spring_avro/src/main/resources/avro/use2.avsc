@@ -1,4 +1,4 @@
-{
+{"schema" : "{
   "namespace": "com.example.pojo",
   "type": "record",
   "name": "User",
@@ -13,4 +13,5 @@
       "name": "phone3", "type": "string", "avro.java.string": "String", "default": "001"
      }
   ]
+}"
 }
