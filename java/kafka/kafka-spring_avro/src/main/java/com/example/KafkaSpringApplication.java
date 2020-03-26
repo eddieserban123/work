@@ -33,9 +33,10 @@ public class KafkaSpringApplication {
 	public static void main(String[] args) throws IOException {
 		ConfigurableApplicationContext context = SpringApplication.run(KafkaSpringApplication.class, args);
 		Producer producer = context.getBean(Producer.class);
-		Consumer consumer = context.getBean(Consumer.class);
+	//	Consumer consumer = context.getBean(Consumer.class);
 
-		producer.sendMessage(new User("peter", 46, "02123123"));
+		User user = User.newBuilder().setAge(40).setEmail("eddie.serban@gmail.com").setPhone3("0727341556").setName("Eduard").setFacebook("eddie.serban").build();
+		producer.sendMessage(user);
 
 
 		System.in.read();

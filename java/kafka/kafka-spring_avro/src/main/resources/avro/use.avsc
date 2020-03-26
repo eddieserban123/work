@@ -11,6 +11,12 @@
     },
     {
       "name": "phone3", "type": "string", "avro.java.string": "String", "default": "001"
+     },
+     {
+      "name": "email", "type": "string", "avro.java.string": "String", "default": "email@at.com"
+     },
+     {
+      "name": "facebook", "type": "string", "avro.java.string": "String", "default": "facebook noe"
      }
   ]
 }

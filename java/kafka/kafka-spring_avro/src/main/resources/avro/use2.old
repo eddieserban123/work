@@ -1,5 +1,5 @@
 {"schema" : "{
-  "namespace": "com.example.pojo",
+  0"namespace": "com.example.pojo",
   "type": "record",
   "name": "User",
   "fields": [
@@ -11,7 +11,11 @@
     },
     {
       "name": "phone3", "type": "string", "avro.java.string": "String", "default": "001"
-     }
+     },
+     {
+       "name": "email", "type": "string", "avro.java.string": "String", "default": "ed@email.com"
+      }
+
   ]
 }"
 }

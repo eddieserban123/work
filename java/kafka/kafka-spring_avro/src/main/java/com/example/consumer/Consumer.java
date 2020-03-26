@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.annotation.PartitionOffset;
+import org.springframework.kafka.annotation.TopicPartition;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -22,7 +24,7 @@ public class Consumer {
     @Value("${topic.name}")
     private String topicName;
 
-    @KafkaListener(topics = "users", groupId = "group_id")
+    @KafkaListener(groupId = "group_id", topicPartitions = {@TopicPartition(topic = "users", partitionOffsets = @PartitionOffset(partition = "2", initialOffset = "0"))})
     public void consume(ConsumerRecord<String, User> record) {
         log.info(String.format("Consumed message -> %s", record.value()));
     }
