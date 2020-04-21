@@ -1,16 +1,13 @@
-package org.demo.kafka.parser.serde;
+package org.demo.kafka.parser;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.kafka.common.serialization.Serializer;
-import org.demo.kafka.parser.TradingInfoSerializer;
-import org.demo.kafka.trading.TradingInfo;
 
 import java.util.Map;
 
@@ -18,15 +15,22 @@ import java.util.Map;
 @AllArgsConstructor
 @Builder
 @Log4j2
-public class TradingInfoKafkaSerializer implements Serializer<TradingInfo> {
+public class JsonKafkaSerializer<T> implements Serializer<T> {
 
     private ObjectMapper mapper = new ObjectMapper();
+    private Class<T> serializedClass;
 
-    public TradingInfoKafkaSerializer() {
+    public JsonKafkaSerializer(Class<T> serializedClass) {
+        this(serializedClass, null);
+    }
 
-        SimpleModule module = new SimpleModule();
-        module.addSerializer(TradingInfo.class, new TradingInfoSerializer());
-        mapper.registerModule(module);
+    public JsonKafkaSerializer(Class<T> serializedClass, StdSerializer<T> serializer) {
+        this.serializedClass = serializedClass;
+        if (serializer != null) {
+            SimpleModule module = new SimpleModule();
+            module.addSerializer(serializedClass, serializer);
+            mapper.registerModule(module);
+        }
     }
 
 
@@ -35,7 +39,7 @@ public class TradingInfoKafkaSerializer implements Serializer<TradingInfo> {
     }
 
     @Override
-    public byte[] serialize(String topic, TradingInfo data) {
+    public byte[] serialize(String topic, T data) {
         try {
             byte json[] = mapper.writeValueAsBytes(data);
             log.info("Produce {}", new String(json));

@@ -33,7 +33,7 @@ public class KafkaStockExProducer implements Runnable {
     public void run() {
         try {
             shouldContinue = true;
-            org.apache.kafka.clients.producer.KafkaProducer<TICKER, TradingInfo> producer = new org.apache.kafka.clients.producer.KafkaProducer<>(properties);
+            org.apache.kafka.clients.producer.KafkaProducer<String, TradingInfo> producer = new org.apache.kafka.clients.producer.KafkaProducer<>(properties);
             Random random = ThreadLocalRandom.current();
             long iter = 0;
             int bound = (1 + random.nextInt(3));
@@ -45,13 +45,13 @@ public class KafkaStockExProducer implements Runnable {
                 if (iter % bound == 0) {
                     bound = (1 + random.nextInt(3));
                 } else
-                    price += random.nextGaussian() * increment;
+                    price +=  Math.round((random.nextGaussian() * increment) * 100.0) / 100.0;;
 
                 int volume = 1 + random.nextInt(1_000_000);
 
-                TradingInfo tradingInfo = TradingInfo.builder().ticker(ticker).time(LocalDateTime.now()).value(price).volume(volume).build();
+                TradingInfo tradingInfo = TradingInfo.builder().ticker(ticker).time(LocalDateTime.now().withNano(0)).value(price).volume(volume).build();
               //  log.info("Trying to send {} ", tradingInfo.toString());
-                producer.send(new ProducerRecord<>(topic, tradingInfo), (metadata, exception) -> {
+                producer.send(new ProducerRecord<>(topic, ticker.toString(), tradingInfo), (metadata, exception) -> {
                     if (exception != null) {
                         log.error(exception.getMessage());
                     } else {

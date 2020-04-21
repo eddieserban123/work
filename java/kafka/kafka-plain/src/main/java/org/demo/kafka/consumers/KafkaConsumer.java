@@ -16,7 +16,7 @@ import java.util.Properties;
 @NoArgsConstructor
 @Builder
 @Log4j2
-public class KafkaConsumer implements Runnable {
+public class KafkaConsumer<K,V> implements Runnable {
 
     private String consumerId;
     private String topic;
@@ -25,16 +25,16 @@ public class KafkaConsumer implements Runnable {
 
     @Override
     public void run() {
-        try (org.apache.kafka.clients.consumer.KafkaConsumer<String, String> consumer =
+        try (org.apache.kafka.clients.consumer.KafkaConsumer<K, V> consumer =
                      new org.apache.kafka.clients.consumer.KafkaConsumer<>(properties)) {
             consumer.subscribe(Collections.singletonList(topic));
             boolean shouldContinue = true;
             while (shouldContinue) {
-                ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
-                Iterator<ConsumerRecord<String, String>> it = records.iterator();
+                ConsumerRecords<K, V> records = consumer.poll(Duration.ofMillis(100));
+                Iterator<ConsumerRecord<K, V>> it = records.iterator();
                 while (it.hasNext()) {
-                    ConsumerRecord<String, String> record = it.next();
-                    log.info("{},{} ", record.key(), record.value());
+                    ConsumerRecord<K, V> record = it.next();
+                    log.info("read out {},{} ", record.key(), record.value());
                 }
 
             }
