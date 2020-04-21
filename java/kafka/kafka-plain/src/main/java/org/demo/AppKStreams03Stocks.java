@@ -1,8 +1,6 @@
 package org.demo;
 
-import com.fasterxml.jackson.databind.JsonDeserializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.streams.KafkaStreams;
@@ -31,23 +29,25 @@ import java.util.concurrent.Executors;
  */
 
 
-public class AppKStreamsStocks03 {
+public class AppKStreams03Stocks {
 
-    private static final org.apache.logging.log4j.Logger log = org.apache.logging.log4j.LogManager.getLogger(AppKStreamsStocks03.class);
+    private static final org.apache.logging.log4j.Logger log = org.apache.logging.log4j.LogManager.getLogger(AppKStreams03Stocks.class);
 
     public static void main(String[] args) throws IOException {
         Properties props = new Properties();
         props.put("bootstrap.servers", "localhost:9092");
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "test-application");
 
-
+//producer
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", TradingInfoKSerializer.class.getName());
+
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
         ExecutorService executorService = Executors.newCachedThreadPool();
         executorService.submit(KafkaStockExProducer.builder().properties(props).ticker(TICKER.MSFT).topic("trading").build());
 
+//streams
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, TradingInfoSerde.class.getName());
 

@@ -33,7 +33,7 @@ docker-compose exec broker kafka-streams-application-reset --application-id  fav
  */
 
 @Log4j2
-public class AppFavouriteColourExercise {
+public class AppKStreams01FavouriteColourExercise {
 
     public static final String FAVOURITE_COLOR_TOPIC_IN = "favourite-color-in";
     public static final String FAVOURITE_COLOR_TOPIC_MIDDLE = "favourite-color-middle";
@@ -97,7 +97,7 @@ public class AppFavouriteColourExercise {
         streams.start();
         Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
 
-        org.apache.kafka.clients.producer.KafkaProducer<String, String> producer = new org.apache.kafka.clients.producer.KafkaProducer<>(props);
+//        org.apache.kafka.clients.producer.KafkaProducer<String, String> producer = new org.apache.kafka.clients.producer.KafkaProducer<>(props);
 //
 //        producer.send(new ProducerRecord<>(FAVOURITE_COLOR_TOPIC_IN, null, "eddie1,red"));
 //        producer.send(new ProducerRecord<>(FAVOURITE_COLOR_TOPIC_IN, null, "peter2,green"));
