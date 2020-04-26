@@ -21,7 +21,7 @@ public class TradingStatus {
 
     public TradingStatus add(TradingInfo trade) {
 
-
+        log.info("***********88 {}", trade);
 
         if (trade.ticker == null)
             throw new IllegalArgumentException("Invalid trade to aggregate: " + trade.toString());
@@ -42,6 +42,9 @@ public class TradingStatus {
     }
 
     public TradingStatus computeAvgPrice() {
+
+        log.info("*******average ");
+
         this.avgPrice = this.sumPrice / this.countTrades;
         return this;
     }
