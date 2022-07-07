@@ -16,7 +16,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.11</maven.compiler.source>
         <maven.compiler.target>1.11</maven.compiler.target>
-        <jetty.version>9.4.15.v20190215</jetty.version>
+        <jetty.version>10.0.10</jetty.version>
         <rxjava.version>2.2.8</rxjava.version>
         <fluenthc.version>4.5.8</fluenthc.version>
         <slf4j.version>1.7.25</slf4j.version>
