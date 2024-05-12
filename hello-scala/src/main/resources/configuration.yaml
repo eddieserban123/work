@@ -1,0 +1,14 @@
+endpoints:
+  ims:
+    host: https://ims-na1-stg1.adobelogin.com/ims/token
+    port: 80
+    verb: POST
+    queryParams:
+      grant_type: authorization_code
+      client_id: ${ims_client_id}
+      client_secret: ${ims_client_secret}
+      code: ${ims_client_code}
+    headers:
+      Content-Type: "application/json"
+    body:
+      content: ${file:details/ims/body.json}
